@@ -1,0 +1,276 @@
+﻿namespace ExampleClient.Source
+{
+    partial class DataSourceManagerForm
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.btnRefresh = new System.Windows.Forms.Button();
+            this.btnModify = new System.Windows.Forms.Button();
+            this.lvDataSources = new System.Windows.Forms.ListView();
+            this.chNumber = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chIp = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chState = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chRetentionLimit = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chMotionMode = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chManualRecord = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chEnabled = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.btnManageLinks = new System.Windows.Forms.Button();
+            this.btnAutoNumber = new System.Windows.Forms.Button();
+            this.btnViewerInfo = new System.Windows.Forms.Button();
+            this.btnGapInfo = new System.Windows.Forms.Button();
+            this.btnMotionConfig = new System.Windows.Forms.Button();
+            this.btnViewBookmarks = new System.Windows.Forms.Button();
+            this.btnMetadata = new System.Windows.Forms.Button();
+            this.btnViewTags = new System.Windows.Forms.Button();
+            this.SuspendLayout();
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Location = new System.Drawing.Point(1193, 273);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(94, 23);
+            this.btnRefresh.TabIndex = 12;
+            this.btnRefresh.Text = "Refresh";
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.ButtonRefresh_Click);
+            // 
+            // btnModify
+            // 
+            this.btnModify.Location = new System.Drawing.Point(1193, 12);
+            this.btnModify.Name = "btnModify";
+            this.btnModify.Size = new System.Drawing.Size(94, 23);
+            this.btnModify.TabIndex = 11;
+            this.btnModify.Text = "Modify";
+            this.btnModify.UseVisualStyleBackColor = true;
+            this.btnModify.Click += new System.EventHandler(this.ButtonModify_Click);
+            // 
+            // lvDataSources
+            // 
+            this.lvDataSources.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.chNumber,
+            this.chType,
+            this.chName,
+            this.chIp,
+            this.chId,
+            this.chState,
+            this.chRetentionLimit,
+            this.chMotionMode,
+            this.chManualRecord,
+            this.chEnabled});
+            this.lvDataSources.FullRowSelect = true;
+            this.lvDataSources.Location = new System.Drawing.Point(12, 12);
+            this.lvDataSources.MultiSelect = false;
+            this.lvDataSources.Name = "lvDataSources";
+            this.lvDataSources.Size = new System.Drawing.Size(1175, 395);
+            this.lvDataSources.TabIndex = 8;
+            this.lvDataSources.UseCompatibleStateImageBehavior = false;
+            this.lvDataSources.View = System.Windows.Forms.View.Details;
+            // 
+            // chNumber
+            // 
+            this.chNumber.Text = "Number";
+            this.chNumber.Width = 64;
+            // 
+            // chType
+            // 
+            this.chType.Text = "Type";
+            this.chType.Width = 70;
+            // 
+            // chName
+            // 
+            this.chName.Text = "Name";
+            this.chName.Width = 287;
+            // 
+            // chIp
+            // 
+            this.chIp.Text = "IP";
+            this.chIp.Width = 120;
+            // 
+            // chId
+            // 
+            this.chId.Text = "ID";
+            this.chId.Width = 255;
+            // 
+            // chState
+            // 
+            this.chState.Text = "State";
+            this.chState.Width = 75;
+            // 
+            // chRetentionLimit
+            // 
+            this.chRetentionLimit.Text = "Retention Limit";
+            this.chRetentionLimit.Width = 90;
+            // 
+            // chMotionMode
+            // 
+            this.chMotionMode.Text = "Motion Mode";
+            this.chMotionMode.Width = 75;
+            // 
+            // chManualRecord
+            // 
+            this.chManualRecord.Text = "Manual Rec.";
+            this.chManualRecord.Width = 74;
+            // 
+            // chEnabled
+            // 
+            this.chEnabled.Text = "Enabled";
+            // 
+            // btnManageLinks
+            // 
+            this.btnManageLinks.Location = new System.Drawing.Point(1193, 41);
+            this.btnManageLinks.Name = "btnManageLinks";
+            this.btnManageLinks.Size = new System.Drawing.Size(94, 23);
+            this.btnManageLinks.TabIndex = 13;
+            this.btnManageLinks.Text = "Manage Links";
+            this.btnManageLinks.UseVisualStyleBackColor = true;
+            this.btnManageLinks.Click += new System.EventHandler(this.ButtonManageLinks_Click);
+            // 
+            // btnAutoNumber
+            // 
+            this.btnAutoNumber.Location = new System.Drawing.Point(1194, 70);
+            this.btnAutoNumber.Name = "btnAutoNumber";
+            this.btnAutoNumber.Size = new System.Drawing.Size(94, 23);
+            this.btnAutoNumber.TabIndex = 14;
+            this.btnAutoNumber.Text = "Auto-Number";
+            this.btnAutoNumber.UseVisualStyleBackColor = true;
+            this.btnAutoNumber.Click += new System.EventHandler(this.ButtonAutoNumber_Click);
+            // 
+            // btnViewerInfo
+            // 
+            this.btnViewerInfo.Location = new System.Drawing.Point(1193, 99);
+            this.btnViewerInfo.Name = "btnViewerInfo";
+            this.btnViewerInfo.Size = new System.Drawing.Size(94, 23);
+            this.btnViewerInfo.TabIndex = 15;
+            this.btnViewerInfo.Text = "Viewer Info";
+            this.btnViewerInfo.UseVisualStyleBackColor = true;
+            this.btnViewerInfo.Click += new System.EventHandler(this.ButtonViewerInfo_Click);
+            // 
+            // btnGapInfo
+            // 
+            this.btnGapInfo.Location = new System.Drawing.Point(1193, 128);
+            this.btnGapInfo.Name = "btnGapInfo";
+            this.btnGapInfo.Size = new System.Drawing.Size(94, 23);
+            this.btnGapInfo.TabIndex = 16;
+            this.btnGapInfo.Text = "Gap Info";
+            this.btnGapInfo.UseVisualStyleBackColor = true;
+            this.btnGapInfo.Click += new System.EventHandler(this.ButtonGapInfo_Click);
+            // 
+            // btnMotionConfig
+            // 
+            this.btnMotionConfig.Location = new System.Drawing.Point(1193, 157);
+            this.btnMotionConfig.Name = "btnMotionConfig";
+            this.btnMotionConfig.Size = new System.Drawing.Size(94, 23);
+            this.btnMotionConfig.TabIndex = 17;
+            this.btnMotionConfig.Text = "Motion Config";
+            this.btnMotionConfig.UseVisualStyleBackColor = true;
+            this.btnMotionConfig.Click += new System.EventHandler(this.ButtonMotionConfig_Click);
+            // 
+            // btnViewBookmarks
+            // 
+            this.btnViewBookmarks.Location = new System.Drawing.Point(1193, 186);
+            this.btnViewBookmarks.Name = "btnViewBookmarks";
+            this.btnViewBookmarks.Size = new System.Drawing.Size(94, 23);
+            this.btnViewBookmarks.TabIndex = 18;
+            this.btnViewBookmarks.Text = "View Bookmarks";
+            this.btnViewBookmarks.UseVisualStyleBackColor = true;
+            this.btnViewBookmarks.Click += new System.EventHandler(this.ButtonViewBookmarks_Click);
+            // 
+            // btnMetadata
+            // 
+            this.btnMetadata.Location = new System.Drawing.Point(1193, 215);
+            this.btnMetadata.Name = "btnMetadata";
+            this.btnMetadata.Size = new System.Drawing.Size(94, 23);
+            this.btnMetadata.TabIndex = 19;
+            this.btnMetadata.Text = "Metadata Rels.";
+            this.btnMetadata.UseVisualStyleBackColor = true;
+            this.btnMetadata.Click += new System.EventHandler(this.ButtonMetadata_Click);
+            // 
+            // btnViewTags
+            // 
+            this.btnViewTags.Location = new System.Drawing.Point(1193, 244);
+            this.btnViewTags.Name = "btnViewTags";
+            this.btnViewTags.Size = new System.Drawing.Size(94, 23);
+            this.btnViewTags.TabIndex = 20;
+            this.btnViewTags.Text = "View Tags";
+            this.btnViewTags.UseVisualStyleBackColor = true;
+            this.btnViewTags.Click += new System.EventHandler(this.ButtonViewTags_Click);
+            // 
+            // DataSourceManagerForm
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(1295, 419);
+            this.Controls.Add(this.btnViewTags);
+            this.Controls.Add(this.btnMetadata);
+            this.Controls.Add(this.btnViewBookmarks);
+            this.Controls.Add(this.btnMotionConfig);
+            this.Controls.Add(this.btnGapInfo);
+            this.Controls.Add(this.btnViewerInfo);
+            this.Controls.Add(this.btnAutoNumber);
+            this.Controls.Add(this.btnManageLinks);
+            this.Controls.Add(this.btnRefresh);
+            this.Controls.Add(this.btnModify);
+            this.Controls.Add(this.lvDataSources);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "DataSourceManagerForm";
+            this.ShowIcon = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Data Source Manager";
+            this.ResumeLayout(false);
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.Button btnRefresh;
+        private System.Windows.Forms.Button btnModify;
+        private System.Windows.Forms.ListView lvDataSources;
+        private System.Windows.Forms.ColumnHeader chName;
+        private System.Windows.Forms.ColumnHeader chId;
+        private System.Windows.Forms.ColumnHeader chNumber;
+        private System.Windows.Forms.ColumnHeader chState;
+        private System.Windows.Forms.ColumnHeader chType;
+        private System.Windows.Forms.ColumnHeader chIp;
+        private System.Windows.Forms.Button btnManageLinks;
+        private System.Windows.Forms.Button btnAutoNumber;
+        private System.Windows.Forms.Button btnViewerInfo;
+        private System.Windows.Forms.ColumnHeader chRetentionLimit;
+        private System.Windows.Forms.Button btnGapInfo;
+        private System.Windows.Forms.Button btnMotionConfig;
+        private System.Windows.Forms.ColumnHeader chMotionMode;
+        private System.Windows.Forms.Button btnViewBookmarks;
+        private System.Windows.Forms.Button btnMetadata;
+        private System.Windows.Forms.ColumnHeader chManualRecord;
+        private System.Windows.Forms.ColumnHeader chEnabled;
+        private System.Windows.Forms.Button btnViewTags;
+    }
+}

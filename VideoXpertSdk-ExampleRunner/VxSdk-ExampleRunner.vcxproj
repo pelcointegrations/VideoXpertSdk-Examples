@@ -1,0 +1,308 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{377BA0DC-1CDF-4E4D-B14F-138DE1F789F2}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>ExampleRunner</RootNamespace>
+    <ProjectName>VxSdk-ExampleRunner</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>build\$(PlatformTarget)\$(Configuration)\bin\</OutDir>
+    <IntDir>build\Intermediates\$(PlatformTarget)\$(Configuration)\</IntDir>
+    <TargetName>VxSdk-ExampleRunner</TargetName>
+	<LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TargetName>VxSdk-ExampleRunner</TargetName>
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>build\$(PlatformTarget)\$(Configuration)\bin\</OutDir>
+    <IntDir>build\Intermediates\$(PlatformTarget)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>build\$(PlatformTarget)\$(Configuration)\bin\</OutDir>
+    <IntDir>build\Intermediates\$(PlatformTarget)\$(Configuration)\</IntDir>
+    <TargetName>VxSdk-ExampleRunner</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetName>VxSdk-ExampleRunner</TargetName>
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>build\$(PlatformTarget)\$(Configuration)\bin\</OutDir>
+    <IntDir>build\Intermediates\$(PlatformTarget)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <DisableSpecificWarnings>4267;4018;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalIncludeDirectories>$(ProjectDir)ThirdParty\Curl\7.43.0\$(PlatformTarget)\include\curl;$(ProjectDir)Source\Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir)ThirdParty\Curl\7.43.0\$(PlatformTarget)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libcurl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>XCOPY "ThirdParty\Curl\7.43.0\$(PlatformTarget)\dlls\*.*" "$(TargetDir)" /y /D</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <DisableSpecificWarnings>4267;4018;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalIncludeDirectories>$(ProjectDir)ThirdParty\Curl\7.43.0\$(PlatformTarget)\include\curl;$(ProjectDir)Source\Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir)ThirdParty\Curl\7.43.0\$(PlatformTarget)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libcurl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>XCOPY "ThirdParty\Curl\7.43.0\$(PlatformTarget)\dlls\*.*" "$(TargetDir)" /y /D</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <DisableSpecificWarnings>4267;4018;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalIncludeDirectories>$(ProjectDir)ThirdParty\Curl\7.43.0\$(PlatformTarget)\include\curl;$(ProjectDir)Source\Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(ProjectDir)ThirdParty\Curl\7.43.0\$(PlatformTarget)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libcurl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>XCOPY "ThirdParty\Curl\7.43.0\$(PlatformTarget)\dlls\*.*" "$(TargetDir)" /y /D</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <DisableSpecificWarnings>4267;4018;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalIncludeDirectories>$(ProjectDir)ThirdParty\Curl\7.43.0\$(PlatformTarget)\include\curl;$(ProjectDir)Source\Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(ProjectDir)ThirdParty\Curl\7.43.0\$(PlatformTarget)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libcurl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>XCOPY "ThirdParty\Curl\7.43.0\$(PlatformTarget)\dlls\*.*" "$(TargetDir)" /y /D</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Bookmarks\AddBookmark.h" />
+    <ClInclude Include="Source\Bookmarks\DeleteBookmark.h" />
+    <ClInclude Include="Source\Bookmarks\ViewAllBookmarks.h" />
+    <ClInclude Include="Source\Common\Constants.h" />
+    <ClInclude Include="Source\Common\Controller.h" />
+    <ClInclude Include="Source\Common\OptionSelector.h" />
+    <ClInclude Include="Source\Common\Paging.h" />
+    <ClInclude Include="Source\Common\stdafx.h" />
+    <ClInclude Include="Source\Common\TabularPrinter.h" />
+    <ClInclude Include="Source\Common\targetver.h" />
+    <ClInclude Include="Source\Common\MenuItem.h" />
+    <ClInclude Include="Source\Common\Plugin.h" />
+    <ClInclude Include="Source\Common\Utility.h" />
+    <ClInclude Include="Source\DataObjects\AddDataObject.h" />
+    <ClInclude Include="Source\DataObjects\DeleteDataObject.h" />
+    <ClInclude Include="Source\DataObjects\ViewAllDataObjects.h" />
+    <ClInclude Include="Source\DataSource\ViewAllDataSource.h" />
+    <ClInclude Include="Source\DataSource\ViewDataSourceByPage.h" />
+    <ClInclude Include="Source\DataSource\ViewDataSourceDetails.h" />
+    <ClInclude Include="Source\Devices\ViewAllDevices.h" />
+    <ClInclude Include="Source\Drawings\AddDrawing.h" />
+    <ClInclude Include="Source\Drawings\DeleteDrawing.h" />
+    <ClInclude Include="Source\Drawings\ViewAllDrawings.h" />
+    <ClInclude Include="Source\Events\InjectEvents.h" />
+    <ClInclude Include="Source\Events\MonitorEvents.h" />
+    <ClInclude Include="Source\Events\SearchEvents.h" />
+    <ClInclude Include="Source\Exports\CreateExport.h" />
+    <ClInclude Include="Source\Exports\DeleteExport.h" />
+    <ClInclude Include="Source\Exports\DownloadExport.h" />
+    <ClInclude Include="Source\Exports\ViewExport.h" />
+    <ClInclude Include="Source\LiveStreaming\DataSourceLiveStreaming.h" />
+    <ClInclude Include="Source\LiveStreaming\MediaOperationshandler.h" />
+    <ClInclude Include="Source\LiveStreaming\PtzOperationsHandler.h" />
+    <ClInclude Include="Source\Roles\AddRole.h" />
+    <ClInclude Include="Source\Roles\DeleteRole.h" />
+    <ClInclude Include="Source\Roles\ViewAllRoles.h" />
+    <ClInclude Include="Source\Schedules\AddSchedule.h" />
+    <ClInclude Include="Source\Schedules\AddTriggerToSchedule.h" />
+    <ClInclude Include="Source\Schedules\DeleteSchedule.h" />
+    <ClInclude Include="Source\Schedules\ViewAllSchedules.h" />
+    <ClInclude Include="Source\Situations\AddNotification.h" />
+    <ClInclude Include="Source\Situations\AddSituation.h" />
+    <ClInclude Include="Source\Situations\DeleteNotification.h" />
+    <ClInclude Include="Source\Situations\DeleteSituation.h" />
+    <ClInclude Include="Source\Situations\DisplaySituations.h" />
+    <ClInclude Include="Source\Situations\ViewNotifications.h" />
+    <ClInclude Include="Source\Tags\AddTag.h" />
+    <ClInclude Include="Source\Tags\DeleteTag.h" />
+    <ClInclude Include="Source\Tags\MergeTag.h" />
+    <ClInclude Include="Source\Tags\ViewAllTags.h" />
+    <ClInclude Include="Source\Users\AddUser.h" />
+    <ClInclude Include="Source\Users\DeleteUser.h" />
+    <ClInclude Include="Source\Users\ViewAllUsers.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Bookmarks\AddBookmark.cpp" />
+    <ClCompile Include="Source\Bookmarks\DeleteBookmark.cpp" />
+    <ClCompile Include="Source\Bookmarks\ViewAllBookmarks.cpp" />
+    <ClCompile Include="Source\Common\Controller.cpp" />
+    <ClCompile Include="Source\Common\Paging.cpp" />
+    <ClCompile Include="Source\Common\stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source\Common\MenuItem.cpp" />
+    <ClCompile Include="Source\Common\TabularPrinter.cpp" />
+    <ClCompile Include="Source\Common\Utility.cpp" />
+    <ClCompile Include="Source\DataObjects\AddDataObject.cpp" />
+    <ClCompile Include="Source\DataObjects\DeleteDataObject.cpp" />
+    <ClCompile Include="Source\DataObjects\ViewAllDataObjects.cpp" />
+    <ClCompile Include="Source\DataSource\ViewAllDataSource.cpp" />
+    <ClCompile Include="Source\DataSource\ViewDataSourceByPage.cpp" />
+    <ClCompile Include="Source\DataSource\ViewDataSourceDetails.cpp" />
+    <ClCompile Include="Source\Devices\ViewAllDevices.cpp" />
+    <ClCompile Include="Source\Drawings\AddDrawing.cpp" />
+    <ClCompile Include="Source\Drawings\DeleteDrawing.cpp" />
+    <ClCompile Include="Source\Drawings\ViewAllDrawings.cpp" />
+    <ClCompile Include="Source\Events\InjectEvents.cpp" />
+    <ClCompile Include="Source\Events\MonitorEvents.cpp" />
+    <ClCompile Include="Source\Events\SearchEvents.cpp" />
+    <ClCompile Include="Source\Exports\CreateExport.cpp" />
+    <ClCompile Include="Source\Exports\DeleteExport.cpp" />
+    <ClCompile Include="Source\Exports\DownloadExport.cpp" />
+    <ClCompile Include="Source\Exports\ViewExport.cpp" />
+    <ClCompile Include="Source\LiveStreaming\DataSourceLiveStreaming.cpp" />
+    <ClCompile Include="Source\LiveStreaming\MediaOperationshandler.cpp" />
+    <ClCompile Include="Source\LiveStreaming\PtzOperationsHandler.cpp" />
+    <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\Roles\AddRole.cpp" />
+    <ClCompile Include="Source\Roles\DeleteRole.cpp" />
+    <ClCompile Include="Source\Roles\ViewAllRoles.cpp" />
+    <ClCompile Include="Source\Schedules\AddSchedule.cpp" />
+    <ClCompile Include="Source\Schedules\AddTriggerToSchedule.cpp" />
+    <ClCompile Include="Source\Schedules\DeleteSchedule.cpp" />
+    <ClCompile Include="Source\Schedules\ViewAllSchedules.cpp" />
+    <ClCompile Include="Source\Situations\AddNotification.cpp" />
+    <ClCompile Include="Source\Situations\AddSituation.cpp" />
+    <ClCompile Include="Source\Situations\DeleteNotification.cpp" />
+    <ClCompile Include="Source\Situations\DeleteSituation.cpp" />
+    <ClCompile Include="Source\Situations\DisplaySituations.cpp" />
+    <ClCompile Include="Source\Situations\ViewNotifications.cpp" />
+    <ClCompile Include="Source\Tags\AddTag.cpp" />
+    <ClCompile Include="Source\Tags\DeleteTag.cpp" />
+    <ClCompile Include="Source\Tags\MergeTag.cpp" />
+    <ClCompile Include="Source\Tags\ViewAllTags.cpp" />
+    <ClCompile Include="Source\Users\AddUser.cpp" />
+    <ClCompile Include="Source\Users\DeleteUser.cpp" />
+    <ClCompile Include="Source\Users\ViewAllUsers.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="packages\VideoXpertSdk-Media.3.0.0\build\native\VideoXpertSdk-Media.targets" Condition="Exists('packages\VideoXpertSdk-Media.3.0.0\build\native\VideoXpertSdk-Media.targets')" />
+  </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\VideoXpertSdk-Media.3.0.0\build\native\VideoXpertSdk-Media.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VideoXpertSdk-Media.3.0.0\build\native\VideoXpertSdk-Media.targets'))" />
+  </Target>
+</Project>
