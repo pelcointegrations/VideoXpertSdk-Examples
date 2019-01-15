@@ -1,0 +1,10 @@
+*.suo
+*.db
+*.opendb
+*.ipch
+*.user
+**/packages/*
+**/Build/*
+**/bin/*
+**/obj/*
+**/Intermediates/*
