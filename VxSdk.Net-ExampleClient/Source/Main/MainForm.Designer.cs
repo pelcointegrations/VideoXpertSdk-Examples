@@ -110,6 +110,8 @@
             this.scOuter = new System.Windows.Forms.SplitContainer();
             this.txbxLog = new System.Windows.Forms.TextBox();
             this.bgWorker = new System.ComponentModel.BackgroundWorker();
+            this.btnLocalRecord = new System.Windows.Forms.Button();
+            this.recordingPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.scInner)).BeginInit();
@@ -212,6 +214,7 @@
             this.connectToolStripMenuItem,
             this.vxSDKLogLevelToolStripMenuItem,
             this.modifyLoggingPathToolStripMenuItem,
+            this.recordingPathToolStripMenuItem,
             this.snapshotPathToolStripMenuItem,
             this.showLogToolStripMenuItem,
             this.logoutToolStripMenuItem,
@@ -223,7 +226,7 @@
             // connectToolStripMenuItem
             // 
             this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
-            this.connectToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.connectToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
             this.connectToolStripMenuItem.Text = "Connect";
             this.connectToolStripMenuItem.Click += new System.EventHandler(this.MenuItemConnect_Click);
             // 
@@ -238,7 +241,7 @@
             this.logFatalToolStripMenuItem,
             this.logDisableToolStripMenuItem});
             this.vxSDKLogLevelToolStripMenuItem.Name = "vxSDKLogLevelToolStripMenuItem";
-            this.vxSDKLogLevelToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.vxSDKLogLevelToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
             this.vxSDKLogLevelToolStripMenuItem.Text = "VxSDK Log Level";
             // 
             // logTraceToolStripMenuItem
@@ -302,35 +305,35 @@
             // modifyLoggingPathToolStripMenuItem
             // 
             this.modifyLoggingPathToolStripMenuItem.Name = "modifyLoggingPathToolStripMenuItem";
-            this.modifyLoggingPathToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.modifyLoggingPathToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
             this.modifyLoggingPathToolStripMenuItem.Text = "Modify Logging Path";
             this.modifyLoggingPathToolStripMenuItem.Click += new System.EventHandler(this.MenuItemModifyLoggingPath_Click);
             // 
             // snapshotPathToolStripMenuItem
             // 
             this.snapshotPathToolStripMenuItem.Name = "snapshotPathToolStripMenuItem";
-            this.snapshotPathToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.snapshotPathToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
             this.snapshotPathToolStripMenuItem.Text = "Modify Snapshot location";
             this.snapshotPathToolStripMenuItem.Click += new System.EventHandler(this.MenuItemSnapshotPath_Click);
             // 
             // showLogToolStripMenuItem
             // 
             this.showLogToolStripMenuItem.Name = "showLogToolStripMenuItem";
-            this.showLogToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.showLogToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
             this.showLogToolStripMenuItem.Text = "Show Log";
             this.showLogToolStripMenuItem.Click += new System.EventHandler(this.MenuItemLog_Click);
             // 
             // logoutToolStripMenuItem
             // 
             this.logoutToolStripMenuItem.Name = "logoutToolStripMenuItem";
-            this.logoutToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.logoutToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
             this.logoutToolStripMenuItem.Text = "Logout";
             this.logoutToolStripMenuItem.Click += new System.EventHandler(this.MenuItemLogout_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.MenuItemExit_Click);
             // 
@@ -690,6 +693,7 @@
             // scInner.Panel2
             // 
             this.scInner.Panel2.BackColor = System.Drawing.SystemColors.Control;
+            this.scInner.Panel2.Controls.Add(this.btnLocalRecord);
             this.scInner.Panel2.Controls.Add(this.nudPostRecord);
             this.scInner.Panel2.Controls.Add(this.lblPostRecord);
             this.scInner.Panel2.Controls.Add(this.nudPreRecord);
@@ -852,9 +856,9 @@
             this.btnManualRecord.Enabled = false;
             this.btnManualRecord.Location = new System.Drawing.Point(931, 365);
             this.btnManualRecord.Name = "btnManualRecord";
-            this.btnManualRecord.Size = new System.Drawing.Size(51, 23);
+            this.btnManualRecord.Size = new System.Drawing.Size(113, 23);
             this.btnManualRecord.TabIndex = 47;
-            this.btnManualRecord.Text = "Record";
+            this.btnManualRecord.Text = "Record To Storage";
             this.btnManualRecord.UseVisualStyleBackColor = true;
             this.btnManualRecord.Click += new System.EventHandler(this.ButtonManualRecord_Click);
             // 
@@ -960,6 +964,25 @@
             this.txbxLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.txbxLog.Size = new System.Drawing.Size(1554, 78);
             this.txbxLog.TabIndex = 0;
+            // 
+            // btnLocalRecord
+            // 
+            this.btnLocalRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnLocalRecord.Enabled = false;
+            this.btnLocalRecord.Location = new System.Drawing.Point(1074, 366);
+            this.btnLocalRecord.Name = "btnLocalRecord";
+            this.btnLocalRecord.Size = new System.Drawing.Size(104, 23);
+            this.btnLocalRecord.TabIndex = 52;
+            this.btnLocalRecord.Text = "Start Local Record";
+            this.btnLocalRecord.UseVisualStyleBackColor = true;
+            this.btnLocalRecord.Click += new System.EventHandler(this.ButtonLocalRecord_Click);
+            // 
+            // recordingPathToolStripMenuItem
+            // 
+            this.recordingPathToolStripMenuItem.Name = "recordingPathToolStripMenuItem";
+            this.recordingPathToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
+            this.recordingPathToolStripMenuItem.Text = "Modify Recording location";
+            this.recordingPathToolStripMenuItem.Click += new System.EventHandler(this.MenuItemRecordingPath_Click);
             // 
             // MainForm
             // 
@@ -1084,6 +1107,8 @@
         private System.Windows.Forms.ToolStripMenuItem pixelSearchToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem timeTablesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem rulesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem recordingPathToolStripMenuItem;
+        public System.Windows.Forms.Button btnLocalRecord;
     }
 }
 

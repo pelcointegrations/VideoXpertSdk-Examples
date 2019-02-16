@@ -33,6 +33,7 @@ namespace ExampleClient.Source
             Instance = this;
             PtzForm = new PtzControlForm();
             Control = new ControlManager();
+            RecordingBasePath = Environment.GetFolderPath(Environment.SpecialFolder.CommonVideos) + "\\";
             SnapshotBasePath = Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures) + "\\";
             bgWorker.DoWork += Utilities.BackgroundWorker_DoWork;
             bgWorker.ProgressChanged += Utilities.BackgroundWorker_ProgressChanged;
@@ -76,6 +77,12 @@ namespace ExampleClient.Source
         /// </summary>
         /// <value>The logging directory for the VxSDK.</value>
         public static string LogPath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the RecordingBasePath property.
+        /// </summary>
+        /// <value>The directory to save local recorded videos.</value>
+        public static string RecordingBasePath { get; set; }
 
         /// <summary>
         /// Gets or sets the SnapshotBasePath property.
@@ -181,7 +188,7 @@ namespace ExampleClient.Source
         /// The EncodeToBase64 method.
         /// </summary>
         /// <param name="toEncode">The string to encode to Base64.</param>
-        /// <returns>The Base64 encoded string.</returns>        
+        /// <returns>The Base64 encoded string.</returns>
         private static string EncodeToBase64(string toEncode)
         {
             var toEncodeAsBytes = Encoding.ASCII.GetBytes(toEncode);
@@ -217,6 +224,35 @@ namespace ExampleClient.Source
             Control.Current.GoToLive();
             SetManualRecordingStatus();
             Control.ChangePtzFormState(Control.PtzControl != null);
+        }
+
+        /// <summary>
+        /// The ButtonManualRecord_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonLocalRecord_Click(object sender, EventArgs args)
+        {
+            if (Control.Current == null || Control.CurrentDataSource == null)
+                return;
+
+            if (btnLocalRecord.Text == @"Stop Local Record")
+            {
+                Control.Current.StopLocalRecording();
+                var message = $"Video saved to: {RecordingBasePath}";
+                MessageBox.Show(message, @"Recording Complete");
+                btnLocalRecord.Text = @"Start Local Record";
+            }
+            else
+            {
+                var temp = Control.CurrentDataSource.Name + "-" + DateTime.Now.ToString("yyyyMMddTHHmmss");
+                var safeFileName = string.Join("_", temp.Split(Path.GetInvalidFileNameChars()));
+
+                if (Control.Current.StartLocalRecording(RecordingBasePath, safeFileName))
+                    btnLocalRecord.Text = @"Stop Local Record";
+                else
+                    WriteToLog("Unable to start local recording.");
+            }
         }
 
         /// <summary>
@@ -718,6 +754,28 @@ namespace ExampleClient.Source
             }
 
             StopAllStreams();
+        }
+
+        /// <summary>
+        /// The MenuItemRecordingPath_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void MenuItemRecordingPath_Click(object sender, EventArgs args)
+        {
+            using (var folderDialog = new FolderBrowserDialog())
+            {
+                folderDialog.SelectedPath = RecordingBasePath;
+                folderDialog.Description = @"Choose Recorded Video Save Path...";
+
+                var result = folderDialog.ShowDialog();
+                if (result != DialogResult.OK) 
+                    return;
+
+                RecordingBasePath = folderDialog.SelectedPath + "\\";
+                var message = $"Recorded Video Path changed: {folderDialog.SelectedPath}";
+                MessageBox.Show(message, @"Recorded Video Path");
+            }
         }
 
         /// <summary>
@@ -1493,6 +1551,9 @@ namespace ExampleClient.Source
                 nudPostRecord.Enabled = false;
                 nudPreRecord.Enabled = false;
                 Control.ChangePtzFormState(false);
+
+                if (btnLocalRecord.Text == @"Stop Local Record")
+                    btnLocalRecord.Text = @"Start Local Record";
 
                 Control.Current.Dispose();
                 Control.Current = null;
