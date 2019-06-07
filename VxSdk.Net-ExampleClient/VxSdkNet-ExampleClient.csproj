@@ -79,7 +79,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="VxSdk.NET-Media">
-      <HintPath>packages\VxSdk.NET-Media.3.0.10\lib\$(Platform)\VxSdk.NET-Media.dll</HintPath>
+      <HintPath>packages\VxSdk.NET-Media.3.0.11\lib\$(Platform)\VxSdk.NET-Media.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -925,11 +925,11 @@
     <PreBuildEvent>
     </PreBuildEvent>
   </PropertyGroup>
-  <Import Project="packages\VxSdk.NET-Media.3.0.10\build\VxSdk.NET-Media.targets" Condition="Exists('packages\VxSdk.NET-Media.3.0.10\build\VxSdk.NET-Media.targets')" />
+  <Import Project="packages\VxSdk.NET-Media.3.0.11\build\VxSdk.NET-Media.targets" Condition="Exists('packages\VxSdk.NET-Media.3.0.11\build\VxSdk.NET-Media.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\VxSdk.NET-Media.3.0.10\build\VxSdk.NET-Media.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VxSdk.NET-Media.3.0.10\build\VxSdk.NET-Media.targets'))" />
+    <Error Condition="!Exists('packages\VxSdk.NET-Media.3.0.11\build\VxSdk.NET-Media.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VxSdk.NET-Media.3.0.11\build\VxSdk.NET-Media.targets'))" />
   </Target>
 </Project>
