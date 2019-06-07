@@ -370,6 +370,27 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The ButtonSnapshotFromVideo_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonSnapshotFromVideo_Click(object sender, EventArgs e)
+        {
+            if (Control.Current == null)
+                return;
+
+            var imageTime = Control.SelectedPanelTime.Replace(":", string.Empty);
+            var filename = "LiveFromVideo-" + imageTime;
+            if (!Directory.Exists(SnapshotBasePath))
+            {
+                WriteToLog($"Unable to take snapshot, path no longer exists {SnapshotBasePath}.");
+                return;
+            }
+            Control.Current.SnapShot(SnapshotBasePath, filename);
+            ShowSnapshotDialog(SnapshotBasePath + filename + ".jpg");
+        }
+
+        /// <summary>
         /// The ButtonStop_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -667,6 +688,7 @@ namespace ExampleClient.Source
             btnPlay.BeginInvoke((MethodInvoker)delegate { btnPlay.Enabled = false; });
             btnStop.BeginInvoke((MethodInvoker)delegate { btnStop.Enabled = false; });
             btnSnapshot.BeginInvoke((MethodInvoker)delegate { btnSnapshot.Enabled = false; });
+            btnSnapshotFromVideo.BeginInvoke((MethodInvoker)delegate { btnSnapshotFromVideo.Enabled = false; });
             btnRefreshDataSources.BeginInvoke((MethodInvoker)delegate { btnRefreshDataSources.Enabled = false; });
             btnManualRecord.BeginInvoke((MethodInvoker)delegate { btnManualRecord.Enabled = false; });
             nudPostRecord.BeginInvoke((MethodInvoker)delegate { nudPostRecord.Enabled = false; });

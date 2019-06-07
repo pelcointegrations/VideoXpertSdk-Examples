@@ -91,6 +91,7 @@ namespace ExampleClient.Source
                 MainForm.Instance.btnPlay.Enabled = true;
                 MainForm.Instance.btnStop.Enabled = true;
                 MainForm.Instance.btnSnapshot.Enabled = true;
+                MainForm.Instance.btnSnapshotFromVideo.Enabled = true;
                 MainForm.Instance.btnLocalRecord.Enabled = true;
                 MainForm.Instance.btnRefreshDataSources.Enabled = true;
             });

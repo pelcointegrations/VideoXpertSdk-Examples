@@ -46,6 +46,7 @@
             this.logFatalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logDisableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.modifyLoggingPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.recordingPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.snapshotPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -97,6 +98,7 @@
             this.btnRefreshDataSources = new System.Windows.Forms.Button();
             this.pbLoadCameras = new System.Windows.Forms.ProgressBar();
             this.lblAddingCameras = new System.Windows.Forms.Label();
+            this.btnLocalRecord = new System.Windows.Forms.Button();
             this.nudPostRecord = new System.Windows.Forms.NumericUpDown();
             this.lblPostRecord = new System.Windows.Forms.Label();
             this.nudPreRecord = new System.Windows.Forms.NumericUpDown();
@@ -110,8 +112,7 @@
             this.scOuter = new System.Windows.Forms.SplitContainer();
             this.txbxLog = new System.Windows.Forms.TextBox();
             this.bgWorker = new System.ComponentModel.BackgroundWorker();
-            this.btnLocalRecord = new System.Windows.Forms.Button();
-            this.recordingPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnSnapshotFromVideo = new System.Windows.Forms.Button();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.scInner)).BeginInit();
@@ -308,6 +309,13 @@
             this.modifyLoggingPathToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
             this.modifyLoggingPathToolStripMenuItem.Text = "Modify Logging Path";
             this.modifyLoggingPathToolStripMenuItem.Click += new System.EventHandler(this.MenuItemModifyLoggingPath_Click);
+            // 
+            // recordingPathToolStripMenuItem
+            // 
+            this.recordingPathToolStripMenuItem.Name = "recordingPathToolStripMenuItem";
+            this.recordingPathToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
+            this.recordingPathToolStripMenuItem.Text = "Modify Recording location";
+            this.recordingPathToolStripMenuItem.Click += new System.EventHandler(this.MenuItemRecordingPath_Click);
             // 
             // snapshotPathToolStripMenuItem
             // 
@@ -700,6 +708,7 @@
             this.scInner.Panel2.Controls.Add(this.lblPreRecord);
             this.scInner.Panel2.Controls.Add(this.btnManualRecord);
             this.scInner.Panel2.Controls.Add(this.dtpSeekTime);
+            this.scInner.Panel2.Controls.Add(this.btnSnapshotFromVideo);
             this.scInner.Panel2.Controls.Add(this.btnSnapshot);
             this.scInner.Panel2.Controls.Add(this.lblTimestampRight);
             this.scInner.Panel2.Controls.Add(this.scVideoPanels);
@@ -795,11 +804,23 @@
             this.lblAddingCameras.Text = "Loading Cameras";
             this.lblAddingCameras.Visible = false;
             // 
+            // btnLocalRecord
+            // 
+            this.btnLocalRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnLocalRecord.Enabled = false;
+            this.btnLocalRecord.Location = new System.Drawing.Point(1074, 366);
+            this.btnLocalRecord.Name = "btnLocalRecord";
+            this.btnLocalRecord.Size = new System.Drawing.Size(104, 23);
+            this.btnLocalRecord.TabIndex = 52;
+            this.btnLocalRecord.Text = "Start Local Record";
+            this.btnLocalRecord.UseVisualStyleBackColor = true;
+            this.btnLocalRecord.Click += new System.EventHandler(this.ButtonLocalRecord_Click);
+            // 
             // nudPostRecord
             // 
             this.nudPostRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.nudPostRecord.Enabled = false;
-            this.nudPostRecord.Location = new System.Drawing.Point(881, 366);
+            this.nudPostRecord.Location = new System.Drawing.Point(933, 366);
             this.nudPostRecord.Maximum = new decimal(new int[] {
             30,
             0,
@@ -814,7 +835,7 @@
             // 
             this.lblPostRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblPostRecord.AutoSize = true;
-            this.lblPostRecord.Location = new System.Drawing.Point(852, 370);
+            this.lblPostRecord.Location = new System.Drawing.Point(907, 369);
             this.lblPostRecord.Name = "lblPostRecord";
             this.lblPostRecord.Size = new System.Drawing.Size(28, 13);
             this.lblPostRecord.TabIndex = 50;
@@ -824,7 +845,7 @@
             // 
             this.nudPreRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.nudPreRecord.Enabled = false;
-            this.nudPreRecord.Location = new System.Drawing.Point(802, 366);
+            this.nudPreRecord.Location = new System.Drawing.Point(853, 366);
             this.nudPreRecord.Maximum = new decimal(new int[] {
             30,
             0,
@@ -844,7 +865,7 @@
             // 
             this.lblPreRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblPreRecord.AutoSize = true;
-            this.lblPreRecord.Location = new System.Drawing.Point(777, 370);
+            this.lblPreRecord.Location = new System.Drawing.Point(828, 370);
             this.lblPreRecord.Name = "lblPreRecord";
             this.lblPreRecord.Size = new System.Drawing.Size(23, 13);
             this.lblPreRecord.TabIndex = 48;
@@ -854,11 +875,11 @@
             // 
             this.btnManualRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnManualRecord.Enabled = false;
-            this.btnManualRecord.Location = new System.Drawing.Point(931, 365);
+            this.btnManualRecord.Location = new System.Drawing.Point(981, 365);
             this.btnManualRecord.Name = "btnManualRecord";
-            this.btnManualRecord.Size = new System.Drawing.Size(113, 23);
+            this.btnManualRecord.Size = new System.Drawing.Size(87, 23);
             this.btnManualRecord.TabIndex = 47;
-            this.btnManualRecord.Text = "Record To Storage";
+            this.btnManualRecord.Text = "Record To VX";
             this.btnManualRecord.UseVisualStyleBackColor = true;
             this.btnManualRecord.Click += new System.EventHandler(this.ButtonManualRecord_Click);
             // 
@@ -877,11 +898,12 @@
             // 
             this.btnSnapshot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnSnapshot.Enabled = false;
+            this.btnSnapshot.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnSnapshot.Location = new System.Drawing.Point(697, 366);
             this.btnSnapshot.Name = "btnSnapshot";
-            this.btnSnapshot.Size = new System.Drawing.Size(75, 23);
+            this.btnSnapshot.Size = new System.Drawing.Size(61, 23);
             this.btnSnapshot.TabIndex = 45;
-            this.btnSnapshot.Text = "Snapshot";
+            this.btnSnapshot.Text = "Snap(VX)";
             this.btnSnapshot.Click += new System.EventHandler(this.ButtonSnapshot_Click);
             // 
             // lblTimestampRight
@@ -965,24 +987,17 @@
             this.txbxLog.Size = new System.Drawing.Size(1554, 78);
             this.txbxLog.TabIndex = 0;
             // 
-            // btnLocalRecord
+            // btnSnapshotFromVideo
             // 
-            this.btnLocalRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnLocalRecord.Enabled = false;
-            this.btnLocalRecord.Location = new System.Drawing.Point(1074, 366);
-            this.btnLocalRecord.Name = "btnLocalRecord";
-            this.btnLocalRecord.Size = new System.Drawing.Size(104, 23);
-            this.btnLocalRecord.TabIndex = 52;
-            this.btnLocalRecord.Text = "Start Local Record";
-            this.btnLocalRecord.UseVisualStyleBackColor = true;
-            this.btnLocalRecord.Click += new System.EventHandler(this.ButtonLocalRecord_Click);
-            // 
-            // recordingPathToolStripMenuItem
-            // 
-            this.recordingPathToolStripMenuItem.Name = "recordingPathToolStripMenuItem";
-            this.recordingPathToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
-            this.recordingPathToolStripMenuItem.Text = "Modify Recording location";
-            this.recordingPathToolStripMenuItem.Click += new System.EventHandler(this.MenuItemRecordingPath_Click);
+            this.btnSnapshotFromVideo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnSnapshotFromVideo.Enabled = false;
+            this.btnSnapshotFromVideo.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnSnapshotFromVideo.Location = new System.Drawing.Point(761, 367);
+            this.btnSnapshotFromVideo.Name = "btnSnapshotFromVideo";
+            this.btnSnapshotFromVideo.Size = new System.Drawing.Size(61, 23);
+            this.btnSnapshotFromVideo.TabIndex = 45;
+            this.btnSnapshotFromVideo.Text = "Snap(Vid)";
+            this.btnSnapshotFromVideo.Click += new System.EventHandler(this.ButtonSnapshotFromVideo_Click);
             // 
             // MainForm
             // 
@@ -1109,6 +1124,7 @@
         private System.Windows.Forms.ToolStripMenuItem rulesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem recordingPathToolStripMenuItem;
         public System.Windows.Forms.Button btnLocalRecord;
+        public System.Windows.Forms.Button btnSnapshotFromVideo;
     }
 }
 
