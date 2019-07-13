@@ -62,8 +62,12 @@
             this.showPTZControlsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.streamsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.streamProtocolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.rtspToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mjpegToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rtspUdpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rtspTcpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.jpegPullToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.playbackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.normalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.skipGapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.alarmInputsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bookmarkManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -98,21 +102,21 @@
             this.btnRefreshDataSources = new System.Windows.Forms.Button();
             this.pbLoadCameras = new System.Windows.Forms.ProgressBar();
             this.lblAddingCameras = new System.Windows.Forms.Label();
-            this.btnLocalRecord = new System.Windows.Forms.Button();
-            this.nudPostRecord = new System.Windows.Forms.NumericUpDown();
-            this.lblPostRecord = new System.Windows.Forms.Label();
-            this.nudPreRecord = new System.Windows.Forms.NumericUpDown();
-            this.lblPreRecord = new System.Windows.Forms.Label();
-            this.btnManualRecord = new System.Windows.Forms.Button();
             this.dtpSeekTime = new System.Windows.Forms.DateTimePicker();
-            this.btnSnapshot = new System.Windows.Forms.Button();
+            this.btnLocalRecord = new System.Windows.Forms.Button();
             this.lblTimestampRight = new System.Windows.Forms.Label();
+            this.nudPreRecord = new System.Windows.Forms.NumericUpDown();
+            this.btnSnapshot = new System.Windows.Forms.Button();
             this.scVideoPanels = new System.Windows.Forms.SplitContainer();
             this.panelVideoStreamRight = new System.Windows.Forms.Panel();
+            this.btnManualRecord = new System.Windows.Forms.Button();
+            this.nudPostRecord = new System.Windows.Forms.NumericUpDown();
+            this.lblPostRecord = new System.Windows.Forms.Label();
+            this.lblPreRecord = new System.Windows.Forms.Label();
+            this.btnSnapshotFromVideo = new System.Windows.Forms.Button();
             this.scOuter = new System.Windows.Forms.SplitContainer();
             this.txbxLog = new System.Windows.Forms.TextBox();
             this.bgWorker = new System.ComponentModel.BackgroundWorker();
-            this.btnSnapshotFromVideo = new System.Windows.Forms.Button();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.scInner)).BeginInit();
@@ -120,12 +124,12 @@
             this.scInner.Panel2.SuspendLayout();
             this.scInner.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDataSources)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPostRecord)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudPreRecord)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.scVideoPanels)).BeginInit();
             this.scVideoPanels.Panel1.SuspendLayout();
             this.scVideoPanels.Panel2.SuspendLayout();
             this.scVideoPanels.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPostRecord)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.scOuter)).BeginInit();
             this.scOuter.Panel1.SuspendLayout();
             this.scOuter.Panel2.SuspendLayout();
@@ -137,7 +141,7 @@
             this.btnPlay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnPlay.Enabled = false;
             this.btnPlay.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.btnPlay.Location = new System.Drawing.Point(557, 366);
+            this.btnPlay.Location = new System.Drawing.Point(466, 366);
             this.btnPlay.Name = "btnPlay";
             this.btnPlay.Size = new System.Drawing.Size(45, 23);
             this.btnPlay.TabIndex = 14;
@@ -157,6 +161,7 @@
             this.panelVideoStreamLeft.Size = new System.Drawing.Size(584, 353);
             this.panelVideoStreamLeft.TabIndex = 2;
             this.panelVideoStreamLeft.Click += new System.EventHandler(this.PanelVideoStream_Click);
+            this.panelVideoStreamLeft.Paint += new System.Windows.Forms.PaintEventHandler(this.panelVideoStreamLeft_Paint);
             this.panelVideoStreamLeft.MouseClick += new System.Windows.Forms.MouseEventHandler(this.PanelVideoStreamLeft_MouseClick);
             this.panelVideoStreamLeft.MouseEnter += new System.EventHandler(this.PanelVideoStream_MouseEnter);
             this.panelVideoStreamLeft.MouseLeave += new System.EventHandler(this.PanelVideoStream_MouseLeave);
@@ -167,7 +172,7 @@
             this.btnPause.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnPause.Enabled = false;
             this.btnPause.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.btnPause.Location = new System.Drawing.Point(455, 366);
+            this.btnPause.Location = new System.Drawing.Point(364, 366);
             this.btnPause.Name = "btnPause";
             this.btnPause.Size = new System.Drawing.Size(45, 23);
             this.btnPause.TabIndex = 2;
@@ -179,7 +184,7 @@
             this.btnStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnStop.Enabled = false;
             this.btnStop.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.btnStop.Location = new System.Drawing.Point(506, 366);
+            this.btnStop.Location = new System.Drawing.Point(415, 366);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(45, 23);
             this.btnStop.TabIndex = 4;
@@ -189,10 +194,12 @@
             // lblTimestampLeft
             // 
             this.lblTimestampLeft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblTimestampLeft.Location = new System.Drawing.Point(3, 364);
+            this.lblTimestampLeft.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTimestampLeft.Location = new System.Drawing.Point(0, 366);
             this.lblTimestampLeft.Name = "lblTimestampLeft";
-            this.lblTimestampLeft.Size = new System.Drawing.Size(125, 25);
+            this.lblTimestampLeft.Size = new System.Drawing.Size(120, 25);
             this.lblTimestampLeft.TabIndex = 11;
+            this.lblTimestampLeft.Text = "Time Left";
             // 
             // menuStrip
             // 
@@ -419,7 +426,8 @@
             // streamsToolStripMenuItem
             // 
             this.streamsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.streamProtocolToolStripMenuItem});
+            this.streamProtocolToolStripMenuItem,
+            this.playbackToolStripMenuItem});
             this.streamsToolStripMenuItem.Name = "streamsToolStripMenuItem";
             this.streamsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.streamsToolStripMenuItem.Text = "Streams";
@@ -427,27 +435,60 @@
             // streamProtocolToolStripMenuItem
             // 
             this.streamProtocolToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.rtspToolStripMenuItem,
-            this.mjpegToolStripMenuItem});
+            this.rtspUdpToolStripMenuItem,
+            this.rtspTcpToolStripMenuItem,
+            this.jpegPullToolStripMenuItem});
             this.streamProtocolToolStripMenuItem.Name = "streamProtocolToolStripMenuItem";
             this.streamProtocolToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.streamProtocolToolStripMenuItem.Text = "Stream Protocol";
             // 
-            // rtspToolStripMenuItem
+            // rtspUdpToolStripMenuItem
             // 
-            this.rtspToolStripMenuItem.Checked = true;
-            this.rtspToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.rtspToolStripMenuItem.Name = "rtspToolStripMenuItem";
-            this.rtspToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
-            this.rtspToolStripMenuItem.Text = "RTSP";
-            this.rtspToolStripMenuItem.Click += new System.EventHandler(this.MenuItemProtocol_Click);
+            this.rtspUdpToolStripMenuItem.Checked = true;
+            this.rtspUdpToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.rtspUdpToolStripMenuItem.Name = "rtspUdpToolStripMenuItem";
+            this.rtspUdpToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.rtspUdpToolStripMenuItem.Text = "RTSP UDP";
+            this.rtspUdpToolStripMenuItem.Click += new System.EventHandler(this.MenuItemProtocol_Click);
             // 
-            // mjpegToolStripMenuItem
+            // rtspTcpToolStripMenuItem
             // 
-            this.mjpegToolStripMenuItem.Name = "mjpegToolStripMenuItem";
-            this.mjpegToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
-            this.mjpegToolStripMenuItem.Text = "MJPEG";
-            this.mjpegToolStripMenuItem.Click += new System.EventHandler(this.MenuItemProtocol_Click);
+            this.rtspTcpToolStripMenuItem.Name = "rtspTcpToolStripMenuItem";
+            this.rtspTcpToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.rtspTcpToolStripMenuItem.Text = "RTSP TCP";
+            this.rtspTcpToolStripMenuItem.Click += new System.EventHandler(this.MenuItemProtocol_Click);
+            // 
+            // jpegPullToolStripMenuItem
+            // 
+            this.jpegPullToolStripMenuItem.Name = "jpegPullToolStripMenuItem";
+            this.jpegPullToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.jpegPullToolStripMenuItem.Text = "JPEG Pull";
+            this.jpegPullToolStripMenuItem.Click += new System.EventHandler(this.MenuItemProtocol_Click);
+            // 
+            // playbackToolStripMenuItem
+            // 
+            this.playbackToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.normalToolStripMenuItem,
+            this.skipGapsToolStripMenuItem});
+            this.playbackToolStripMenuItem.Name = "playbackToolStripMenuItem";
+            this.playbackToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.playbackToolStripMenuItem.Text = "Playback";
+            // 
+            // normalToolStripMenuItem
+            // 
+            this.normalToolStripMenuItem.Checked = true;
+            this.normalToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.normalToolStripMenuItem.Name = "normalToolStripMenuItem";
+            this.normalToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
+            this.normalToolStripMenuItem.Text = "Normal";
+            this.normalToolStripMenuItem.Click += new System.EventHandler(this.MenuItemPlaybackOptions_Click);
+            // 
+            // skipGapsToolStripMenuItem
+            // 
+            this.skipGapsToolStripMenuItem.Name = "skipGapsToolStripMenuItem";
+            this.skipGapsToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
+            this.skipGapsToolStripMenuItem.Text = "Skip Gaps";
+            this.skipGapsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemPlaybackOptions_Click);
             // 
             // manageToolStripMenuItem
             // 
@@ -630,7 +671,7 @@
             this.btnSeek.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnSeek.Enabled = false;
             this.btnSeek.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.btnSeek.Location = new System.Drawing.Point(353, 366);
+            this.btnSeek.Location = new System.Drawing.Point(265, 366);
             this.btnSeek.Name = "btnSeek";
             this.btnSeek.Size = new System.Drawing.Size(45, 23);
             this.btnSeek.TabIndex = 36;
@@ -642,7 +683,7 @@
             this.btnLive.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnLive.Enabled = false;
             this.btnLive.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.btnLive.Location = new System.Drawing.Point(404, 366);
+            this.btnLive.Location = new System.Drawing.Point(313, 366);
             this.btnLive.Name = "btnLive";
             this.btnLive.Size = new System.Drawing.Size(45, 23);
             this.btnLive.TabIndex = 37;
@@ -653,7 +694,7 @@
             // 
             this.lblSpeed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblSpeed.AutoSize = true;
-            this.lblSpeed.Location = new System.Drawing.Point(608, 371);
+            this.lblSpeed.Location = new System.Drawing.Point(513, 371);
             this.lblSpeed.Name = "lblSpeed";
             this.lblSpeed.Size = new System.Drawing.Size(38, 13);
             this.lblSpeed.TabIndex = 38;
@@ -663,7 +704,7 @@
             // 
             this.nudSpeed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.nudSpeed.DecimalPlaces = 1;
-            this.nudSpeed.Location = new System.Drawing.Point(647, 369);
+            this.nudSpeed.Location = new System.Drawing.Point(552, 369);
             this.nudSpeed.Maximum = new decimal(new int[] {
             300,
             0,
@@ -701,18 +742,12 @@
             // scInner.Panel2
             // 
             this.scInner.Panel2.BackColor = System.Drawing.SystemColors.Control;
-            this.scInner.Panel2.Controls.Add(this.btnLocalRecord);
-            this.scInner.Panel2.Controls.Add(this.nudPostRecord);
-            this.scInner.Panel2.Controls.Add(this.lblPostRecord);
-            this.scInner.Panel2.Controls.Add(this.nudPreRecord);
-            this.scInner.Panel2.Controls.Add(this.lblPreRecord);
-            this.scInner.Panel2.Controls.Add(this.btnManualRecord);
             this.scInner.Panel2.Controls.Add(this.dtpSeekTime);
-            this.scInner.Panel2.Controls.Add(this.btnSnapshotFromVideo);
-            this.scInner.Panel2.Controls.Add(this.btnSnapshot);
+            this.scInner.Panel2.Controls.Add(this.btnLocalRecord);
             this.scInner.Panel2.Controls.Add(this.lblTimestampRight);
+            this.scInner.Panel2.Controls.Add(this.nudPreRecord);
+            this.scInner.Panel2.Controls.Add(this.btnSnapshot);
             this.scInner.Panel2.Controls.Add(this.scVideoPanels);
-            this.scInner.Panel2.Controls.Add(this.lblTimestampLeft);
             this.scInner.Panel2.Controls.Add(this.nudSpeed);
             this.scInner.Panel2.Controls.Add(this.btnLive);
             this.scInner.Panel2.Controls.Add(this.lblSpeed);
@@ -720,6 +755,13 @@
             this.scInner.Panel2.Controls.Add(this.btnStop);
             this.scInner.Panel2.Controls.Add(this.btnSeek);
             this.scInner.Panel2.Controls.Add(this.btnPlay);
+            this.scInner.Panel2.Controls.Add(this.lblTimestampLeft);
+            this.scInner.Panel2.Controls.Add(this.btnManualRecord);
+            this.scInner.Panel2.Controls.Add(this.nudPostRecord);
+            this.scInner.Panel2.Controls.Add(this.lblPostRecord);
+            this.scInner.Panel2.Controls.Add(this.lblPreRecord);
+            this.scInner.Panel2.Controls.Add(this.btnSnapshotFromVideo);
+            this.scInner.Panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.scInner_Panel2_Paint);
             this.scInner.Size = new System.Drawing.Size(1559, 394);
             this.scInner.SplitterDistance = 366;
             this.scInner.TabIndex = 40;
@@ -804,11 +846,22 @@
             this.lblAddingCameras.Text = "Loading Cameras";
             this.lblAddingCameras.Visible = false;
             // 
+            // dtpSeekTime
+            // 
+            this.dtpSeekTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.dtpSeekTime.CustomFormat = "yyyy-MM-dd hh:mm:ss tt";
+            this.dtpSeekTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpSeekTime.Location = new System.Drawing.Point(120, 367);
+            this.dtpSeekTime.Name = "dtpSeekTime";
+            this.dtpSeekTime.ShowUpDown = true;
+            this.dtpSeekTime.Size = new System.Drawing.Size(141, 20);
+            this.dtpSeekTime.TabIndex = 46;
+            // 
             // btnLocalRecord
             // 
             this.btnLocalRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnLocalRecord.Enabled = false;
-            this.btnLocalRecord.Location = new System.Drawing.Point(1074, 366);
+            this.btnLocalRecord.Location = new System.Drawing.Point(970, 365);
             this.btnLocalRecord.Name = "btnLocalRecord";
             this.btnLocalRecord.Size = new System.Drawing.Size(104, 23);
             this.btnLocalRecord.TabIndex = 52;
@@ -816,36 +869,22 @@
             this.btnLocalRecord.UseVisualStyleBackColor = true;
             this.btnLocalRecord.Click += new System.EventHandler(this.ButtonLocalRecord_Click);
             // 
-            // nudPostRecord
+            // lblTimestampRight
             // 
-            this.nudPostRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.nudPostRecord.Enabled = false;
-            this.nudPostRecord.Location = new System.Drawing.Point(933, 366);
-            this.nudPostRecord.Maximum = new decimal(new int[] {
-            30,
-            0,
-            0,
-            0});
-            this.nudPostRecord.Name = "nudPostRecord";
-            this.nudPostRecord.Size = new System.Drawing.Size(44, 20);
-            this.nudPostRecord.TabIndex = 51;
-            this.nudPostRecord.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // lblPostRecord
-            // 
-            this.lblPostRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblPostRecord.AutoSize = true;
-            this.lblPostRecord.Location = new System.Drawing.Point(907, 369);
-            this.lblPostRecord.Name = "lblPostRecord";
-            this.lblPostRecord.Size = new System.Drawing.Size(28, 13);
-            this.lblPostRecord.TabIndex = 50;
-            this.lblPostRecord.Text = "Post";
+            this.lblTimestampRight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblTimestampRight.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTimestampRight.Location = new System.Drawing.Point(1070, 364);
+            this.lblTimestampRight.Name = "lblTimestampRight";
+            this.lblTimestampRight.Size = new System.Drawing.Size(120, 25);
+            this.lblTimestampRight.TabIndex = 44;
+            this.lblTimestampRight.Text = "Time Right";
+            this.lblTimestampRight.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // nudPreRecord
             // 
             this.nudPreRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.nudPreRecord.Enabled = false;
-            this.nudPreRecord.Location = new System.Drawing.Point(853, 366);
+            this.nudPreRecord.Location = new System.Drawing.Point(760, 366);
             this.nudPreRecord.Maximum = new decimal(new int[] {
             30,
             0,
@@ -861,59 +900,17 @@
             0,
             0});
             // 
-            // lblPreRecord
-            // 
-            this.lblPreRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblPreRecord.AutoSize = true;
-            this.lblPreRecord.Location = new System.Drawing.Point(828, 370);
-            this.lblPreRecord.Name = "lblPreRecord";
-            this.lblPreRecord.Size = new System.Drawing.Size(23, 13);
-            this.lblPreRecord.TabIndex = 48;
-            this.lblPreRecord.Text = "Pre";
-            // 
-            // btnManualRecord
-            // 
-            this.btnManualRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnManualRecord.Enabled = false;
-            this.btnManualRecord.Location = new System.Drawing.Point(981, 365);
-            this.btnManualRecord.Name = "btnManualRecord";
-            this.btnManualRecord.Size = new System.Drawing.Size(87, 23);
-            this.btnManualRecord.TabIndex = 47;
-            this.btnManualRecord.Text = "Record To VX";
-            this.btnManualRecord.UseVisualStyleBackColor = true;
-            this.btnManualRecord.Click += new System.EventHandler(this.ButtonManualRecord_Click);
-            // 
-            // dtpSeekTime
-            // 
-            this.dtpSeekTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.dtpSeekTime.CustomFormat = "yyyy-MM-dd hh:mm:ss tt";
-            this.dtpSeekTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpSeekTime.Location = new System.Drawing.Point(206, 367);
-            this.dtpSeekTime.Name = "dtpSeekTime";
-            this.dtpSeekTime.ShowUpDown = true;
-            this.dtpSeekTime.Size = new System.Drawing.Size(141, 20);
-            this.dtpSeekTime.TabIndex = 46;
-            // 
             // btnSnapshot
             // 
             this.btnSnapshot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnSnapshot.Enabled = false;
             this.btnSnapshot.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnSnapshot.Location = new System.Drawing.Point(697, 366);
+            this.btnSnapshot.Location = new System.Drawing.Point(606, 365);
             this.btnSnapshot.Name = "btnSnapshot";
             this.btnSnapshot.Size = new System.Drawing.Size(61, 23);
             this.btnSnapshot.TabIndex = 45;
             this.btnSnapshot.Text = "Snap(VX)";
             this.btnSnapshot.Click += new System.EventHandler(this.ButtonSnapshot_Click);
-            // 
-            // lblTimestampRight
-            // 
-            this.lblTimestampRight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblTimestampRight.Location = new System.Drawing.Point(1058, 364);
-            this.lblTimestampRight.Name = "lblTimestampRight";
-            this.lblTimestampRight.Size = new System.Drawing.Size(125, 25);
-            this.lblTimestampRight.TabIndex = 44;
-            this.lblTimestampRight.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // scVideoPanels
             // 
@@ -952,6 +949,65 @@
             this.panelVideoStreamRight.MouseLeave += new System.EventHandler(this.PanelVideoStream_MouseLeave);
             this.panelVideoStreamRight.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.PanelVideoStream_MouseWheel);
             // 
+            // btnManualRecord
+            // 
+            this.btnManualRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnManualRecord.Enabled = false;
+            this.btnManualRecord.Location = new System.Drawing.Point(882, 365);
+            this.btnManualRecord.Name = "btnManualRecord";
+            this.btnManualRecord.Size = new System.Drawing.Size(87, 23);
+            this.btnManualRecord.TabIndex = 47;
+            this.btnManualRecord.Text = "Record To VX";
+            this.btnManualRecord.UseVisualStyleBackColor = true;
+            this.btnManualRecord.Click += new System.EventHandler(this.ButtonManualRecord_Click);
+            // 
+            // nudPostRecord
+            // 
+            this.nudPostRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.nudPostRecord.Enabled = false;
+            this.nudPostRecord.Location = new System.Drawing.Point(834, 366);
+            this.nudPostRecord.Maximum = new decimal(new int[] {
+            30,
+            0,
+            0,
+            0});
+            this.nudPostRecord.Name = "nudPostRecord";
+            this.nudPostRecord.Size = new System.Drawing.Size(44, 20);
+            this.nudPostRecord.TabIndex = 51;
+            this.nudPostRecord.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // lblPostRecord
+            // 
+            this.lblPostRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblPostRecord.AutoSize = true;
+            this.lblPostRecord.Location = new System.Drawing.Point(807, 369);
+            this.lblPostRecord.Name = "lblPostRecord";
+            this.lblPostRecord.Size = new System.Drawing.Size(28, 13);
+            this.lblPostRecord.TabIndex = 50;
+            this.lblPostRecord.Text = "Post";
+            // 
+            // lblPreRecord
+            // 
+            this.lblPreRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblPreRecord.AutoSize = true;
+            this.lblPreRecord.Location = new System.Drawing.Point(737, 370);
+            this.lblPreRecord.Name = "lblPreRecord";
+            this.lblPreRecord.Size = new System.Drawing.Size(23, 13);
+            this.lblPreRecord.TabIndex = 48;
+            this.lblPreRecord.Text = "Pre";
+            // 
+            // btnSnapshotFromVideo
+            // 
+            this.btnSnapshotFromVideo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnSnapshotFromVideo.Enabled = false;
+            this.btnSnapshotFromVideo.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnSnapshotFromVideo.Location = new System.Drawing.Point(668, 365);
+            this.btnSnapshotFromVideo.Name = "btnSnapshotFromVideo";
+            this.btnSnapshotFromVideo.Size = new System.Drawing.Size(61, 23);
+            this.btnSnapshotFromVideo.TabIndex = 45;
+            this.btnSnapshotFromVideo.Text = "Snap(Vid)";
+            this.btnSnapshotFromVideo.Click += new System.EventHandler(this.ButtonSnapshotFromVideo_Click);
+            // 
             // scOuter
             // 
             this.scOuter.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -986,18 +1042,7 @@
             this.txbxLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.txbxLog.Size = new System.Drawing.Size(1554, 78);
             this.txbxLog.TabIndex = 0;
-            // 
-            // btnSnapshotFromVideo
-            // 
-            this.btnSnapshotFromVideo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnSnapshotFromVideo.Enabled = false;
-            this.btnSnapshotFromVideo.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnSnapshotFromVideo.Location = new System.Drawing.Point(761, 367);
-            this.btnSnapshotFromVideo.Name = "btnSnapshotFromVideo";
-            this.btnSnapshotFromVideo.Size = new System.Drawing.Size(61, 23);
-            this.btnSnapshotFromVideo.TabIndex = 45;
-            this.btnSnapshotFromVideo.Text = "Snap(Vid)";
-            this.btnSnapshotFromVideo.Click += new System.EventHandler(this.ButtonSnapshotFromVideo_Click);
+            this.txbxLog.TextChanged += new System.EventHandler(this.txbxLog_TextChanged);
             // 
             // MainForm
             // 
@@ -1019,12 +1064,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.scInner)).EndInit();
             this.scInner.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvDataSources)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPostRecord)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudPreRecord)).EndInit();
             this.scVideoPanels.Panel1.ResumeLayout(false);
             this.scVideoPanels.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.scVideoPanels)).EndInit();
             this.scVideoPanels.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.nudPostRecord)).EndInit();
             this.scOuter.Panel1.ResumeLayout(false);
             this.scOuter.Panel2.ResumeLayout(false);
             this.scOuter.Panel2.PerformLayout();
@@ -1048,8 +1093,7 @@
         private System.Windows.Forms.ToolStripMenuItem showPTZControlsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem streamsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem streamProtocolToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem rtspToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem mjpegToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rtspUdpToolStripMenuItem;
         public System.Windows.Forms.Button btnPlay;
         public System.Windows.Forms.Button btnPause;
         public System.Windows.Forms.Button btnStop;
@@ -1058,7 +1102,6 @@
         public System.Windows.Forms.Button btnSeek;
         public System.Windows.Forms.Button btnLive;
         private System.Windows.Forms.Label lblSpeed;
-        private System.Windows.Forms.NumericUpDown nudSpeed;
         private System.Windows.Forms.SplitContainer scInner;
         private System.Windows.Forms.ToolStripMenuItem insertSystemEventToolStripMenuItem;
         private System.Windows.Forms.SplitContainer scOuter;
@@ -1125,6 +1168,12 @@
         private System.Windows.Forms.ToolStripMenuItem recordingPathToolStripMenuItem;
         public System.Windows.Forms.Button btnLocalRecord;
         public System.Windows.Forms.Button btnSnapshotFromVideo;
+        private System.Windows.Forms.ToolStripMenuItem playbackToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem normalToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem skipGapsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem jpegPullToolStripMenuItem;
+        public System.Windows.Forms.NumericUpDown nudSpeed;
+        public System.Windows.Forms.ToolStripMenuItem rtspTcpToolStripMenuItem;
     }
 }
 

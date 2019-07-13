@@ -12,6 +12,8 @@
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -61,7 +63,6 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http">
-      <HintPath>packages\System.Net.Http.2.0.20126.16343\lib\net40\System.Net.Http.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -78,8 +79,8 @@
     </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="VxSdk.NET-Media">
-      <HintPath>packages\VxSdk.NET-Media.3.0.12\lib\$(Platform)\VxSdk.NET-Media.dll</HintPath>
+    <Reference Include="VxSdk.NET-Media, Version=0.0.0.0, Culture=neutral, PublicKeyToken=2604320bde3eedc4, processorArchitecture=x86">
+      <HintPath>packages\VxSdk.NET-Media.3.0.15\lib\x86\VxSdk.NET-Media.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -889,6 +890,7 @@
     <EmbeddedResource Include="Source\Users\UserManagerForm.resx">
       <DependentUpon>UserManagerForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -920,16 +922,19 @@
   <ItemGroup>
     <None Include="Resources\cam_ptz_offline.png" />
   </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
   </PropertyGroup>
-  <Import Project="packages\VxSdk.NET-Media.3.0.12\build\VxSdk.NET-Media.targets" Condition="Exists('packages\VxSdk.NET-Media.3.0.12\build\VxSdk.NET-Media.targets')" />
+  <Import Project="packages\VxSdk.NET-Media.3.0.15\build\VxSdk.NET-Media.targets" Condition="Exists('packages\VxSdk.NET-Media.3.0.15\build\VxSdk.NET-Media.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\VxSdk.NET-Media.3.0.12\build\VxSdk.NET-Media.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VxSdk.NET-Media.3.0.12\build\VxSdk.NET-Media.targets'))" />
+    <Error Condition="!Exists('packages\VxSdk.NET-Media.3.0.15\build\VxSdk.NET-Media.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VxSdk.NET-Media.3.0.15\build\VxSdk.NET-Media.targets'))" />
   </Target>
 </Project>

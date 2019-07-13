@@ -17,6 +17,7 @@ namespace ExampleClient.Source
             // Build the path to GStreamer based on the current system settings.
             var currentPath = new System.IO.DirectoryInfo(Application.ExecutablePath).Parent;
             Environment.SetEnvironmentVariable("PATH", currentPath?.FullName + "\\bin");
+            //Environment.SetEnvironmentVariable("GST_DEBUG", "2");
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

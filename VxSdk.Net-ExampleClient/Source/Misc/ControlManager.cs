@@ -1,6 +1,8 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 using VxSdkNet;
+using System.Collections.Generic;
+
 
 namespace ExampleClient.Source
 {
@@ -30,6 +32,7 @@ namespace ExampleClient.Source
         {
             Instance = this;
             SelectControl(Controls.Left);
+            _skipRecordingGaps = false;
         }
 
         /// <summary>
@@ -38,6 +41,28 @@ namespace ExampleClient.Source
         /// <value>The current <see cref="ControlManager"/> instance.</value>
         public static ControlManager Instance { get; private set; }
 
+        public bool SkipPlayback
+        {
+            get { return _skipRecordingGaps; }
+            set { _skipRecordingGaps = value; }
+        }
+
+        public List<Clip> CachedClips
+        {
+            set
+            {
+                if (SelectedControl == Controls.Left)
+                {
+                    _cachedClipsLeft = value;
+                    _justJumpedLeftTime = new System.DateTime(1970, 1, 1);
+                }
+                else
+                {
+                    _cachedClipsRight = value;
+                    _justJumpedRightTime = new System.DateTime(1970, 1, 1);
+                }
+            }
+        }
         /// <summary>
         /// Gets or sets the SelectedControl property.
         /// </summary>
@@ -250,6 +275,11 @@ namespace ExampleClient.Source
         /// The OnTimestampEventLeft method.
         /// </summary>
         /// <param name="timeEvent">The <paramref name="timeEvent"/> parameter.</param>
+        /// 
+        // For some synching
+        static System.DateTime _justJumpedLeftTime;
+        static System.DateTime _justJumpedRightTime;
+
         private static void OnTimestampEventLeft(MediaEvent timeEvent)
         {
             // Note that the timestamp is in UTC by default, so you must convert it to local time
@@ -259,6 +289,50 @@ namespace ExampleClient.Source
             {
                 MainForm.Instance.lblTimestampLeft.Text = timestamp;
             });
+
+            // Skip a gap if necessary
+            if ((Instance.SkipPlayback == true) && (Instance._mediaControllerLeft.Mode == MediaControl.Modes.Playback) && (_justJumpedLeftTime.AddSeconds(1) < timeEvent.Timestamp))
+            {
+                // Are we in a gap? - If so seek to the next play time
+                // clips are ordered from oldest to newest
+                var clips = Instance._cachedClipsLeft;
+                int i = 0;
+                for (; i < clips.Count; i++)
+                {
+                    var clip = clips[i];
+                    // Which direction?
+                    if (MainForm.Instance.nudSpeed.Value > 0)
+                    {
+                        if (timeEvent.Timestamp.AddSeconds(2) >= clip.EndTime)
+                        {
+                            // Look at the next Timestamp
+                            if (i == (clips.Count - 1)) { break; } // This should not happen
+                            if (timeEvent.Timestamp.AddSeconds(3) < clips[i + 1].StartTime)
+                            {
+                                // In a gap - seek to the start time of the next clip
+                                var transport = (MainForm.Instance.rtspTcpToolStripMenuItem.Checked == true) ? MediaControl.RTSPNetworkTransports.RTPOverRTSP : MediaControl.RTSPNetworkTransports.UDP;
+                                System.DateTime startTime = clips[i + 1].StartTime;
+                                float speed = (float)MainForm.Instance.nudSpeed.Value;
+                                object[] invokeArray = new object[4];
+                                invokeArray[0] = Instance._mediaControllerLeft;
+                                invokeArray[1] = startTime;
+                                invokeArray[2] = speed;
+                                invokeArray[3] = transport;
+                                _justJumpedLeftTime = timeEvent.Timestamp;
+                                MainForm.Instance.BeginInvoke(new SeekSkipGapDelegate(SeekSkipGapMethod), invokeArray);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        public delegate void SeekSkipGapDelegate(MediaControl mediaControl, System.DateTime startTime, float speed, MediaControl.RTSPNetworkTransports transport);
+
+        public static void SeekSkipGapMethod(MediaControl mediaControl, System.DateTime startTime, float speed, MediaControl.RTSPNetworkTransports transport)
+        {
+            mediaControl.Stop();
+            mediaControl.Seek(startTime, speed, transport);
         }
 
         /// <summary>
@@ -274,6 +348,43 @@ namespace ExampleClient.Source
             {
                 MainForm.Instance.lblTimestampRight.Text = timestamp;
             });
+
+            // Skip a gap if necessary
+            if ((Instance.SkipPlayback == true) && (Instance._mediaControllerRight.Mode == MediaControl.Modes.Playback) && (_justJumpedRightTime.AddSeconds(1) < timeEvent.Timestamp))
+            {
+                // Are we in a gap? - If so seek to the next play time
+                // clips are ordered from oldest to newest
+                var clips = Instance._cachedClipsRight;
+                int i = 0;
+                for (; i < clips.Count; i++)
+                {
+                    var clip = clips[i];
+                    // Which direction?
+                    if (MainForm.Instance.nudSpeed.Value > 0)
+                    {
+                        if (timeEvent.Timestamp.AddSeconds(1) >= clip.EndTime)
+                        {
+                            // Look at the next Timestamp
+                            if (i == (clips.Count - 1)) { break; } // This should not happen
+                            if (timeEvent.Timestamp.AddSeconds(2) < clips[i + 1].StartTime)
+                            {
+                                // In a gap - seek to the start time of the next clip
+                                var transport = (MainForm.Instance.rtspTcpToolStripMenuItem.Checked == true) ? MediaControl.RTSPNetworkTransports.RTPOverRTSP : MediaControl.RTSPNetworkTransports.UDP;
+                                System.DateTime startTime = clips[i + 1].StartTime;
+                                float speed = (float)MainForm.Instance.nudSpeed.Value;
+                                object[] invokeArray = new object[4];
+                                invokeArray[0] = Instance._mediaControllerRight;
+                                invokeArray[1] = startTime;
+                                invokeArray[2] = speed;
+                                invokeArray[3] = transport;
+                                _justJumpedRightTime = timeEvent.Timestamp;
+                                MainForm.Instance.BeginInvoke(new SeekSkipGapDelegate(SeekSkipGapMethod), invokeArray);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -357,5 +468,17 @@ namespace ExampleClient.Source
         /// The _playingIndexRight field.
         /// </summary>  
         private int _playingIndexRight;
+
+        /// <summary>
+        /// Used to determine if we should skip gaps on recorded video (during playback)
+        /// </summary>
+        private bool _skipRecordingGaps;
+
+        /// <summary>
+        /// Cache clips as getting them can take too long
+        /// </summary>
+        private List<Clip> _cachedClipsLeft;
+        private List<Clip> _cachedClipsRight;
+
     }
 }

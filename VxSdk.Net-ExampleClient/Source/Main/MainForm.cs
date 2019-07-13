@@ -20,7 +20,7 @@ namespace ExampleClient.Source
     /// <remarks>This class contains the main UI form.</remarks>
     public partial class MainForm : Form
     {
-        public static string LicenseString = "ENTER_LICENSE_KEY_HERE";
+        public static string LicenseString = "DCovPywTKiY5LgolLiYsKCI/MywlBRUTdxAAD24dGxsfFRE=";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainForm" /> class.
@@ -764,19 +764,52 @@ namespace ExampleClient.Source
         private void MenuItemProtocol_Click(object sender, EventArgs args)
         {
             var item = sender as ToolStripMenuItem;
-            if (item != null && item.Text == @"MJPEG")
+            if (item != null)
             {
-                rtspToolStripMenuItem.Checked = false;
-                mjpegToolStripMenuItem.Checked = true;
+                if (item.Text == @"JPEG Pull")
+                {
+                    rtspUdpToolStripMenuItem.Checked = false;
+                    rtspTcpToolStripMenuItem.Checked = false;
+                    jpegPullToolStripMenuItem.Checked = true;
+                }
+                else if (item.Text == @"RTSP TCP")
+                {
+                    rtspUdpToolStripMenuItem.Checked = false;
+                    rtspTcpToolStripMenuItem.Checked = true;
+                    jpegPullToolStripMenuItem.Checked = false;
+                }
+                else
+                {
+                    rtspUdpToolStripMenuItem.Checked = true;
+                    rtspTcpToolStripMenuItem.Checked = false;
+                    jpegPullToolStripMenuItem.Checked = false;
+                }
+            }
+            StopAllStreams();
+        }
+
+        /// <summary>
+        /// The MenuItemPlaybackOptions_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void MenuItemPlaybackOptions_Click(object sender, EventArgs e)
+        {
+            var item = sender as ToolStripMenuItem;
+            if (item != null && item.Text == @"Skip Gaps")
+            {
+                normalToolStripMenuItem.Checked = false;
+                skipGapsToolStripMenuItem.Checked = true;
             }
             else
             {
-                rtspToolStripMenuItem.Checked = true;
-                mjpegToolStripMenuItem.Checked = false;
+                normalToolStripMenuItem.Checked = true;
+                skipGapsToolStripMenuItem.Checked = false;
             }
 
             StopAllStreams();
         }
+
 
         /// <summary>
         /// The MenuItemRecordingPath_Click method.
@@ -1338,8 +1371,10 @@ namespace ExampleClient.Source
         /// <param name="selProtocol">The selected protocol.</param>
         /// <param name="dataSource">The selected data source.</param>
         /// <param name="showWindow">Selects the first available stream if False.</param>
+        /// <param name="useRtspTcp">Only valid if protocol is RtspRtp.  Selects TCP or UDP transport</param>
+        /// <param name="recordDateTime">Only show the data intefaces with recording if using playback</param>
         /// <returns>The currently selected data interface.</returns>
-        private static DataInterface SelectDataInterface(DataInterface.StreamProtocols selProtocol, DataSource dataSource, bool showWindow)
+        private static DataInterface SelectDataInterface(DataInterface.StreamProtocols selProtocol, DataSource dataSource, bool showWindow, bool useRtspTcp, DateTime recordDateTime)
         {
             DataInterface dataInterface;
             if (selProtocol == DataInterface.StreamProtocols.RtspRtp)
@@ -1347,6 +1382,32 @@ namespace ExampleClient.Source
                 var interfaceList = dataSource.DataInterfaces.Where(iface =>
                     iface.Protocol == DataInterface.StreamProtocols.RtspRtp).ToList();
 
+                if (useRtspTcp == true)
+                {
+                    interfaceList = interfaceList.Where(iface => iface.SupportsMulticast == false).ToList();
+                }
+
+                if (recordDateTime != default(DateTime))
+                {
+                    // Need to figure out which interfaces have the clip for the time you want
+                    interfaceList.Clear();
+                    var clips = dataSource.Clips;
+                    foreach (var clip in clips)
+                    {
+                        if ((recordDateTime > clip.StartTime) && (recordDateTime < clip.EndTime))
+                        {
+                            // There is a problem in that the data interface on playback also includes a start time
+                            //   that will be used instead of the seek time to the seek call.  
+                            //  So, go ahead and select the first interface, unless there is more than one
+                            interfaceList = clip.DataInterfaces;
+                            if (interfaceList.Count == 1)
+                            {
+                                interfaceList[0] = dataSource.DataInterfaces[0];
+                            }
+                            break;
+                        }
+                    }
+                }
                 if (interfaceList.Count == 0)
                     return null;
 
@@ -1420,15 +1481,15 @@ namespace ExampleClient.Source
             {
                 // Get the data sources for the selected device.
                 var dataSource = (DataSource)dgvDataSources.SelectedRows[0].Tag;
-                var protocol = mjpegToolStripMenuItem.Checked ? DataInterface.StreamProtocols.MjpegPull : DataInterface.StreamProtocols.RtspRtp;
+                var protocol = jpegPullToolStripMenuItem.Checked ? DataInterface.StreamProtocols.MjpegPull : DataInterface.StreamProtocols.RtspRtp;
                 var showWindow = true;
                 if (Control.Current != null)
                     showWindow = Control.Current.Mode == MediaControl.Modes.Stopped;
 
-                var dataInterface = SelectDataInterface(protocol, dataSource, showWindow);
+                var dataInterface = SelectDataInterface(protocol, dataSource, showWindow, rtspTcpToolStripMenuItem.Checked, seekTime);
                 if (dataInterface == null)
                 {
-                    WriteToLog("Error: No data interface found for selected camera.\n");
+                    WriteToLog("Error: No data interface found for selected camera and/or the seek time requested.\n");
                     return;
                 }
 
@@ -1438,10 +1499,10 @@ namespace ExampleClient.Source
                 if (audioLink != null)
                 {
                     audioDataSource = audioLink.Resource;
-                    audioDataInterface = SelectDataInterface(DataInterface.StreamProtocols.RtspRtp, audioDataSource, false);
+                    audioDataInterface = SelectDataInterface(DataInterface.StreamProtocols.RtspRtp, audioDataSource, false, rtspTcpToolStripMenuItem.Checked, default(DateTime));
                 }
                 else
-                    SelectAudioData(dataSource, showWindow, out audioDataSource, out audioDataInterface);
+                    SelectAudioData(dataSource, showWindow, out audioDataSource, out audioDataInterface, rtspTcpToolStripMenuItem.Checked);
 
                 // If the media controller exists then a stream is running and the user is
                 // requesting a new action on it.  If it's null then this is either the
@@ -1465,9 +1526,20 @@ namespace ExampleClient.Source
                     }
                 }
 
+                // Getting the clip informatoin is necessary to skip gaps on playback, but is not something
+                //   we want to do in the timestamp callback as it takes too long.  So, cache the clip information
+                //   before starting the video
+                Control.CachedClips = dataSource.Clips;
+                Control.SkipPlayback = skipGapsToolStripMenuItem.Checked;
+                var transport = (rtspTcpToolStripMenuItem.Checked == true) ? MediaControl.RTSPNetworkTransports.RTPOverRTSP : MediaControl.RTSPNetworkTransports.UDP;
+                string overlayString = dataSource.Id + "   " + dataSource.Name + "   " + dataInterface.Protocol.ToString();
+                // Add date time stamp.  
+                //   See https://en.cppreference.com/w/cpp/io/manip/put_time
+                overlayString += "  %Y-%m-%d %H:%M:%S";
+                Control.Current.AddVideoOverlayData(overlayString, MediaControl.VideoOverlayDataPositions.BottomCenter, true);
                 if (seekTime == default(DateTime))
                 {
-                    if (!Control.Current.Play((float)nudSpeed.Value))
+                    if (!Control.Current.Play((float)nudSpeed.Value, transport))
                     {
                         WriteToLog(
                             $"Error: Unable to {(Control.Current.Mode == MediaControl.Modes.Playback ? "resume" : "start")} stream.\n");
@@ -1485,7 +1557,7 @@ namespace ExampleClient.Source
                 }
                 else
                 {
-                    if (!Control.Current.Seek(seekTime, (float)nudSpeed.Value))
+                    if (!Control.Current.Seek(seekTime, (float)nudSpeed.Value, transport))
                     {
                         WriteToLog("Error: Unable to start recorded stream.\n");
                         if (Control.Current.IsPipelineActive)
@@ -1593,7 +1665,7 @@ namespace ExampleClient.Source
         /// <param name="showWindow">Specifies wheather to show the window or not</param>
         /// <param name="audioSource">Out parameter for audio data source</param>
         /// <param name="audioInterface">Out parameter for audio data interface</param>
-        private void SelectAudioData(DataSource videoSource, bool showWindow, out DataSource audioSource, out DataInterface audioInterface)
+        private void SelectAudioData(DataSource videoSource, bool showWindow, out DataSource audioSource, out DataInterface audioInterface, bool useTCP)
         {
             audioSource = null;
             audioInterface = null;
@@ -1603,7 +1675,7 @@ namespace ExampleClient.Source
                 if (videoSource.Name != ds.Name || ds.Type != DataSource.Types.Audio)
                     continue;
 
-                audioInterface = SelectDataInterface(DataInterface.StreamProtocols.RtspRtp, ds, showWindow);
+                audioInterface = SelectDataInterface(DataInterface.StreamProtocols.RtspRtp, ds, showWindow, useTCP, default(DateTime));
                 if (audioInterface == null)
                 {
                     WriteToLog("Error: No audio data interface found for selected camera.\n");
@@ -1612,6 +1684,21 @@ namespace ExampleClient.Source
 
                 audioSource = ds;
             }
+        }
+
+        private void scInner_Panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void txbxLog_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panelVideoStreamLeft_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }
