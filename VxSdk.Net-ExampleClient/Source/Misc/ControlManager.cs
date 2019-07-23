@@ -62,6 +62,17 @@ namespace ExampleClient.Source
                     _justJumpedRightTime = new System.DateTime(1970, 1, 1);
                 }
             }
+            get
+            {
+                if (SelectedControl == Controls.Left)
+                {
+                    return _cachedClipsLeft;
+                }
+                else
+                {
+                    return _cachedClipsRight;
+                }
+            }
         }
         /// <summary>
         /// Gets or sets the SelectedControl property.

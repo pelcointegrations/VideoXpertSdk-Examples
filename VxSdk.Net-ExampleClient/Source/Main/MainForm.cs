@@ -1536,6 +1536,20 @@ namespace ExampleClient.Source
                 // Add date time stamp.  
                 //   See https://en.cppreference.com/w/cpp/io/manip/put_time
                 overlayString += "  %Y-%m-%d %H:%M:%S";
+
+                if (seekTime != default(DateTime))
+                {
+                    // In this case, demonstrate how to get the storage information for the clip
+                    foreach (Clip clip in Control.CachedClips)
+                    {
+                        if ((seekTime > clip.StartTime) && (seekTime < clip.EndTime))
+                        {
+                            overlayString += "\n  Storage ID:  " + clip.DataStorageId;
+                            break;
+                        }
+                    }
+
+                }
                 Control.Current.AddVideoOverlayData(overlayString, MediaControl.VideoOverlayDataPositions.BottomCenter, true);
                 if (seekTime == default(DateTime))
                 {
