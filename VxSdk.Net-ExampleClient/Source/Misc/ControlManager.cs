@@ -74,6 +74,45 @@ namespace ExampleClient.Source
                 }
             }
         }
+
+        public bool EnablePlaybackProgress(System.DateTime startTime, System.DateTime endTime)
+        {
+            // Note:  Progress bars will go from 1 to 1000 - need to scale
+            if (SelectedControl == Controls.Left)
+            {
+                _startTimeLeft = startTime;
+                _endTimeLeft = endTime;
+                MainForm.Instance.progressBar_left.Enabled = true;
+                MainForm.Instance.progressBar_left.Visible = true;
+                MainForm.Instance.progressBar_left.Value = MainForm.Instance.progressBar_left.Minimum = 0;
+                MainForm.Instance.progressBar_left.Maximum = 1000;
+            }
+            else
+            {
+                _startTimeRight = startTime;
+                _endTimeRight = endTime;
+                MainForm.Instance.progressBar_right.Enabled = true;
+                MainForm.Instance.progressBar_right.Visible = true;
+                MainForm.Instance.progressBar_left.Value = MainForm.Instance.progressBar_right.Minimum = 0;
+                MainForm.Instance.progressBar_right.Maximum = 1000;
+            }
+            return true;
+        }
+
+        public bool RemovePlaybackProgress()
+        {
+            if (SelectedControl == Controls.Left)
+            {
+                MainForm.Instance.progressBar_left.Visible = false;
+            }
+            else
+            {
+                MainForm.Instance.progressBar_right.Visible = false;
+            }
+            return true;
+        }
+
+
         /// <summary>
         /// Gets or sets the SelectedControl property.
         /// </summary>
@@ -301,6 +340,30 @@ namespace ExampleClient.Source
                 MainForm.Instance.lblTimestampLeft.Text = timestamp;
             });
 
+            var ticksIn = timeEvent.Timestamp.Ticks;
+            if (Instance._mediaControllerLeft.Mode == MediaControl.Modes.Playback)
+            {
+                if (timeEvent.Timestamp.Ticks >= Instance._endTimeLeft.Ticks)
+                {
+                    // We are done - so Pause and show progress at 100%
+                    MainForm.Instance.progressBar_left.BeginInvoke((MethodInvoker)delegate
+                    {
+                        MainForm.Instance.progressBar_left.Value = 1000;
+                    });
+                    Instance._mediaControllerLeft.Pause();
+                    return;
+                }
+                MainForm.Instance.progressBar_left.BeginInvoke((MethodInvoker)delegate
+                {
+                    if (ticksIn < Instance._startTimeLeft.Ticks)
+                    {
+                        ticksIn = Instance._startTimeLeft.Ticks;
+                    }
+                    double ticksDone = (double)ticksIn - Instance._startTimeLeft.Ticks;
+                    ticksDone /= (Instance._endTimeLeft.Ticks - Instance._startTimeLeft.Ticks);
+                    MainForm.Instance.progressBar_left.Value = (int)(ticksDone * 1000);
+                });
+            }
             // Skip a gap if necessary
             if ((Instance.SkipPlayback == true) && (Instance._mediaControllerLeft.Mode == MediaControl.Modes.Playback) && (_justJumpedLeftTime.AddSeconds(1) < timeEvent.Timestamp))
             {
@@ -359,6 +422,31 @@ namespace ExampleClient.Source
             {
                 MainForm.Instance.lblTimestampRight.Text = timestamp;
             });
+
+            var ticksIn = timeEvent.Timestamp.Ticks;
+            if (Instance._mediaControllerRight.Mode == MediaControl.Modes.Playback)
+            {
+                if (timeEvent.Timestamp.Ticks >= Instance._endTimeRight.Ticks)
+                {
+                    // We are done - so Pause and show progress at 100%
+                    MainForm.Instance.progressBar_right.BeginInvoke((MethodInvoker)delegate
+                    {
+                        MainForm.Instance.progressBar_right.Value = 1000;
+                    });
+                    Instance._mediaControllerRight.Pause();
+                    return;
+                }
+                MainForm.Instance.progressBar_right.BeginInvoke((MethodInvoker)delegate
+                {
+                    if (ticksIn < Instance._startTimeRight.Ticks)
+                    {
+                        ticksIn = Instance._startTimeRight.Ticks;
+                    }
+                    double ticksDone = (double)ticksIn - Instance._startTimeRight.Ticks;
+                    ticksDone /= (Instance._endTimeRight.Ticks - Instance._startTimeRight.Ticks);
+                    MainForm.Instance.progressBar_right.Value = (int)(ticksDone * 1000);
+                });
+            }
 
             // Skip a gap if necessary
             if ((Instance.SkipPlayback == true) && (Instance._mediaControllerRight.Mode == MediaControl.Modes.Playback) && (_justJumpedRightTime.AddSeconds(1) < timeEvent.Timestamp))
@@ -491,5 +579,9 @@ namespace ExampleClient.Source
         private List<Clip> _cachedClipsLeft;
         private List<Clip> _cachedClipsRight;
 
+        private System.DateTime _startTimeLeft;
+        private System.DateTime _startTimeRight;
+        private System.DateTime _endTimeLeft;
+        private System.DateTime _endTimeRight;
     }
 }

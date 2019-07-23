@@ -195,7 +195,7 @@ namespace ExampleClient.Source
             var labels = new List<Label> { lblSnapshot1, lblSnapshot2, lblSnapshot3, lblSnapshot4, lblSnapshot5 };
 
             var listBytes = await GetMultiPartImages(snapshotFilter);
-            if (listBytes.Count == 0) 
+            if ((listBytes == null) || (listBytes.Count == 0)) 
                 return;
 
             var i = 0;

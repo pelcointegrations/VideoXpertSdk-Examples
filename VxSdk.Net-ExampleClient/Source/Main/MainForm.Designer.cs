@@ -102,12 +102,13 @@
             this.btnRefreshDataSources = new System.Windows.Forms.Button();
             this.pbLoadCameras = new System.Windows.Forms.ProgressBar();
             this.lblAddingCameras = new System.Windows.Forms.Label();
-            this.dtpSeekTime = new System.Windows.Forms.DateTimePicker();
             this.btnLocalRecord = new System.Windows.Forms.Button();
             this.lblTimestampRight = new System.Windows.Forms.Label();
             this.nudPreRecord = new System.Windows.Forms.NumericUpDown();
             this.btnSnapshot = new System.Windows.Forms.Button();
             this.scVideoPanels = new System.Windows.Forms.SplitContainer();
+            this.progressBar_left = new System.Windows.Forms.ProgressBar();
+            this.progressBar_right = new System.Windows.Forms.ProgressBar();
             this.panelVideoStreamRight = new System.Windows.Forms.Panel();
             this.btnManualRecord = new System.Windows.Forms.Button();
             this.nudPostRecord = new System.Windows.Forms.NumericUpDown();
@@ -158,7 +159,7 @@
             this.panelVideoStreamLeft.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.panelVideoStreamLeft.Location = new System.Drawing.Point(3, 3);
             this.panelVideoStreamLeft.Name = "panelVideoStreamLeft";
-            this.panelVideoStreamLeft.Size = new System.Drawing.Size(584, 353);
+            this.panelVideoStreamLeft.Size = new System.Drawing.Size(584, 340);
             this.panelVideoStreamLeft.TabIndex = 2;
             this.panelVideoStreamLeft.Click += new System.EventHandler(this.PanelVideoStream_Click);
             this.panelVideoStreamLeft.Paint += new System.Windows.Forms.PaintEventHandler(this.panelVideoStreamLeft_Paint);
@@ -454,7 +455,7 @@
             // rtspTcpToolStripMenuItem
             // 
             this.rtspTcpToolStripMenuItem.Name = "rtspTcpToolStripMenuItem";
-            this.rtspTcpToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.rtspTcpToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.rtspTcpToolStripMenuItem.Text = "RTSP TCP";
             this.rtspTcpToolStripMenuItem.Click += new System.EventHandler(this.MenuItemProtocol_Click);
             // 
@@ -671,11 +672,11 @@
             this.btnSeek.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnSeek.Enabled = false;
             this.btnSeek.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.btnSeek.Location = new System.Drawing.Point(265, 366);
+            this.btnSeek.Location = new System.Drawing.Point(256, 366);
             this.btnSeek.Name = "btnSeek";
-            this.btnSeek.Size = new System.Drawing.Size(45, 23);
+            this.btnSeek.Size = new System.Drawing.Size(54, 23);
             this.btnSeek.TabIndex = 36;
-            this.btnSeek.Text = "Seek";
+            this.btnSeek.Text = "Seek ...";
             this.btnSeek.Click += new System.EventHandler(this.ButtonSeek_Click);
             // 
             // btnLive
@@ -742,7 +743,6 @@
             // scInner.Panel2
             // 
             this.scInner.Panel2.BackColor = System.Drawing.SystemColors.Control;
-            this.scInner.Panel2.Controls.Add(this.dtpSeekTime);
             this.scInner.Panel2.Controls.Add(this.btnLocalRecord);
             this.scInner.Panel2.Controls.Add(this.lblTimestampRight);
             this.scInner.Panel2.Controls.Add(this.nudPreRecord);
@@ -846,17 +846,6 @@
             this.lblAddingCameras.Text = "Loading Cameras";
             this.lblAddingCameras.Visible = false;
             // 
-            // dtpSeekTime
-            // 
-            this.dtpSeekTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.dtpSeekTime.CustomFormat = "yyyy-MM-dd hh:mm:ss tt";
-            this.dtpSeekTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpSeekTime.Location = new System.Drawing.Point(120, 367);
-            this.dtpSeekTime.Name = "dtpSeekTime";
-            this.dtpSeekTime.ShowUpDown = true;
-            this.dtpSeekTime.Size = new System.Drawing.Size(141, 20);
-            this.dtpSeekTime.TabIndex = 46;
-            // 
             // btnLocalRecord
             // 
             this.btnLocalRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -922,14 +911,36 @@
             // 
             // scVideoPanels.Panel1
             // 
+            this.scVideoPanels.Panel1.Controls.Add(this.progressBar_left);
             this.scVideoPanels.Panel1.Controls.Add(this.panelVideoStreamLeft);
             // 
             // scVideoPanels.Panel2
             // 
+            this.scVideoPanels.Panel2.Controls.Add(this.progressBar_right);
             this.scVideoPanels.Panel2.Controls.Add(this.panelVideoStreamRight);
             this.scVideoPanels.Size = new System.Drawing.Size(1183, 359);
             this.scVideoPanels.SplitterDistance = 590;
             this.scVideoPanels.TabIndex = 41;
+            // 
+            // progressBar_left
+            // 
+            this.progressBar_left.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.progressBar_left.Enabled = false;
+            this.progressBar_left.Location = new System.Drawing.Point(0, 349);
+            this.progressBar_left.Name = "progressBar_left";
+            this.progressBar_left.Size = new System.Drawing.Size(590, 10);
+            this.progressBar_left.TabIndex = 3;
+            this.progressBar_left.Visible = false;
+            // 
+            // progressBar_right
+            // 
+            this.progressBar_right.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.progressBar_right.Enabled = false;
+            this.progressBar_right.Location = new System.Drawing.Point(0, 349);
+            this.progressBar_right.Name = "progressBar_right";
+            this.progressBar_right.Size = new System.Drawing.Size(589, 10);
+            this.progressBar_right.TabIndex = 3;
+            this.progressBar_right.Visible = false;
             // 
             // panelVideoStreamRight
             // 
@@ -941,7 +952,7 @@
             this.panelVideoStreamRight.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.panelVideoStreamRight.Location = new System.Drawing.Point(3, 3);
             this.panelVideoStreamRight.Name = "panelVideoStreamRight";
-            this.panelVideoStreamRight.Size = new System.Drawing.Size(578, 353);
+            this.panelVideoStreamRight.Size = new System.Drawing.Size(578, 340);
             this.panelVideoStreamRight.TabIndex = 3;
             this.panelVideoStreamRight.Click += new System.EventHandler(this.PanelVideoStream_Click);
             this.panelVideoStreamRight.MouseClick += new System.Windows.Forms.MouseEventHandler(this.PanelVideoStreamRight_MouseClick);
@@ -1147,7 +1158,6 @@
         private System.Windows.Forms.ToolStripMenuItem logoutToolStripMenuItem;
         public System.Windows.Forms.Button btnRefreshDataSources;
         public System.ComponentModel.BackgroundWorker bgWorker;
-        private System.Windows.Forms.DateTimePicker dtpSeekTime;
         public System.Windows.Forms.DataGridView dgvDataSources;
         private System.Windows.Forms.DataGridViewImageColumn colStatus;
         private System.Windows.Forms.DataGridViewTextBoxColumn colName;
@@ -1174,6 +1184,8 @@
         private System.Windows.Forms.ToolStripMenuItem jpegPullToolStripMenuItem;
         public System.Windows.Forms.NumericUpDown nudSpeed;
         public System.Windows.Forms.ToolStripMenuItem rtspTcpToolStripMenuItem;
+        public System.Windows.Forms.ProgressBar progressBar_left;
+        public System.Windows.Forms.ProgressBar progressBar_right;
     }
 }
 

@@ -20,7 +20,7 @@ namespace ExampleClient.Source
     /// <remarks>This class contains the main UI form.</remarks>
     public partial class MainForm : Form
     {
-        public static string LicenseString = "DCovPywTKiY5LgolLiYsKCI/MywlBRUTdxAAD24dGxsfFRE=";
+        public static string LicenseString = "ENTER_LICENSE_KEY_HERE";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainForm" /> class.
@@ -28,7 +28,6 @@ namespace ExampleClient.Source
         public MainForm()
         {
             InitializeComponent();
-            dtpSeekTime.Value = DateTime.Now.AddMinutes(-10);
             scOuter.Panel2Collapsed = true;
             Instance = this;
             PtzForm = new PtzControlForm();
@@ -347,8 +346,56 @@ namespace ExampleClient.Source
         /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonSeek_Click(object sender, EventArgs args)
         {
-            // The seek time value must be in UTC format.
-            StartStream(dtpSeekTime.Value.ToUniversalTime());
+            // Get the start and end times from the selected data source
+            var dataSource = (DataSource)dgvDataSources.SelectedRows[0].Tag;
+
+            // Want to cache the clips to avoid extra server calls
+            var clips = dataSource.Clips;
+            if (clips.Count == 0)
+            {
+                // No data clips - so nothing to show
+                MessageBox.Show("This Camera contains no recordings");
+                return;
+            }
+
+            // Note, if there is a storage time, the start time may be changing while you are selecting
+            //   your start time.
+            SeekSelectForm seekSelectForm = new SeekSelectForm(clips[0].StartTime.ToLocalTime(), clips[clips.Count - 1].EndTime.ToLocalTime());
+            seekSelectForm.ShowDialog();
+
+            if (seekSelectForm.DialogResult == DialogResult.OK)
+            {
+                // You may have selected a gap - check this case, let the user know,
+                //   and adjust
+                DateTime startTimeToUse = seekSelectForm.StartTime;
+                for (int i = 0; i < clips.Count - 1; i++)
+                {
+                    var clip = clips[i];
+                    if ((seekSelectForm.StartTime > clip.EndTime) && (seekSelectForm.StartTime < clips[i + 1].StartTime))
+                    {
+                        // in a gap - round up to the next clip start
+                        startTimeToUse = clips[i + 1].StartTime;
+                        MessageBox.Show("Start Time in gap:  will start at " + startTimeToUse.ToLocalTime().ToString());
+                        break;
+                    }
+                }
+
+                DateTime endTimeToUse = seekSelectForm.EndTime;
+                for (int i = 0; i < clips.Count - 1; i++)
+                {
+                    var clip = clips[i];
+                    if ((seekSelectForm.EndTime > clip.EndTime) && (seekSelectForm.EndTime < clips[i + 1].StartTime))
+                    {
+                        // in a gap - round down to the last clip end
+                        endTimeToUse = clips[i].EndTime;
+                        MessageBox.Show("End Time in gap:  will start at " + endTimeToUse.ToLocalTime().ToString());
+                        break;
+                    }
+                }
+
+                // The time values must be in UTC format.
+                StartStream(startTimeToUse.ToUniversalTime(), endTimeToUse.ToUniversalTime());
+            }
         }
 
         /// <summary>
@@ -1475,7 +1522,9 @@ namespace ExampleClient.Source
         /// </summary>
         /// <param name="seekTime">The <paramref name="seekTime"/> in UTC format.  If no value or a default 
         /// DateTime object is given then the stream is started in live mode.</param>
-        private void StartStream(DateTime seekTime = default(DateTime))
+        /// <param name="endTime">The endTime in UTC format.  This value is only used in playback mode.  The
+        /// playback video will stop when the endtime is reached.  This allows a progress bar.</param>
+        private void StartStream(DateTime seekTime = default(DateTime), DateTime endTime = default(DateTime))
         {
             try
             {
@@ -1531,25 +1580,12 @@ namespace ExampleClient.Source
                 //   before starting the video
                 Control.CachedClips = dataSource.Clips;
                 Control.SkipPlayback = skipGapsToolStripMenuItem.Checked;
+                Control.RemovePlaybackProgress();
                 var transport = (rtspTcpToolStripMenuItem.Checked == true) ? MediaControl.RTSPNetworkTransports.RTPOverRTSP : MediaControl.RTSPNetworkTransports.UDP;
                 string overlayString = dataSource.Id + "   " + dataSource.Name + "   " + dataInterface.Protocol.ToString();
                 // Add date time stamp.  
                 //   See https://en.cppreference.com/w/cpp/io/manip/put_time
                 overlayString += "  %Y-%m-%d %H:%M:%S";
-
-                if (seekTime != default(DateTime))
-                {
-                    // In this case, demonstrate how to get the storage information for the clip
-                    foreach (Clip clip in Control.CachedClips)
-                    {
-                        if ((seekTime > clip.StartTime) && (seekTime < clip.EndTime))
-                        {
-                            overlayString += "\n  Storage ID:  " + clip.DataStorageId;
-                            break;
-                        }
-                    }
-
-                }
                 Control.Current.AddVideoOverlayData(overlayString, MediaControl.VideoOverlayDataPositions.BottomCenter, true);
                 if (seekTime == default(DateTime))
                 {
@@ -1571,6 +1607,18 @@ namespace ExampleClient.Source
                 }
                 else
                 {
+                    // In this case, demonstrate how to get the storage information for the clip
+                    foreach (Clip clip in Control.CachedClips)
+                    {
+                        if ((seekTime > clip.StartTime) && (seekTime < clip.EndTime))
+                        {
+                            overlayString += "\n  Storage ID:  " + clip.DataStorageId;
+                            break;
+                        }
+                    }
+                    Control.Current.AddVideoOverlayData(overlayString, MediaControl.VideoOverlayDataPositions.BottomCenter, true);
+
+                    Control.EnablePlaybackProgress(seekTime, endTime);
                     if (!Control.Current.Seek(seekTime, (float)nudSpeed.Value, transport))
                     {
                         WriteToLog("Error: Unable to start recorded stream.\n");
@@ -1639,6 +1687,8 @@ namespace ExampleClient.Source
             {
                 if (Control.Current == null)
                     return;
+
+                Control.RemovePlaybackProgress();
 
                 Control.Current.Stop();
 

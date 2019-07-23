@@ -62,9 +62,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net" />
-    <Reference Include="System.Net.Http">
-      <Private>True</Private>
-    </Reference>
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\System.Net.Http.Formatting.Extension.5.2.3.0\lib\System.Net.Http.Extensions.dll</HintPath>
       <Private>True</Private>
@@ -138,6 +136,10 @@
     <Compile Include="Source\Rules\RuleManagerForm.Designer.cs">
       <DependentUpon>RuleManagerForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\Seek\SeekSelectForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Seek\SeekSelectForm.Designer.cs" />
     <Compile Include="Source\Situations\ModifyNotificationForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -639,6 +641,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Source\Rules\RuleManagerForm.resx">
       <DependentUpon>RuleManagerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Seek\SeekSelectForm.resx">
+      <DependentUpon>SeekSelectForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Source\Situations\ModifyNotificationForm.resx">
       <DependentUpon>ModifyNotificationForm.cs</DependentUpon>
