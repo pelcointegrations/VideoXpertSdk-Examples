@@ -27,8 +27,7 @@ namespace ExampleClient.Source
             Application.Run(new MainForm());
         }
 
-        // private static string _licenseString = "ENTER_LICENSE_KEY_HERE";
-        public static string _licenseString = "DCovPywTKiY5LgolLiYsKCI/MywlBRUTdxAAD24dGxsfFRE=";
+        private static string _licenseString = "ENTER_LICENSE_KEY_HERE";
         public static string LicenseString { get => _licenseString; }
 
     }
