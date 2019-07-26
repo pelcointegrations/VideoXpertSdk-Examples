@@ -314,7 +314,7 @@ namespace ExampleClient.Source.Exports
                         process.StartInfo.CreateNoWindow = true;
                         process.StartInfo.RedirectStandardOutput = true;
                         process.StartInfo.FileName = "ffmpeg.exe";
-                        process.StartInfo.Arguments = "-i \"" + mkvFiles[0] + "\" " + textBox_fileName.Text;
+                        process.StartInfo.Arguments = "-y -i \"" + mkvFiles[0] + "\" " + textBox_fileName.Text;
                         process.Start();
                         process.WaitForExit();
                     }
