@@ -61,6 +61,8 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -111,6 +113,18 @@
     </Compile>
     <Compile Include="Source\DataStorages\AddEdgeClipForm.Designer.cs">
       <DependentUpon>AddEdgeClipForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Exports\ExportDownloadProgess.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Exports\ExportDownloadProgess.Designer.cs">
+      <DependentUpon>ExportDownloadProgess.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Exports\LocalExportSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Exports\LocalExportSelect.Designer.cs">
+      <DependentUpon>LocalExportSelect.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\Rules\AddRuleTriggerForm.cs">
       <SubType>Form</SubType>
@@ -630,6 +644,12 @@
     <EmbeddedResource Include="Source\DataStorages\AddEdgeClipForm.resx">
       <DependentUpon>AddEdgeClipForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Source\Exports\ExportDownloadProgess.resx">
+      <DependentUpon>ExportDownloadProgess.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Exports\LocalExportSelect.resx">
+      <DependentUpon>LocalExportSelect.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Source\Rules\AddRuleTriggerForm.resx">
       <DependentUpon>AddRuleTriggerForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -942,4 +962,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('packages\VxSdk.NET-Media.3.0.17\build\VxSdk.NET-Media.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VxSdk.NET-Media.3.0.17\build\VxSdk.NET-Media.targets'))" />
   </Target>
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /Y /F $(ProjectDir)ThirdParty\ffmpeg.exe $(TargetDir)</PostBuildEvent>
+  </PropertyGroup>
 </Project>

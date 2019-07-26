@@ -20,8 +20,6 @@ namespace ExampleClient.Source
     /// <remarks>This class contains the main UI form.</remarks>
     public partial class MainForm : Form
     {
-        public static string LicenseString = "ENTER_LICENSE_KEY_HERE";
-
         /// <summary>
         /// Initializes a new instance of the <see cref="MainForm" /> class.
         /// </summary>
@@ -464,7 +462,7 @@ namespace ExampleClient.Source
         /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void MainForm_Shown(object sender, EventArgs args)
         {
-            if (LicenseString == "ENTER_LICENSE_KEY_HERE")
+            if (Program.LicenseString == "ENTER_LICENSE_KEY_HERE")
                 MessageBox.Show(Instance, Resources.LicenseStringMissingText, @"Default License Key", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
@@ -649,6 +647,19 @@ namespace ExampleClient.Source
             using (var exportForm = new ExportManagerForm())
             {
                 exportForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// The MenuItemExportLocal_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void MenuItemExportLocal_Click(object sender, EventArgs e)
+        {
+            using (var localExportForm = new Exports.LocalExportSelect())
+            {
+                localExportForm.ShowDialog();
             }
         }
 

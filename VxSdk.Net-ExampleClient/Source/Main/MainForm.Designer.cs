@@ -77,6 +77,7 @@
             this.dataStorageManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.devicesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.drawingManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportsLocalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.licenseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.monitorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -502,6 +503,7 @@
             this.dataStorageManagerToolStripMenuItem,
             this.devicesToolStripMenuItem,
             this.drawingManagerToolStripMenuItem,
+            this.exportsLocalToolStripMenuItem,
             this.exportManagerToolStripMenuItem,
             this.licenseToolStripMenuItem,
             this.monitorsToolStripMenuItem,
@@ -576,11 +578,18 @@
             this.drawingManagerToolStripMenuItem.Text = "Drawings";
             this.drawingManagerToolStripMenuItem.Click += new System.EventHandler(this.MenuItemDrawingManager_Click);
             // 
+            // exportsLocalToolStripMenuItem
+            // 
+            this.exportsLocalToolStripMenuItem.Name = "exportsLocalToolStripMenuItem";
+            this.exportsLocalToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.exportsLocalToolStripMenuItem.Text = "Exports Local";
+            this.exportsLocalToolStripMenuItem.Click += new System.EventHandler(this.MenuItemExportLocal_Click);
+            // 
             // exportManagerToolStripMenuItem
             // 
             this.exportManagerToolStripMenuItem.Name = "exportManagerToolStripMenuItem";
             this.exportManagerToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
-            this.exportManagerToolStripMenuItem.Text = "Exports";
+            this.exportManagerToolStripMenuItem.Text = "Exports Server";
             this.exportManagerToolStripMenuItem.Click += new System.EventHandler(this.MenuItemExportManager_Click);
             // 
             // licenseToolStripMenuItem
@@ -1186,6 +1195,7 @@
         public System.Windows.Forms.ToolStripMenuItem rtspTcpToolStripMenuItem;
         public System.Windows.Forms.ProgressBar progressBar_left;
         public System.Windows.Forms.ProgressBar progressBar_right;
+        private System.Windows.Forms.ToolStripMenuItem exportsLocalToolStripMenuItem;
     }
 }
 

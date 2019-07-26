@@ -44,7 +44,7 @@ namespace ExampleClient.Source
         /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonConnect_Click(object sender, EventArgs args)
         {
-            MainForm.CurrentSystem = new VXSystem(txbxIp.Text, Convert.ToInt32(tbxPort.Text), true, MainForm.LicenseString);
+            MainForm.CurrentSystem = new VXSystem(txbxIp.Text, Convert.ToInt32(tbxPort.Text), true, Program.LicenseString);
             try
             {
                 var result = MainForm.CurrentSystem.Login(txbxUserName.Text, txbxPassword.Text);
