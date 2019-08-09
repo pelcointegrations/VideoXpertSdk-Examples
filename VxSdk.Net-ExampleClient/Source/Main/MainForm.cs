@@ -369,10 +369,10 @@ namespace ExampleClient.Source
                 for (int i = 0; i < clips.Count - 1; i++)
                 {
                     var clip = clips[i];
-                    if ((seekSelectForm.StartTime > clip.EndTime) && (seekSelectForm.StartTime < clips[i + 1].StartTime))
+                    if ((seekSelectForm.StartTime.ToUniversalTime() >= clip.EndTime) && (seekSelectForm.StartTime.ToUniversalTime() < clips[i + 1].StartTime))
                     {
                         // in a gap - round up to the next clip start
-                        startTimeToUse = clips[i + 1].StartTime;
+                        startTimeToUse = clips[i + 1].StartTime.ToLocalTime();
                         MessageBox.Show("Start Time in gap:  will start at " + startTimeToUse.ToLocalTime().ToString());
                         break;
                     }
@@ -382,16 +382,17 @@ namespace ExampleClient.Source
                 for (int i = 0; i < clips.Count - 1; i++)
                 {
                     var clip = clips[i];
-                    if ((seekSelectForm.EndTime > clip.EndTime) && (seekSelectForm.EndTime < clips[i + 1].StartTime))
+                    if ((seekSelectForm.EndTime.ToUniversalTime() > clip.EndTime) && (seekSelectForm.EndTime.ToUniversalTime() <= clips[i + 1].StartTime))
                     {
                         // in a gap - round down to the last clip end
-                        endTimeToUse = clips[i].EndTime;
+                        endTimeToUse = clips[i].EndTime.ToLocalTime();
                         MessageBox.Show("End Time in gap:  will start at " + endTimeToUse.ToLocalTime().ToString());
                         break;
                     }
                 }
 
                 // The time values must be in UTC format.
+                WriteToLog("Info:  Skip Gaps Set To:  " + skipGapsToolStripMenuItem.Checked.ToString());
                 StartStream(startTimeToUse.ToUniversalTime(), endTimeToUse.ToUniversalTime());
             }
         }
@@ -1452,7 +1453,7 @@ namespace ExampleClient.Source
                     var clips = dataSource.Clips;
                     foreach (var clip in clips)
                     {
-                        if ((recordDateTime > clip.StartTime) && (recordDateTime < clip.EndTime))
+                        if ((recordDateTime >= clip.StartTime) && (recordDateTime < clip.EndTime))
                         {
                             // There is a problem in that the data interface on playback also includes a start time
                             //   that will be used instead of the seek time to the seek call.  
@@ -1591,6 +1592,11 @@ namespace ExampleClient.Source
                 //   before starting the video
                 Control.CachedClips = dataSource.Clips;
                 Control.SkipPlayback = skipGapsToolStripMenuItem.Checked;
+                // Print the clips as info
+                for (int i = 0; i < Control.CachedClips.Count; i++)
+                {
+                    WriteToLog("Info:  Clip Number " + i + " Start:  " + Control.CachedClips[i].StartTime.ToLocalTime() + "  End:  " + Control.CachedClips[i].EndTime.ToLocalTime());
+                }
                 Control.RemovePlaybackProgress();
                 var transport = (rtspTcpToolStripMenuItem.Checked == true) ? MediaControl.RTSPNetworkTransports.RTPOverRTSP : MediaControl.RTSPNetworkTransports.UDP;
                 string overlayString = dataSource.Id + "   " + dataSource.Name + "   " + dataInterface.Protocol.ToString();
@@ -1621,7 +1627,7 @@ namespace ExampleClient.Source
                     // In this case, demonstrate how to get the storage information for the clip
                     foreach (Clip clip in Control.CachedClips)
                     {
-                        if ((seekTime > clip.StartTime) && (seekTime < clip.EndTime))
+                        if ((seekTime >= clip.StartTime) && (seekTime < clip.EndTime))
                         {
                             overlayString += "\n  Storage ID:  " + clip.DataStorageId;
                             break;
@@ -1630,6 +1636,8 @@ namespace ExampleClient.Source
                     Control.Current.AddVideoOverlayData(overlayString, MediaControl.VideoOverlayDataPositions.BottomCenter, true);
 
                     Control.EnablePlaybackProgress(seekTime, endTime);
+                    TimeSpan ts = (seekTime - new DateTime(1970, 1, 1, 0, 0, 0));
+                    double timePassedIn = ts.TotalSeconds;
                     if (!Control.Current.Seek(seekTime, (float)nudSpeed.Value, transport))
                     {
                         WriteToLog("Error: Unable to start recorded stream.\n");

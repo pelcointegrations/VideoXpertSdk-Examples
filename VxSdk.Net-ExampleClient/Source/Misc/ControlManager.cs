@@ -406,6 +406,7 @@ namespace ExampleClient.Source
         public static void SeekSkipGapMethod(MediaControl mediaControl, System.DateTime startTime, float speed, MediaControl.RTSPNetworkTransports transport)
         {
             mediaControl.Stop();
+            MainForm.Instance.WriteToLog("Info:  Skipping Gap.  Next Seek Time:  " + startTime.ToLocalTime().ToString());
             mediaControl.Seek(startTime, speed, transport);
         }
 
