@@ -478,17 +478,17 @@
             // 
             // normalToolStripMenuItem
             // 
-            this.normalToolStripMenuItem.Checked = true;
-            this.normalToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.normalToolStripMenuItem.Name = "normalToolStripMenuItem";
-            this.normalToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
+            this.normalToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.normalToolStripMenuItem.Text = "Normal";
             this.normalToolStripMenuItem.Click += new System.EventHandler(this.MenuItemPlaybackOptions_Click);
             // 
             // skipGapsToolStripMenuItem
             // 
+            this.skipGapsToolStripMenuItem.Checked = true;
+            this.skipGapsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.skipGapsToolStripMenuItem.Name = "skipGapsToolStripMenuItem";
-            this.skipGapsToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
+            this.skipGapsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.skipGapsToolStripMenuItem.Text = "Skip Gaps";
             this.skipGapsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemPlaybackOptions_Click);
             // 

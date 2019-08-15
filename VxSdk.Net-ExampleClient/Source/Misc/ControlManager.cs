@@ -407,7 +407,7 @@ namespace ExampleClient.Source
         {
             mediaControl.Stop();
             MainForm.Instance.WriteToLog("Info:  Skipping Gap.  Next Seek Time:  " + startTime.ToLocalTime().ToString());
-            mediaControl.Seek(startTime, speed, transport);
+            mediaControl.Seek(startTime.AddSeconds(1), speed, transport);
         }
 
         /// <summary>
