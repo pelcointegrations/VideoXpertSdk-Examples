@@ -1565,6 +1565,12 @@ namespace ExampleClient.Source
                 else
                     SelectAudioData(dataSource, showWindow, out audioDataSource, out audioDataInterface, rtspTcpToolStripMenuItem.Checked);
 
+                // If the audioDataInterface is null, you cannot play audio
+                if (audioDataInterface == null)
+                {
+                    audioDataSource = null;
+                }
+
                 // If the media controller exists then a stream is running and the user is
                 // requesting a new action on it.  If it's null then this is either the
                 // first run or an existing stream has been stopped.  So a new media controller
