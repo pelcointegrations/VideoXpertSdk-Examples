@@ -28,7 +28,7 @@ namespace ExampleClient.Source
         }
 
         private static string _licenseString = "ENTER_LICENSE_KEY_HERE";
-        public static string LicenseString { get => _licenseString; }
+        public static string LicenseString { get { return _licenseString; } }
 
     }
 }

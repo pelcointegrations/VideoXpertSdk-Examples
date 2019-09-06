@@ -23,7 +23,7 @@ namespace ExampleClient.Source.Exports
             _canceled = true;
         }
 
-        public bool Canceled { get =>  _canceled;}
+        public bool Canceled { get { return _canceled; } }
 
         private void ExportDownloadProgess_Load(object sender, EventArgs e)
         {
