@@ -149,7 +149,7 @@ namespace ExampleClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The LicenseString variable is still set to the default value (located in .\Source\Main\MainForm.cs).
+        ///   Looks up a localized string similar to The LicenseString variable is still set to the default value (located in .\Source\Program.cs).
         ///
         ///You will NOT be able to connect to ANY VideoXpert system until the value of LicenseString is set to a valid license key..
         /// </summary>
