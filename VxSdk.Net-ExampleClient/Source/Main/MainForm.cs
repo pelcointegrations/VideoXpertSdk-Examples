@@ -1545,7 +1545,15 @@ namespace ExampleClient.Source
                 var protocol = jpegPullToolStripMenuItem.Checked ? DataInterface.StreamProtocols.MjpegPull : DataInterface.StreamProtocols.RtspRtp;
                 var showWindow = true;
                 if (Control.Current != null)
+                {
+                    if (Control.Current.Mode == MediaControl.Modes.Live && nudSpeed.Value < 0 && seekTime == default(DateTime))
+                    {
+                        WriteToLog("Warning: Reverse playback from live not supported.\n");
+                        return;
+                    }
+
                     showWindow = Control.Current.Mode == MediaControl.Modes.Stopped;
+                }
 
                 var dataInterface = SelectDataInterface(protocol, dataSource, showWindow, rtspTcpToolStripMenuItem.Checked, seekTime);
                 if (dataInterface == null)

@@ -375,7 +375,9 @@ namespace ExampleClient.Source
                 {
                     var clip = clips[i];
                     // Which direction?
-                    if (MainForm.Instance.nudSpeed.Value > 0)
+                    decimal currentSpeed = 1;
+                    MainForm.Instance.nudSpeed.BeginInvoke((MethodInvoker)delegate { currentSpeed = MainForm.Instance.nudSpeed.Value; });
+                    if (currentSpeed > 0)
                     {
                         if (timeEvent.Timestamp.AddSeconds(2) >= clip.EndTime)
                         {
