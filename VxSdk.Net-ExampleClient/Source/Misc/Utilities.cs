@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExampleClient.Properties;
+using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -9,7 +10,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VxSdkNet;
-using ExampleClient.Properties;
 
 namespace ExampleClient.Source
 {
@@ -63,7 +63,7 @@ namespace ExampleClient.Source
                 var progress = (decimal)dataSourceNum / dataSourceTotal * 100;
                 MainForm.Instance.bgWorker.ReportProgress((int)progress, null);
                 Bitmap camIcon;
-                if (dataSource.DataInterfaces.Any(item => (int) item.RenderType > 0 && (int) item.RenderType <= 4))
+                if (dataSource.DataInterfaces.Any(item => (int)item.RenderType > 0 && (int)item.RenderType <= 4))
                 {
                     camIcon = dataSource.State == DataSource.States.Offline ? Resources.cam_pano_offline : Resources.cam_pano;
                 }
@@ -86,14 +86,8 @@ namespace ExampleClient.Source
                 // If data source collection was successful enable the UI elements.
                 MainForm.Instance.eventsToolStripMenuItem.Enabled = true;
                 MainForm.Instance.manageToolStripMenuItem.Enabled = true;
-                MainForm.Instance.btnSeek.Enabled = true;
-                MainForm.Instance.btnPause.Enabled = true;
-                MainForm.Instance.btnPlay.Enabled = true;
-                MainForm.Instance.btnStop.Enabled = true;
-                MainForm.Instance.btnSnapshot.Enabled = true;
-                MainForm.Instance.btnSnapshotFromVideo.Enabled = true;
-                MainForm.Instance.btnLocalRecord.Enabled = true;
-                MainForm.Instance.btnRefreshDataSources.Enabled = true;
+
+                MainForm.Instance.EnableModeByState(ControlManager.VcrMode.Stopped);
             });
         }
 

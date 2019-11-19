@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.btnPlay = new System.Windows.Forms.Button();
             this.panelVideoStreamLeft = new System.Windows.Forms.Panel();
             this.btnPause = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
@@ -137,18 +136,6 @@
             this.scOuter.Panel2.SuspendLayout();
             this.scOuter.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // btnPlay
-            // 
-            this.btnPlay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnPlay.Enabled = false;
-            this.btnPlay.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.btnPlay.Location = new System.Drawing.Point(466, 366);
-            this.btnPlay.Name = "btnPlay";
-            this.btnPlay.Size = new System.Drawing.Size(45, 23);
-            this.btnPlay.TabIndex = 14;
-            this.btnPlay.Text = "Play";
-            this.btnPlay.Click += new System.EventHandler(this.ButtonPlay_Click);
             // 
             // panelVideoStreamLeft
             // 
@@ -371,42 +358,42 @@
             // subscribeToSystemEventsToolStripMenuItem
             // 
             this.subscribeToSystemEventsToolStripMenuItem.Name = "subscribeToSystemEventsToolStripMenuItem";
-            this.subscribeToSystemEventsToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
+            this.subscribeToSystemEventsToolStripMenuItem.Size = new System.Drawing.Size(260, 22);
             this.subscribeToSystemEventsToolStripMenuItem.Text = "Subscribe to System Events";
             this.subscribeToSystemEventsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemSubscribe_Click);
             // 
             // subscribeToSystemEventsByTypeToolStripMenuItem
             // 
             this.subscribeToSystemEventsByTypeToolStripMenuItem.Name = "subscribeToSystemEventsByTypeToolStripMenuItem";
-            this.subscribeToSystemEventsByTypeToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
+            this.subscribeToSystemEventsByTypeToolStripMenuItem.Size = new System.Drawing.Size(260, 22);
             this.subscribeToSystemEventsByTypeToolStripMenuItem.Text = "Subscribe to System Events By Type";
             this.subscribeToSystemEventsByTypeToolStripMenuItem.Click += new System.EventHandler(this.MenuItemSubscribeByType_Click);
             // 
             // displayEventDialogsToolStripMenuItem
             // 
             this.displayEventDialogsToolStripMenuItem.Name = "displayEventDialogsToolStripMenuItem";
-            this.displayEventDialogsToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
+            this.displayEventDialogsToolStripMenuItem.Size = new System.Drawing.Size(260, 22);
             this.displayEventDialogsToolStripMenuItem.Text = "Display Event Dialogs";
             this.displayEventDialogsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemDisplayEventDialogs_Click);
             // 
             // insertSystemEventToolStripMenuItem
             // 
             this.insertSystemEventToolStripMenuItem.Name = "insertSystemEventToolStripMenuItem";
-            this.insertSystemEventToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
+            this.insertSystemEventToolStripMenuItem.Size = new System.Drawing.Size(260, 22);
             this.insertSystemEventToolStripMenuItem.Text = "Insert System Event";
             this.insertSystemEventToolStripMenuItem.Click += new System.EventHandler(this.MenuItemInsertEvent_Click);
             // 
             // searchEventsToolStripMenuItem
             // 
             this.searchEventsToolStripMenuItem.Name = "searchEventsToolStripMenuItem";
-            this.searchEventsToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
+            this.searchEventsToolStripMenuItem.Size = new System.Drawing.Size(260, 22);
             this.searchEventsToolStripMenuItem.Text = "Event Search";
             this.searchEventsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemSearchEvents_Click);
             // 
             // acknowledgeAllEventsToolStripMenuItem
             // 
             this.acknowledgeAllEventsToolStripMenuItem.Name = "acknowledgeAllEventsToolStripMenuItem";
-            this.acknowledgeAllEventsToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
+            this.acknowledgeAllEventsToolStripMenuItem.Size = new System.Drawing.Size(260, 22);
             this.acknowledgeAllEventsToolStripMenuItem.Text = "Acknowledge All Events";
             this.acknowledgeAllEventsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemAcknowledgeAllEvents_Click);
             // 
@@ -415,13 +402,13 @@
             this.ptzToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showPTZControlsToolStripMenuItem});
             this.ptzToolStripMenuItem.Name = "ptzToolStripMenuItem";
-            this.ptzToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
+            this.ptzToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.ptzToolStripMenuItem.Text = "PTZ";
             // 
             // showPTZControlsToolStripMenuItem
             // 
             this.showPTZControlsToolStripMenuItem.Name = "showPTZControlsToolStripMenuItem";
-            this.showPTZControlsToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.showPTZControlsToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             this.showPTZControlsToolStripMenuItem.Text = "Show PTZ Controls";
             this.showPTZControlsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemShowPtzControls_Click);
             // 
@@ -449,21 +436,21 @@
             this.rtspUdpToolStripMenuItem.Checked = true;
             this.rtspUdpToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.rtspUdpToolStripMenuItem.Name = "rtspUdpToolStripMenuItem";
-            this.rtspUdpToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.rtspUdpToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
             this.rtspUdpToolStripMenuItem.Text = "RTSP UDP";
             this.rtspUdpToolStripMenuItem.Click += new System.EventHandler(this.MenuItemProtocol_Click);
             // 
             // rtspTcpToolStripMenuItem
             // 
             this.rtspTcpToolStripMenuItem.Name = "rtspTcpToolStripMenuItem";
-            this.rtspTcpToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.rtspTcpToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
             this.rtspTcpToolStripMenuItem.Text = "RTSP TCP";
             this.rtspTcpToolStripMenuItem.Click += new System.EventHandler(this.MenuItemProtocol_Click);
             // 
             // jpegPullToolStripMenuItem
             // 
             this.jpegPullToolStripMenuItem.Name = "jpegPullToolStripMenuItem";
-            this.jpegPullToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.jpegPullToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
             this.jpegPullToolStripMenuItem.Text = "JPEG Pull";
             this.jpegPullToolStripMenuItem.Click += new System.EventHandler(this.MenuItemProtocol_Click);
             // 
@@ -479,7 +466,7 @@
             // normalToolStripMenuItem
             // 
             this.normalToolStripMenuItem.Name = "normalToolStripMenuItem";
-            this.normalToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.normalToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
             this.normalToolStripMenuItem.Text = "Normal";
             this.normalToolStripMenuItem.Click += new System.EventHandler(this.MenuItemPlaybackOptions_Click);
             // 
@@ -488,7 +475,7 @@
             this.skipGapsToolStripMenuItem.Checked = true;
             this.skipGapsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.skipGapsToolStripMenuItem.Name = "skipGapsToolStripMenuItem";
-            this.skipGapsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.skipGapsToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
             this.skipGapsToolStripMenuItem.Text = "Skip Gaps";
             this.skipGapsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemPlaybackOptions_Click);
             // 
@@ -681,7 +668,7 @@
             this.btnSeek.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnSeek.Enabled = false;
             this.btnSeek.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.btnSeek.Location = new System.Drawing.Point(256, 366);
+            this.btnSeek.Location = new System.Drawing.Point(304, 366);
             this.btnSeek.Name = "btnSeek";
             this.btnSeek.Size = new System.Drawing.Size(54, 23);
             this.btnSeek.TabIndex = 36;
@@ -693,7 +680,7 @@
             this.btnLive.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnLive.Enabled = false;
             this.btnLive.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.btnLive.Location = new System.Drawing.Point(313, 366);
+            this.btnLive.Location = new System.Drawing.Point(465, 366);
             this.btnLive.Name = "btnLive";
             this.btnLive.Size = new System.Drawing.Size(45, 23);
             this.btnLive.TabIndex = 37;
@@ -714,6 +701,7 @@
             // 
             this.nudSpeed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.nudSpeed.DecimalPlaces = 1;
+            this.nudSpeed.Enabled = false;
             this.nudSpeed.Location = new System.Drawing.Point(552, 369);
             this.nudSpeed.Maximum = new decimal(new int[] {
             300,
@@ -763,7 +751,6 @@
             this.scInner.Panel2.Controls.Add(this.btnPause);
             this.scInner.Panel2.Controls.Add(this.btnStop);
             this.scInner.Panel2.Controls.Add(this.btnSeek);
-            this.scInner.Panel2.Controls.Add(this.btnPlay);
             this.scInner.Panel2.Controls.Add(this.lblTimestampLeft);
             this.scInner.Panel2.Controls.Add(this.btnManualRecord);
             this.scInner.Panel2.Controls.Add(this.nudPostRecord);
@@ -936,6 +923,7 @@
             this.progressBar_left.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.progressBar_left.Enabled = false;
             this.progressBar_left.Location = new System.Drawing.Point(0, 349);
+            this.progressBar_left.Maximum = 1000;
             this.progressBar_left.Name = "progressBar_left";
             this.progressBar_left.Size = new System.Drawing.Size(590, 10);
             this.progressBar_left.TabIndex = 3;
@@ -946,6 +934,7 @@
             this.progressBar_right.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.progressBar_right.Enabled = false;
             this.progressBar_right.Location = new System.Drawing.Point(0, 349);
+            this.progressBar_right.Maximum = 1000;
             this.progressBar_right.Name = "progressBar_right";
             this.progressBar_right.Size = new System.Drawing.Size(589, 10);
             this.progressBar_right.TabIndex = 3;
@@ -1114,7 +1103,6 @@
         private System.Windows.Forms.ToolStripMenuItem streamsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem streamProtocolToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem rtspUdpToolStripMenuItem;
-        public System.Windows.Forms.Button btnPlay;
         public System.Windows.Forms.Button btnPause;
         public System.Windows.Forms.Button btnStop;
         public System.Windows.Forms.ToolStripMenuItem eventsToolStripMenuItem;

@@ -1,7 +1,8 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using VxSdkNet;
-using System.Collections.Generic;
 
 
 namespace ExampleClient.Source
@@ -12,6 +13,15 @@ namespace ExampleClient.Source
     /// <remarks>Manages the UI controls based on the selected video panel.</remarks> 
     public class ControlManager
     {
+        public enum VcrMode
+        {
+            Unknown,
+            Stopped,
+            Paused,
+            Live,
+            Playback
+        }
+
         /// <summary>
         /// The Controls enumeration.
         /// </summary>
@@ -28,18 +38,37 @@ namespace ExampleClient.Source
         /// <summary>
         /// Initializes a new instance of the <see cref="ControlManager" /> class.
         /// </summary>
-        public ControlManager()
+        private ControlManager()
         {
-            Instance = this;
-            SelectControl(Controls.Left);
             _skipRecordingGaps = false;
+            Task.Run(Init);
+        }
+
+        private void Init()
+        {
+            SelectControl(Controls.Left);
+        }
+
+        public static ControlManager Instance
+        {
+            get
+            {
+                lock (_instanceLock)
+                {
+                    if (_instance == null)
+                        _instance = new ControlManager();
+                    return _instance;
+                }
+            }
         }
 
         /// <summary>
         /// Gets the Instance property.
         /// </summary>
         /// <value>The current <see cref="ControlManager"/> instance.</value>
-        public static ControlManager Instance { get; private set; }
+        private static ControlManager _instance;
+
+        private static readonly object _instanceLock = new object();
 
         public bool SkipPlayback
         {
@@ -84,8 +113,7 @@ namespace ExampleClient.Source
                 _endTimeLeft = endTime;
                 MainForm.Instance.progressBar_left.Enabled = true;
                 MainForm.Instance.progressBar_left.Visible = true;
-                MainForm.Instance.progressBar_left.Value = MainForm.Instance.progressBar_left.Minimum = 0;
-                MainForm.Instance.progressBar_left.Maximum = 1000;
+                MainForm.Instance.progressBar_left.Value = 0;
             }
             else
             {
@@ -93,8 +121,7 @@ namespace ExampleClient.Source
                 _endTimeRight = endTime;
                 MainForm.Instance.progressBar_right.Enabled = true;
                 MainForm.Instance.progressBar_right.Visible = true;
-                MainForm.Instance.progressBar_left.Value = MainForm.Instance.progressBar_right.Minimum = 0;
-                MainForm.Instance.progressBar_right.Maximum = 1000;
+                MainForm.Instance.progressBar_left.Value = 0;
             }
             return true;
         }
@@ -204,9 +231,6 @@ namespace ExampleClient.Source
 
             PtzControlForm.GetPatterns();
             PtzControlForm.GetPresets();
-
-            if (Current != null) 
-                MainForm.Instance.btnLive.Enabled = Current.Mode == MediaControl.Modes.Playback;
         }
 
         /// <summary>
@@ -520,6 +544,21 @@ namespace ExampleClient.Source
                 MainForm.Instance.Control.SelectControl(currControl);
             });
         }
+
+        public VcrMode VcrState
+        {
+            get => SelectedControl == Controls.Left ? _vcrStateLeft : _vcrStateRight;
+            set
+            {
+                if (SelectedControl == Controls.Left)
+                    _vcrStateLeft = value;
+                else
+                    _vcrStateRight = value;
+            }
+        }
+
+        private VcrMode _vcrStateLeft;
+        private VcrMode _vcrStateRight;
 
         /// <summary>
         /// The _dataSourceLeft field.

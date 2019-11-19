@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExampleClient.Properties;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -10,7 +11,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VxSdkNet;
-using ExampleClient.Properties;
 
 namespace ExampleClient.Source
 {
@@ -29,7 +29,7 @@ namespace ExampleClient.Source
             scOuter.Panel2Collapsed = true;
             Instance = this;
             PtzForm = new PtzControlForm();
-            Control = new ControlManager();
+            Control = ControlManager.Instance;
             RecordingBasePath = Environment.GetFolderPath(Environment.SpecialFolder.CommonVideos) + "\\";
             SnapshotBasePath = Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures) + "\\";
             bgWorker.DoWork += Utilities.BackgroundWorker_DoWork;
@@ -105,6 +105,17 @@ namespace ExampleClient.Source
         /// <value>A <see cref="ControlManager"/>.</value>
         public ControlManager Control { get; set; }
 
+        private DataSource SelectedDataSource
+        {
+            get
+            {
+                DataSource dataSource = null;
+                if (dgvDataSources.SelectedRows.Count >= 1)
+                    dataSource = (DataSource)dgvDataSources.SelectedRows[0].Tag;
+                return dataSource;
+            }
+        }
+
         /// <summary>
         /// The OnInternalEvent method.
         /// </summary>
@@ -114,7 +125,7 @@ namespace ExampleClient.Source
             WriteToLog(internalEvent.Type.ToString());
             if (internalEvent.Type == InternalEvent.EventType.GraceLicenseExpired || internalEvent.Type == InternalEvent.EventType.SystemLicenseExpired)
             {
-                Logout();
+                BeginInvoke(new Action(Logout));
             }
         }
 
@@ -212,15 +223,10 @@ namespace ExampleClient.Source
         /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonLive_Click(object sender, EventArgs args)
         {
-            if (Control.Current == null) 
-                StartStream();
+            if (SelectedDataSource == null) return;
 
-            if (Control.Current == null) 
-                return;
-
-            Control.Current.GoToLive();
-            SetManualRecordingStatus();
-            Control.ChangePtzFormState(Control.PtzControl != null);
+            StartStream();
+            EnableLiveMode();
         }
 
         /// <summary>
@@ -267,7 +273,7 @@ namespace ExampleClient.Source
 
             if (Control.CurrentManualRecording == null)
             {
-                var newManualRecording = new NewManualRecording {DataSourceId = Control.CurrentDataSource.Id};
+                var newManualRecording = new NewManualRecording { DataSourceId = Control.CurrentDataSource.Id };
 
                 Control.CurrentManualRecording = CurrentSystem.AddManualRecording(newManualRecording);
                 if (Control.CurrentManualRecording == null)
@@ -305,25 +311,26 @@ namespace ExampleClient.Source
         /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonPause_Click(object sender, EventArgs args)
         {
-            if (Control.Current == null)
-                return;
+            if (SelectedDataSource == null || Control.Current == null) return;
 
-            Control.Current.Pause();
-            Control.ChangePtzFormState(false);
-            btnLive.Enabled = true;
-            btnManualRecord.Enabled = false;
-            nudPostRecord.Enabled = false;
-            nudPreRecord.Enabled = false;
-        }
-
-        /// <summary>
-        /// The ButtonPlay_Click method.
-        /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void ButtonPlay_Click(object sender, EventArgs args)
-        {
-            StartStream();
+            if (Control.VcrState != ControlManager.VcrMode.Paused)
+            {
+                Control.Current.Pause();
+                EnablePauseMode();
+            }
+            else
+            {
+                if (Control.Current.Mode == MediaControl.Modes.Live)
+                {
+                    Control.Current.GoToLive();
+                    EnableLiveMode();
+                }
+                else
+                {
+                    Control.Current.Play((float)nudSpeed.Value);
+                    EnablePlaybackMode();
+                }
+            }
         }
 
         /// <summary>
@@ -344,11 +351,10 @@ namespace ExampleClient.Source
         /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonSeek_Click(object sender, EventArgs args)
         {
-            // Get the start and end times from the selected data source
-            var dataSource = (DataSource)dgvDataSources.SelectedRows[0].Tag;
+            if (SelectedDataSource == null) return;
 
             // Want to cache the clips to avoid extra server calls
-            var clips = dataSource.Clips;
+            var clips = SelectedDataSource.Clips;
             if (clips.Count == 0)
             {
                 // No data clips - so nothing to show
@@ -395,6 +401,8 @@ namespace ExampleClient.Source
                 WriteToLog("Info:  Skip Gaps Set To:  " + skipGapsToolStripMenuItem.Checked.ToString());
                 StartStream(startTimeToUse.ToUniversalTime(), endTimeToUse.ToUniversalTime());
             }
+
+            EnablePlaybackMode();
         }
 
         /// <summary>
@@ -404,8 +412,7 @@ namespace ExampleClient.Source
         /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonSnapshot_Click(object sender, EventArgs args)
         {
-            if (Control.Current == null)
-                return;
+            if (Control.Current == null) return;
 
             var dataSource = Control.Current.CurrentDataSource;
             if (Control.Current.Mode == MediaControl.Modes.Live)
@@ -422,8 +429,7 @@ namespace ExampleClient.Source
         /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonSnapshotFromVideo_Click(object sender, EventArgs e)
         {
-            if (Control.Current == null)
-                return;
+            if (Control.Current == null) return;
 
             var imageTime = Control.SelectedPanelTime.Replace(":", string.Empty);
             var filename = "LiveFromVideo-" + imageTime;
@@ -443,7 +449,10 @@ namespace ExampleClient.Source
         /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonStop_Click(object sender, EventArgs args)
         {
+            if (Control.Current == null) return;
+
             StopStream();
+            EnableStopMode();
         }
 
         /// <summary>
@@ -721,7 +730,7 @@ namespace ExampleClient.Source
         {
             var name = CurrentSystem.Name;
             Logout();
-            WriteToLog("Info: Logged out from "+ name +".");
+            WriteToLog("Info: Logged out from " + name + ".");
         }
 
         /// <summary>
@@ -732,7 +741,7 @@ namespace ExampleClient.Source
             StopAllStreams();
             CurrentSystem.SystemEvent -= OnSystemEvent;
             CurrentSystem.InternalEvent -= OnInternalEvent;
-            dgvDataSources.BeginInvoke((MethodInvoker)delegate { dgvDataSources.Rows.Clear(); });
+            dgvDataSources.Rows.Clear();
             CurrentUserName = string.Empty;
             CurrentPassword = string.Empty;
             CurrentDataSources?.Clear();
@@ -740,18 +749,10 @@ namespace ExampleClient.Source
 
             CurrentDataSources = null;
             CurrentDevices = null;
-            eventsToolStripMenuItem.GetCurrentParent().BeginInvoke((MethodInvoker)delegate { eventsToolStripMenuItem.Enabled = false; });
-            manageToolStripMenuItem.GetCurrentParent().BeginInvoke((MethodInvoker)delegate { manageToolStripMenuItem.Enabled = false; });
-            btnSeek.BeginInvoke((MethodInvoker)delegate { btnSeek.Enabled = false; });
-            btnPause.BeginInvoke((MethodInvoker)delegate { btnPause.Enabled = false; });
-            btnPlay.BeginInvoke((MethodInvoker)delegate { btnPlay.Enabled = false; });
-            btnStop.BeginInvoke((MethodInvoker)delegate { btnStop.Enabled = false; });
-            btnSnapshot.BeginInvoke((MethodInvoker)delegate { btnSnapshot.Enabled = false; });
-            btnSnapshotFromVideo.BeginInvoke((MethodInvoker)delegate { btnSnapshotFromVideo.Enabled = false; });
-            btnRefreshDataSources.BeginInvoke((MethodInvoker)delegate { btnRefreshDataSources.Enabled = false; });
-            btnManualRecord.BeginInvoke((MethodInvoker)delegate { btnManualRecord.Enabled = false; });
-            nudPostRecord.BeginInvoke((MethodInvoker)delegate { nudPostRecord.Enabled = false; });
-            nudPreRecord.BeginInvoke((MethodInvoker)delegate { nudPreRecord.Enabled = false; });
+            eventsToolStripMenuItem.Enabled = false;
+            manageToolStripMenuItem.Enabled = false;
+
+            EnableLoggedOutMode();
         }
 
         /// <summary>
@@ -883,7 +884,7 @@ namespace ExampleClient.Source
                 folderDialog.Description = @"Choose Recorded Video Save Path...";
 
                 var result = folderDialog.ShowDialog();
-                if (result != DialogResult.OK) 
+                if (result != DialogResult.OK)
                     return;
 
                 RecordingBasePath = folderDialog.SelectedPath + "\\";
@@ -1006,7 +1007,7 @@ namespace ExampleClient.Source
                 folderDialog.Description = @"Choose Snapshot Save Path...";
 
                 var result = folderDialog.ShowDialog();
-                if (result != DialogResult.OK) 
+                if (result != DialogResult.OK)
                     return;
 
                 SnapshotBasePath = folderDialog.SelectedPath + "\\";
@@ -1232,7 +1233,10 @@ namespace ExampleClient.Source
         private void PanelVideoStreamLeft_MouseClick(object sender, MouseEventArgs args)
         {
             Control.SelectControl(ControlManager.Controls.Left);
-            SetManualRecordingStatus();
+
+            if (Control.VcrState != ControlManager.VcrMode.Unknown)
+                EnableModeByState();
+
             if (Control.PtzControl == null)
                 return;
 
@@ -1247,7 +1251,10 @@ namespace ExampleClient.Source
         private void PanelVideoStreamRight_MouseClick(object sender, MouseEventArgs args)
         {
             Control.SelectControl(ControlManager.Controls.Right);
-            SetManualRecordingStatus();
+
+            if (Control.VcrState != ControlManager.VcrMode.Unknown)
+                EnableModeByState();
+
             if (Control.PtzControl == null)
                 return;
 
@@ -1495,10 +1502,129 @@ namespace ExampleClient.Source
             return dataInterface;
         }
 
+        public void EnableModeByState(ControlManager.VcrMode state = ControlManager.VcrMode.Unknown)
+        {
+            if (state == ControlManager.VcrMode.Unknown)
+                state = Control.VcrState;
+
+            switch (state)
+            {
+                case ControlManager.VcrMode.Live:
+                    EnableLiveMode();
+                    break;
+                case ControlManager.VcrMode.Paused:
+                    EnablePauseMode();
+                    break;
+                case ControlManager.VcrMode.Playback:
+                    EnablePlaybackMode();
+                    break;
+                case ControlManager.VcrMode.Stopped:
+                    EnableStopMode();
+                    break;
+            }
+        }
+
+        private void EnableLiveMode()
+        {
+            if (Control.Current == null) return;
+
+            Control.VcrState = ControlManager.VcrMode.Live;
+            btnLive.Enabled = false;
+            btnPause.Enabled = true;
+            btnSeek.Enabled = true;
+            btnStop.Enabled = true;
+
+            btnSnapshot.Enabled = true;
+            btnSnapshotFromVideo.Enabled = true;
+            btnRefreshDataSources.Enabled = true;
+            btnLocalRecord.Enabled = true;
+            nudSpeed.Enabled = false;
+            btnPause.Text = "Pause";
+            nudSpeed.Value = 1.0m;
+            SetManualRecordingStatus();
+            Control.ChangePtzFormState(Control.PtzControl != null);
+        }
+
+        private void EnablePauseMode()
+        {
+            if (Control.Current == null) return;
+
+            Control.VcrState = ControlManager.VcrMode.Paused;
+            btnLive.Enabled = true;
+            btnPause.Enabled = true;
+            btnSeek.Enabled = true;
+            btnStop.Enabled = true;
+            btnManualRecord.Enabled = false;
+            nudPostRecord.Enabled = false;
+            nudPreRecord.Enabled = false;
+
+            btnSnapshot.Enabled = true;
+            btnSnapshotFromVideo.Enabled = true;
+            btnRefreshDataSources.Enabled = true;
+            btnLocalRecord.Enabled = true;
+            nudSpeed.Enabled = true;
+            btnPause.Text = "Play";
+            Control.ChangePtzFormState(false);
+        }
+
+        private void EnablePlaybackMode()
+        {
+            if (Control.Current == null) return;
+
+            Control.VcrState = ControlManager.VcrMode.Playback;
+            btnLive.Enabled = true;
+            btnPause.Enabled = true;
+            btnSeek.Enabled = true;
+            btnStop.Enabled = true;
+
+            btnSnapshot.Enabled = true;
+            btnSnapshotFromVideo.Enabled = true;
+            btnRefreshDataSources.Enabled = true;
+            btnLocalRecord.Enabled = true;
+            nudSpeed.Enabled = false;
+            btnPause.Text = "Pause";
+            SetManualRecordingStatus();
+        }
+
+        private void EnableStopMode()
+        {
+            Control.VcrState = ControlManager.VcrMode.Stopped;
+            btnLive.Enabled = true;
+            btnPause.Enabled = false;
+            btnSeek.Enabled = true;
+            btnStop.Enabled = false;
+
+            btnSnapshot.Enabled = false;
+            btnSnapshotFromVideo.Enabled = false;
+            btnRefreshDataSources.Enabled = false;
+            btnLocalRecord.Enabled = false;
+            nudSpeed.Enabled = true;
+            btnPause.Text = "Pause";
+            SetManualRecordingStatus();
+        }
+
+        private void EnableLoggedOutMode()
+        {
+            Control.VcrState = ControlManager.VcrMode.Unknown;
+            btnLive.Enabled = false;
+            btnPause.Enabled = false;
+            btnSeek.Enabled = false;
+            btnStop.Enabled = false;
+
+            btnSnapshot.Enabled = false;
+            btnSnapshotFromVideo.Enabled = false;
+            btnRefreshDataSources.Enabled = false;
+            btnLocalRecord.Enabled = false;
+            nudSpeed.Enabled = false;
+            btnPause.Text = "Pause";
+            nudSpeed.Value = 1.0m;
+            SetManualRecordingStatus();
+        }
+
         /// <summary>
         /// Sets the state of the manual recording UI elements based on the manual recording status of the current stream.
         /// </summary>
-        public void SetManualRecordingStatus()
+        private void SetManualRecordingStatus()
         {
             if (Control.CurrentDataSource == null)
             {
@@ -1541,21 +1667,25 @@ namespace ExampleClient.Source
             try
             {
                 // Get the data sources for the selected device.
-                var dataSource = (DataSource)dgvDataSources.SelectedRows[0].Tag;
                 var protocol = jpegPullToolStripMenuItem.Checked ? DataInterface.StreamProtocols.MjpegPull : DataInterface.StreamProtocols.RtspRtp;
                 var showWindow = true;
+
+                bool startingLiveStream = seekTime.Equals(default(DateTime));
+                bool changingDataSource = Control.CurrentDataSource == null || SelectedDataSource.Id != Control.CurrentDataSource.Id;
+
+                StopStream();
+
                 if (Control.Current != null)
                 {
-                    if (Control.Current.Mode == MediaControl.Modes.Live && nudSpeed.Value < 0 && seekTime == default(DateTime))
+                    if (Control.Current.Mode == MediaControl.Modes.Live && nudSpeed.Value < 0 && startingLiveStream)
                     {
                         WriteToLog("Warning: Reverse playback from live not supported.\n");
                         return;
                     }
-
                     showWindow = Control.Current.Mode == MediaControl.Modes.Stopped;
                 }
 
-                var dataInterface = SelectDataInterface(protocol, dataSource, showWindow, rtspTcpToolStripMenuItem.Checked, seekTime);
+                var dataInterface = SelectDataInterface(protocol, SelectedDataSource, showWindow, rtspTcpToolStripMenuItem.Checked, seekTime);
                 if (dataInterface == null)
                 {
                     WriteToLog("Error: No data interface found for selected camera and/or the seek time requested.\n");
@@ -1564,14 +1694,14 @@ namespace ExampleClient.Source
 
                 DataSource audioDataSource;
                 DataInterface audioDataInterface;
-                var audioLink = dataSource.LinkedAudioRelation;
+                var audioLink = SelectedDataSource.LinkedAudioRelation;
                 if (audioLink != null)
                 {
                     audioDataSource = audioLink.Resource;
                     audioDataInterface = SelectDataInterface(DataInterface.StreamProtocols.RtspRtp, audioDataSource, false, rtspTcpToolStripMenuItem.Checked, default(DateTime));
                 }
                 else
-                    SelectAudioData(dataSource, showWindow, out audioDataSource, out audioDataInterface, rtspTcpToolStripMenuItem.Checked);
+                    SelectAudioData(SelectedDataSource, showWindow, out audioDataSource, out audioDataInterface, rtspTcpToolStripMenuItem.Checked);
 
                 // If the audioDataInterface is null, you cannot play audio
                 if (audioDataInterface == null)
@@ -1585,7 +1715,7 @@ namespace ExampleClient.Source
                 // instance is needed.
                 if (Control.Current == null)
                 {
-                    Control.Current = new MediaControl(dataSource, dataInterface, audioDataSource, audioDataInterface);
+                    Control.Current = new MediaControl(SelectedDataSource, dataInterface, audioDataSource, audioDataInterface);
                     Control.SubscribeToTimestamps();
                     Control.SubscribeToStreamEvents();
                     Control.Current.SetVideoWindow(Control.SelectedPanel.Handle);
@@ -1594,31 +1724,34 @@ namespace ExampleClient.Source
                 {
                     // If a new device has been selected while another stream is running, stop the
                     // old stream and set up the new stream using the new data source.
-                    if (Control.CurrentDataSource == null || dataSource.Id != Control.CurrentDataSource.Id)
+                    if (changingDataSource)
                     {
                         Control.Current.Stop();
-                        Control.Current.SetDataSource(dataSource, dataInterface, audioDataSource, audioDataInterface);
+                        Control.Current.SetDataSource(SelectedDataSource, dataInterface, audioDataSource, audioDataInterface);
                     }
                 }
 
                 // Getting the clip informatoin is necessary to skip gaps on playback, but is not something
                 //   we want to do in the timestamp callback as it takes too long.  So, cache the clip information
                 //   before starting the video
-                Control.CachedClips = dataSource.Clips;
+                Control.CachedClips = SelectedDataSource.Clips;
                 Control.SkipPlayback = skipGapsToolStripMenuItem.Checked;
                 // Print the clips as info
                 for (int i = 0; i < Control.CachedClips.Count; i++)
                 {
                     WriteToLog("Info:  Clip Number " + i + " Start:  " + Control.CachedClips[i].StartTime.ToLocalTime() + "  End:  " + Control.CachedClips[i].EndTime.ToLocalTime());
                 }
+
                 Control.RemovePlaybackProgress();
                 var transport = (rtspTcpToolStripMenuItem.Checked == true) ? MediaControl.RTSPNetworkTransports.RTPOverRTSP : MediaControl.RTSPNetworkTransports.UDP;
-                string overlayString = dataSource.Id + "   " + dataSource.Name + "   " + dataInterface.Protocol.ToString();
+
+                string overlayString = SelectedDataSource.Id + "   " + SelectedDataSource.Name + "   " + dataInterface.Protocol.ToString();
                 // Add date time stamp.  
                 //   See https://en.cppreference.com/w/cpp/io/manip/put_time
                 overlayString += "  %Y-%m-%d %H:%M:%S";
                 Control.Current.AddVideoOverlayData(overlayString, MediaControl.VideoOverlayDataPositions.BottomCenter, true);
-                if (seekTime == default(DateTime))
+
+                if (startingLiveStream)
                 {
                     if (!Control.Current.Play((float)nudSpeed.Value, transport))
                     {
@@ -1638,6 +1771,9 @@ namespace ExampleClient.Source
                 }
                 else
                 {
+                    // In playback, we force TCP since it's the better protocol for the job
+                    transport = MediaControl.RTSPNetworkTransports.RTPOverRTSP;
+
                     // In this case, demonstrate how to get the storage information for the clip
                     foreach (Clip clip in Control.CachedClips)
                     {
@@ -1673,8 +1809,8 @@ namespace ExampleClient.Source
                 }
 
                 Control.SetPlayingIndex();
-                SetupPtzControls(dataSource);
-                Control.CurrentDataSource = dataSource;
+                SetupPtzControls(SelectedDataSource);
+                Control.CurrentDataSource = SelectedDataSource;
                 SetManualRecordingStatus();
             }
             catch (Exception ex)
@@ -1718,8 +1854,7 @@ namespace ExampleClient.Source
         {
             try
             {
-                if (Control.Current == null)
-                    return;
+                if (Control.Current == null) return;
 
                 Control.RemovePlaybackProgress();
 
