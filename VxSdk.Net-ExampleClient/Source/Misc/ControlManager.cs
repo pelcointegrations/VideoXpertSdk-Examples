@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -41,7 +42,7 @@ namespace ExampleClient.Source
         private ControlManager()
         {
             _skipRecordingGaps = false;
-            Task.Run(Init);
+            Task.Run(new Action(Init));
         }
 
         private void Init()
