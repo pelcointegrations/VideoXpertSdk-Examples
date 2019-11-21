@@ -135,6 +135,7 @@ namespace ExampleClient
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "SeekSelectForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Seek Select Times";
             this.Load += new System.EventHandler(this.SeekSelectForm_Load);
             this.groupBox1.ResumeLayout(false);

@@ -247,7 +247,7 @@ namespace ExampleClient.Source
                 Text = @"System License Warning",
                 ClientSize = new Size(500, 137),
                 FormBorderStyle = FormBorderStyle.FixedDialog,
-                StartPosition = FormStartPosition.CenterScreen,
+                StartPosition = FormStartPosition.CenterParent,
                 MinimizeBox = false,
                 MaximizeBox = false
             };
@@ -271,7 +271,7 @@ namespace ExampleClient.Source
             buttonOk.Click += (sender, args) => form.Close();
             form.AcceptButton = buttonOk;
             form.Controls.AddRange(new Control[] { label, buttonOk });
-            form.Show();
+            form.ShowDialog();
         }
 
         /// <summary>
@@ -1828,8 +1828,12 @@ namespace ExampleClient.Source
         /// available presets and patterns for the device.</remarks>
         private void SetupPtzControls(DataSource dataSource)
         {
-            Control.States.PtzControl = dataSource.IsPTZ ? dataSource.PTZController : null;
-            Control.ChangePtzFormState(dataSource.IsPTZ);
+            if (dataSource.IsPTZ && Control.States.MediaController.Mode == MediaControl.Modes.Live)
+                Control.States.PtzControl = dataSource.PTZController;
+            else
+                Control.States.PtzControl = null;
+
+            Control.ChangePtzFormState(dataSource.PTZController != null);
         }
 
         /// <summary>

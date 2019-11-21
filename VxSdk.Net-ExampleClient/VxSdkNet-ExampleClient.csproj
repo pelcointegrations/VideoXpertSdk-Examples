@@ -153,7 +153,9 @@
     <Compile Include="Source\Seek\SeekSelectForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Source\Seek\SeekSelectForm.Designer.cs" />
+    <Compile Include="Source\Seek\SeekSelectForm.Designer.cs">
+      <DependentUpon>SeekSelectForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Source\Situations\ModifyNotificationForm.cs">
       <SubType>Form</SubType>
     </Compile>
