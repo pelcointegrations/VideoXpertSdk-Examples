@@ -10,11 +10,7 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user to modify the motion config for a data source.</remarks>
     public partial class ModifyMotionConfigForm : Form
     {
-        /// <summary>
-        /// Gets or sets the SelectedMotionConfig property.
-        /// </summary>
-        /// <value>The currently selected motion config.</value>
-        private Configuration.Motion SelectedMotionConfig { get; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModifyMotionConfigForm" /> class.
@@ -30,14 +26,30 @@ namespace ExampleClient.Source
                 case Configuration.MotionMode.Camera:
                     rbCamera.Checked = true;
                     break;
+
                 case Configuration.MotionMode.Recorder:
                     rbRecorder.Checked = true;
                     break;
+
                 default:
                     rbDisabled.Checked = true;
                     break;
             }
         }
+
+        #endregion Public Constructors
+
+        #region Private Properties
+
+        /// <summary>
+        /// Gets or sets the SelectedMotionConfig property.
+        /// </summary>
+        /// <value>The currently selected motion config.</value>
+        private Configuration.Motion SelectedMotionConfig { get; }
+
+        #endregion Private Properties
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonSave_Click method.
@@ -69,8 +81,10 @@ namespace ExampleClient.Source
         /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void RadioButtonMode_Click(object sender, EventArgs args)
         {
-                lblSensitivity.Enabled = !rbDisabled.Checked;
-                nudSensitivity.Enabled = !rbDisabled.Checked;
+            lblSensitivity.Enabled = !rbDisabled.Checked;
+            nudSensitivity.Enabled = !rbDisabled.Checked;
         }
+
+        #endregion Private Methods
     }
 }

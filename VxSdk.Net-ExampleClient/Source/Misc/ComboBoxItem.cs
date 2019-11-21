@@ -6,6 +6,8 @@
     /// <remarks>A utility class for custom combo box items.</remarks>
     public class ComboboxItem
     {
+        #region Public Properties
+
         /// <summary>
         /// Gets or sets the Text property.
         /// </summary>
@@ -18,6 +20,10 @@
         /// <value>The value to store.</value>
         public object Value { get; set; }
 
+        #endregion Public Properties
+
+        #region Public Methods
+
         /// <summary>
         /// The ToString method.
         /// </summary>
@@ -26,5 +32,7 @@
         {
             return Text;
         }
+
+        #endregion Public Methods
     }
 }

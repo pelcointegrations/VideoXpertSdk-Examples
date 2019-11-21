@@ -10,6 +10,8 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user to view relay outputs on the VideoXpert system.</remarks>
     public partial class RelayOutputManagerForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RelayOutputManagerForm" /> class.
         /// </summary>
@@ -20,11 +22,15 @@ namespace ExampleClient.Source
             PopulateRelayOutputs();
         }
 
+        #endregion Public Constructors
+
+        #region Private Methods
+
         /// <summary>
         /// The ButtonModify_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param> 
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonModify_Click(object sender, EventArgs args)
         {
             if (lvRelayOutputManager.SelectedItems.Count == 0)
@@ -51,7 +57,7 @@ namespace ExampleClient.Source
         /// The ButtonRefresh_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param> 
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonRefresh_Click(object sender, EventArgs args)
         {
             // Refresh the items in the list view.
@@ -63,7 +69,7 @@ namespace ExampleClient.Source
         /// The ButtonTrigger_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>  
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonTrigger_Click(object sender, EventArgs args)
         {
             if (lvRelayOutputManager.SelectedItems.Count == 0)
@@ -85,7 +91,7 @@ namespace ExampleClient.Source
         /// The ListViewRelayOutputManager_SelectedIndexChanged method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param> 
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ListViewRelayOutputManager_SelectedIndexChanged(object sender, EventArgs args)
         {
             if (lvRelayOutputManager.SelectedItems.Count == 0)
@@ -118,5 +124,7 @@ namespace ExampleClient.Source
                 lvRelayOutputManager.Items.Add(lvItem);
             }
         }
+
+        #endregion Private Methods
     }
 }

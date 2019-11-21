@@ -9,14 +9,10 @@ namespace ExampleClient.Source
     /// The AddScheduleTriggerForm class.
     /// </summary>
     /// <remarks>Provides a dialog window that allows the user to select the settings
-    /// that will be used to create a new schedule trigger.</remarks> 
+    /// that will be used to create a new schedule trigger.</remarks>
     public partial class AddScheduleTriggerForm : Form
     {
-        /// <summary>
-        /// Gets or sets the ScheduleTriggerListView property.
-        /// </summary>
-        /// <value>The list view to add the new schedule trigger to.</value>
-        public ListView ScheduleTriggerListView { get; set; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AddScheduleTriggerForm" /> class.
@@ -36,53 +32,35 @@ namespace ExampleClient.Source
                 cbxTimeTables.Items.Add(new ComboboxItem { Text = timeTable.Name, Value = timeTable });
         }
 
-        /// <summary>
-        /// The ComboBoxEvent_SelectedIndexChanged method.
-        /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void ComboBoxEvent_SelectedIndexChanged(object sender, EventArgs args)
-        {
-            gbxEventProperties.Enabled = cbxEvent.SelectedIndex != 0;
-        }
+        #endregion Public Constructors
+
+        #region Public Properties
 
         /// <summary>
-        /// The ButtonGenerate_Click method.
+        /// Gets or sets the ScheduleTriggerListView property.
         /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void ButtonGenerate_Click(object sender, EventArgs args)
-        {
-            tbxId.Clear();
-            tbxId.Text = Guid.NewGuid().ToString();
-        }
+        /// <value>The list view to add the new schedule trigger to.</value>
+        public ListView ScheduleTriggerListView { get; set; }
+
+        #endregion Public Properties
+
+        #region Private Methods
 
         /// <summary>
-        /// The ButtonAddEventProperty_Click method.
+        /// The AddEventDetails method.
         /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void ButtonAddEventProperty_Click(object sender, EventArgs args)
+        /// <param name="scheduleTrigger">The new schedule trigger to add info to.</param>
+        private void AddEventDetails(NewScheduleTrigger scheduleTrigger)
         {
-            // Show the NewPropertyForm dialog.
-            using (var newPropertyForm = new NewPropertyForm(lvEventProperties))
-            {
-                newPropertyForm.ShowDialog();
-            }
+            // Set the situation type based on the selection.
+            scheduleTrigger.EventSituationType = cbxEvent.SelectedItem.ToString();
 
-            // Refresh the items in the list view.
-            lvEventProperties.Refresh();
-        }
+            // Set the event properties if they have been added.
+            var eventProperties = new List<KeyValuePair<string, string>>();
+            foreach (ListViewItem item in lvEventProperties.Items)
+                eventProperties.Add(new KeyValuePair<string, string>(item.SubItems[0].Text, item.SubItems[1].Text));
 
-        /// <summary>
-        /// The ButtonRemoveEventProperty_Click method.
-        /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void ButtonRemoveEventProperty_Click(object sender, EventArgs args)
-        {
-            if (lvEventProperties.SelectedItems.Count > 0)
-                lvEventProperties.SelectedItems[0].Remove();
+            scheduleTrigger.EventProperties = eventProperties;
         }
 
         /// <summary>
@@ -132,20 +110,54 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
-        /// The AddEventDetails method.
+        /// The ButtonAddEventProperty_Click method.
         /// </summary>
-        /// <param name="scheduleTrigger">The new schedule trigger to add info to.</param>
-        private void AddEventDetails(NewScheduleTrigger scheduleTrigger)
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonAddEventProperty_Click(object sender, EventArgs args)
         {
-            // Set the situation type based on the selection.
-            scheduleTrigger.EventSituationType = cbxEvent.SelectedItem.ToString();
+            // Show the NewPropertyForm dialog.
+            using (var newPropertyForm = new NewPropertyForm(lvEventProperties))
+            {
+                newPropertyForm.ShowDialog();
+            }
 
-            // Set the event properties if they have been added.
-            var eventProperties = new List<KeyValuePair<string, string>>();
-            foreach (ListViewItem item in lvEventProperties.Items)
-                eventProperties.Add(new KeyValuePair<string, string>(item.SubItems[0].Text, item.SubItems[1].Text));
-
-            scheduleTrigger.EventProperties = eventProperties;
+            // Refresh the items in the list view.
+            lvEventProperties.Refresh();
         }
+
+        /// <summary>
+        /// The ButtonGenerate_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonGenerate_Click(object sender, EventArgs args)
+        {
+            tbxId.Clear();
+            tbxId.Text = Guid.NewGuid().ToString();
+        }
+
+        /// <summary>
+        /// The ButtonRemoveEventProperty_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonRemoveEventProperty_Click(object sender, EventArgs args)
+        {
+            if (lvEventProperties.SelectedItems.Count > 0)
+                lvEventProperties.SelectedItems[0].Remove();
+        }
+
+        /// <summary>
+        /// The ComboBoxEvent_SelectedIndexChanged method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ComboBoxEvent_SelectedIndexChanged(object sender, EventArgs args)
+        {
+            gbxEventProperties.Enabled = cbxEvent.SelectedIndex != 0;
+        }
+
+        #endregion Private Methods
     }
 }

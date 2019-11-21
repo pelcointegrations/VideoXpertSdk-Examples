@@ -10,6 +10,8 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user to view and modify time tables on the VideoXpert system.</remarks>
     public partial class TimeTableManagerForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeTableManagerForm" /> class.
         /// </summary>
@@ -20,11 +22,15 @@ namespace ExampleClient.Source
             PopulateTimeTables();
         }
 
+        #endregion Public Constructors
+
+        #region Private Methods
+
         /// <summary>
         /// The ButtonAdd_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param> 
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonAdd_Click(object sender, EventArgs args)
         {
             // Show the ModifyTimeTableForm dialog.
@@ -46,7 +52,7 @@ namespace ExampleClient.Source
         /// The ButtonDelete_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param> 
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonDelete_Click(object sender, EventArgs args)
         {
             if (lvTimeTableManager.SelectedItems.Count == 0)
@@ -66,7 +72,7 @@ namespace ExampleClient.Source
         /// The ButtonModify_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param> 
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonModify_Click(object sender, EventArgs args)
         {
             if (lvTimeTableManager.SelectedItems.Count == 0)
@@ -109,6 +115,6 @@ namespace ExampleClient.Source
             }
         }
 
-
+        #endregion Private Methods
     }
 }

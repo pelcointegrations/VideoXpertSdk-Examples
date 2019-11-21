@@ -14,11 +14,7 @@ namespace ExampleClient.Source
     /// </remarks>
     public partial class AddNotificationForm : Form
     {
-        /// <summary>
-        /// Gets or sets the SelectedSituation property.
-        /// </summary>
-        /// <value>The currently selected situation.</value>
-        private Situation SelectedSituation { get; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AddNotificationForm" /> class.
@@ -28,6 +24,20 @@ namespace ExampleClient.Source
             InitializeComponent();
             SelectedSituation = situation;
         }
+
+        #endregion Public Constructors
+
+        #region Private Properties
+
+        /// <summary>
+        /// Gets or sets the SelectedSituation property.
+        /// </summary>
+        /// <value>The currently selected situation.</value>
+        private Situation SelectedSituation { get; }
+
+        #endregion Private Properties
+
+        #region Public Methods
 
         /// <summary>
         /// The PopulateRoles method.
@@ -48,11 +58,15 @@ namespace ExampleClient.Source
             clbRoles.DisplayMember = "NAME";
         }
 
+        #endregion Public Methods
+
+        #region Private Methods
+
         /// <summary>
         /// The ButtonAdd_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param> 
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonAdd_Click(object sender, EventArgs args)
         {
             var roles = (from DataRowView view in clbRoles.CheckedItems select (Role)view["OBJECT"]).ToList();
@@ -63,5 +77,7 @@ namespace ExampleClient.Source
 
             SelectedSituation.AddNotification(newNotification);
         }
+
+        #endregion Private Methods
     }
 }

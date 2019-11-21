@@ -10,12 +10,7 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user to modify a data sources linked resources.</remarks>
     public partial class ManageDataSourceLinksForm : Form
     {
-        /// <summary>
-        /// Gets or sets the SelectedDataSource property.
-        /// </summary>
-        /// <value>The currently selected dataSource.</value>
-        private DataSource SelectedDataSource { get; }
-
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ManageDataSourceLinksForm" /> class.
@@ -28,28 +23,19 @@ namespace ExampleClient.Source
             PopulateLinkedDataSources();
         }
 
+        #endregion Public Constructors
+
+        #region Private Properties
+
         /// <summary>
-        /// The PopulateDataSources method.
+        /// Gets or sets the SelectedDataSource property.
         /// </summary>
-        private void PopulateLinkedDataSources()
-        {
-            lvDataSources.Items.Clear();
+        /// <value>The currently selected dataSource.</value>
+        private DataSource SelectedDataSource { get; }
 
-            // Get the existing data sources from the VideoXpert system and add
-            // them to the list view.
-            var resources = SelectedDataSource.Type == DataSource.Types.Audio ? SelectedDataSource.VideoRelations : SelectedDataSource.AudioRelations;
+        #endregion Private Properties
 
-            foreach (var resource in resources)
-            {
-                var dataSource = resource.Resource;
-                var lvItem = new ListViewItem(dataSource.Number.ToString());
-                lvItem.SubItems.Add(dataSource.Name);
-                lvItem.SubItems.Add(dataSource.Ip);
-                lvItem.SubItems.Add(resource.IsLinked.ToString());
-                lvItem.Tag = resource;
-                lvDataSources.Items.Add(lvItem);
-            }
-        }
+        #region Private Methods
 
         /// <summary>
         /// The ButtonLink_Click method.
@@ -80,5 +66,30 @@ namespace ExampleClient.Source
             var resource = (ResourceRel)lvDataSources.SelectedItems[0].Tag;
             btnLink.Text = resource.IsLinked ? "Unlink" : "Link";
         }
+
+        /// <summary>
+        /// The PopulateDataSources method.
+        /// </summary>
+        private void PopulateLinkedDataSources()
+        {
+            lvDataSources.Items.Clear();
+
+            // Get the existing data sources from the VideoXpert system and add
+            // them to the list view.
+            var resources = SelectedDataSource.Type == DataSource.Types.Audio ? SelectedDataSource.VideoRelations : SelectedDataSource.AudioRelations;
+
+            foreach (var resource in resources)
+            {
+                var dataSource = resource.Resource;
+                var lvItem = new ListViewItem(dataSource.Number.ToString());
+                lvItem.SubItems.Add(dataSource.Name);
+                lvItem.SubItems.Add(dataSource.Ip);
+                lvItem.SubItems.Add(resource.IsLinked.ToString());
+                lvItem.Tag = resource;
+                lvDataSources.Items.Add(lvItem);
+            }
+        }
+
+        #endregion Private Methods
     }
 }

@@ -7,9 +7,11 @@ namespace ExampleClient.Source
     /// The AddDrawingForm class.
     /// </summary>
     /// <remarks>Provides a dialog window that allows the user to select the settings
-    /// that will be used to create a new Drawing.</remarks> 
+    /// that will be used to create a new Drawing.</remarks>
     public partial class AddDrawingForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AddDrawingForm" /> class.
         /// </summary>
@@ -17,6 +19,10 @@ namespace ExampleClient.Source
         {
             InitializeComponent();
         }
+
+        #endregion Public Constructors
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonAdd_Click method
@@ -38,5 +44,7 @@ namespace ExampleClient.Source
                 throw;
             }
         }
+
+        #endregion Private Methods
     }
 }

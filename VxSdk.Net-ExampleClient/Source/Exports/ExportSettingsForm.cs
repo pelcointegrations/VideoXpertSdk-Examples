@@ -8,9 +8,11 @@ namespace ExampleClient.Source
     /// The ExportSettingsForm class.
     /// </summary>
     /// <remarks>Provides a dialog window that allows the user to select the settings
-    /// that will be used to create a new export file.</remarks> 
+    /// that will be used to create a new export file.</remarks>
     public partial class ExportSettingsForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ExportSettingsForm" /> class.
         /// </summary>
@@ -18,6 +20,10 @@ namespace ExampleClient.Source
         {
             InitializeComponent();
         }
+
+        #endregion Public Constructors
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonStartExport_Click method
@@ -42,5 +48,7 @@ namespace ExampleClient.Source
 
             Close();
         }
+
+        #endregion Private Methods
     }
 }

@@ -12,6 +12,8 @@ namespace ExampleClient.Source
     /// devices from the VideoXpert system.</remarks>
     public partial class DataSourceManagerForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DataSourceManagerForm" /> class.
         /// </summary>
@@ -22,31 +24,9 @@ namespace ExampleClient.Source
             PopulateDataSources();
         }
 
-        /// <summary>
-        /// The PopulateDataSources method.
-        /// </summary>
-        private void PopulateDataSources()
-        {
-            lvDataSources.Items.Clear();
+        #endregion Public Constructors
 
-            // Get the existing data sources from the VideoXpert system and add them
-            // to the list view.
-            foreach (var dataSource in MainForm.CurrentSystem.DataSources.OrderByDescending(x => x.Type))
-            {
-                var lvItem = new ListViewItem(dataSource.Number.ToString());
-                lvItem.SubItems.Add(dataSource.Type.ToString());
-                lvItem.SubItems.Add(dataSource.Name);
-                lvItem.SubItems.Add(dataSource.Ip);
-                lvItem.SubItems.Add(dataSource.Id);
-                lvItem.SubItems.Add(dataSource.State.ToString());
-                lvItem.SubItems.Add(dataSource.RetentionLimit.ToString());
-                lvItem.SubItems.Add(dataSource.MotionConfiguration == null ? "N/A" : dataSource.MotionConfiguration.Mode.ToString());
-                lvItem.SubItems.Add(dataSource.IsManuallyRecording.ToString());
-                lvItem.SubItems.Add(dataSource.IsEnabled.ToString());
-                lvItem.Tag = dataSource;
-                lvDataSources.Items.Add(lvItem);
-            }
-        }
+        #region Private Methods
 
         /// <summary>
         /// The ButtonAutoNumber_Click method.
@@ -109,7 +89,7 @@ namespace ExampleClient.Source
             // Show the ManageDataSourceLinksForm dialog.
             using (var manageDataSourceLinksForm = new ManageDataSourceLinksForm(dataSource))
             {
-                 manageDataSourceLinksForm.ShowDialog();
+                manageDataSourceLinksForm.ShowDialog();
             }
         }
 
@@ -252,5 +232,33 @@ namespace ExampleClient.Source
                 tagDetailsForm.ShowDialog();
             }
         }
+
+        /// <summary>
+        /// The PopulateDataSources method.
+        /// </summary>
+        private void PopulateDataSources()
+        {
+            lvDataSources.Items.Clear();
+
+            // Get the existing data sources from the VideoXpert system and add them
+            // to the list view.
+            foreach (var dataSource in MainForm.CurrentSystem.DataSources.OrderByDescending(x => x.Type))
+            {
+                var lvItem = new ListViewItem(dataSource.Number.ToString());
+                lvItem.SubItems.Add(dataSource.Type.ToString());
+                lvItem.SubItems.Add(dataSource.Name);
+                lvItem.SubItems.Add(dataSource.Ip);
+                lvItem.SubItems.Add(dataSource.Id);
+                lvItem.SubItems.Add(dataSource.State.ToString());
+                lvItem.SubItems.Add(dataSource.RetentionLimit.ToString());
+                lvItem.SubItems.Add(dataSource.MotionConfiguration == null ? "N/A" : dataSource.MotionConfiguration.Mode.ToString());
+                lvItem.SubItems.Add(dataSource.IsManuallyRecording.ToString());
+                lvItem.SubItems.Add(dataSource.IsEnabled.ToString());
+                lvItem.Tag = dataSource;
+                lvDataSources.Items.Add(lvItem);
+            }
+        }
+
+        #endregion Private Methods
     }
 }

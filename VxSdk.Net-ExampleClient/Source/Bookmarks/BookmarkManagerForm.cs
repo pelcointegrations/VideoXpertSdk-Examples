@@ -11,11 +11,17 @@ namespace ExampleClient.Source
     /// bookmarks from the VideoXpert system.</remarks>
     public partial class BookmarkManagerForm : Form
     {
+        #region Private Fields
+
         /// <summary>
         /// The _lastItemChecked field.
-        /// </summary>  
+        /// </summary>
         /// <remarks>Holds the last item checked in the BookmarkManager list view.</remarks>
         private ListViewItem _lastItemChecked;
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BookmarkManagerForm" /> class.
@@ -27,34 +33,15 @@ namespace ExampleClient.Source
             PopulateBookmarks();
         }
 
-        /// <summary>
-        /// The PopulateBookmarks method.
-        /// </summary>
-        private void PopulateBookmarks()
-        {
-            // Get the existing bookmarks from the VideoXpert system and add
-            // them to the list view.
-            foreach (var bookmark in MainForm.CurrentSystem.Bookmarks)
-            {
-                var bookmarkLock = bookmark.Lock;
-                var lvItem = new ListViewItem(string.Empty);
-                lvItem.SubItems.Add(bookmark.Id);
-                lvItem.SubItems.Add(bookmark.Time.ToLocalTime().ToString("s"));
-                lvItem.SubItems.Add(bookmark.Name);
-                lvItem.SubItems.Add(bookmark.Description);
-                lvItem.SubItems.Add(bookmarkLock.IsEnabled ? "Enabled" : "Disabled");
-                lvItem.SubItems.Add(bookmarkLock.StartTime.ToLocalTime().ToString("s"));
-                lvItem.SubItems.Add(bookmarkLock.EndTime.ToLocalTime().ToString("s"));
-                lvItem.Tag = bookmark;
-                lvBookmarkManager.Items.Add(lvItem);
-            }
-        }
+        #endregion Public Constructors
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonConfigureAutoUnlock_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>  
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonConfigureAutoUnlock_Click(object sender, EventArgs args)
         {
             decimal value = MainForm.CurrentSystem.BookmarkAutoUnlockTime;
@@ -68,7 +55,7 @@ namespace ExampleClient.Source
         /// The ButtonDelete_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>  
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonDelete_Click(object sender, EventArgs args)
         {
             if (lvBookmarkManager.CheckedItems.Count == 0)
@@ -85,7 +72,7 @@ namespace ExampleClient.Source
         /// The ButtonModify_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param> 
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonModify_Click(object sender, EventArgs args)
         {
             if (lvBookmarkManager.CheckedItems.Count == 0)
@@ -113,7 +100,7 @@ namespace ExampleClient.Source
         /// The ButtonNewBookmark_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>  
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonNewBookmark_Click(object sender, EventArgs args)
         {
             // Show the AddBookmarkForm dialog.
@@ -137,7 +124,7 @@ namespace ExampleClient.Source
         /// The ButtonRefresh_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param> 
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonRefresh_Click(object sender, EventArgs args)
         {
             // Refresh the items in the list view to include the newly added bookmark.
@@ -150,7 +137,7 @@ namespace ExampleClient.Source
         /// The ListViewBookmarkManager_ItemCheck method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>  
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ListViewBookmarkManager_ItemCheck(object sender, ItemCheckEventArgs args)
         {
             // If we have the lastItem set as checked, and it is different
@@ -170,7 +157,7 @@ namespace ExampleClient.Source
         /// The ListViewBookmarkManager_SelectedIndexChanged method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>  
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ListViewBookmarkManager_SelectedIndexChanged(object sender, EventArgs args)
         {
             if (lvBookmarkManager.SelectedItems.Count == 0)
@@ -178,5 +165,30 @@ namespace ExampleClient.Source
 
             lvBookmarkManager.SelectedItems[0].Checked = true;
         }
+
+        /// <summary>
+        /// The PopulateBookmarks method.
+        /// </summary>
+        private void PopulateBookmarks()
+        {
+            // Get the existing bookmarks from the VideoXpert system and add
+            // them to the list view.
+            foreach (var bookmark in MainForm.CurrentSystem.Bookmarks)
+            {
+                var bookmarkLock = bookmark.Lock;
+                var lvItem = new ListViewItem(string.Empty);
+                lvItem.SubItems.Add(bookmark.Id);
+                lvItem.SubItems.Add(bookmark.Time.ToLocalTime().ToString("s"));
+                lvItem.SubItems.Add(bookmark.Name);
+                lvItem.SubItems.Add(bookmark.Description);
+                lvItem.SubItems.Add(bookmarkLock.IsEnabled ? "Enabled" : "Disabled");
+                lvItem.SubItems.Add(bookmarkLock.StartTime.ToLocalTime().ToString("s"));
+                lvItem.SubItems.Add(bookmarkLock.EndTime.ToLocalTime().ToString("s"));
+                lvItem.Tag = bookmark;
+                lvBookmarkManager.Items.Add(lvItem);
+            }
+        }
+
+        #endregion Private Methods
     }
 }

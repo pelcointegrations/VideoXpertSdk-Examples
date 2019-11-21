@@ -12,23 +12,7 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user to modify a tag.</remarks>
     public partial class ModifyTagForm : Form
     {
-        /// <summary>
-        /// Gets or sets the SelectedTag property.
-        /// </summary>
-        /// <value>The currently selected tag.</value>
-        private Tag SelectedTag { get; }
-
-        /// <summary>
-        /// Gets or sets the CurrentDeviceList property.
-        /// </summary>
-        /// <value>The list of devices for the currently selected tag.</value>
-        private List<string> CurrentDeviceList { get; set; }
-
-        /// <summary>
-        /// Gets or sets the CurrentSourceList property.
-        /// </summary>
-        /// <value>The list of sources for the currently selected tag.</value>
-        private List<string> CurrentSourceList { get; set; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModifyTagForm" /> class.
@@ -49,6 +33,32 @@ namespace ExampleClient.Source
             PopulateDevices();
         }
 
+        #endregion Public Constructors
+
+        #region Private Properties
+
+        /// <summary>
+        /// Gets or sets the CurrentDeviceList property.
+        /// </summary>
+        /// <value>The list of devices for the currently selected tag.</value>
+        private List<string> CurrentDeviceList { get; set; }
+
+        /// <summary>
+        /// Gets or sets the CurrentSourceList property.
+        /// </summary>
+        /// <value>The list of sources for the currently selected tag.</value>
+        private List<string> CurrentSourceList { get; set; }
+
+        /// <summary>
+        /// Gets or sets the SelectedTag property.
+        /// </summary>
+        /// <value>The currently selected tag.</value>
+        private Tag SelectedTag { get; }
+
+        #endregion Private Properties
+
+        #region Private Methods
+
         /// <summary>
         /// The ButtonSave_Click method.
         /// </summary>
@@ -65,7 +75,7 @@ namespace ExampleClient.Source
                     SelectedTag.Parent = null;
                 else
                 {
-                    var cbxTag = (Tag) ((ComboboxItem) cbxTags.SelectedItem).Value;
+                    var cbxTag = (Tag)((ComboboxItem)cbxTags.SelectedItem).Value;
                     if (cbxTag != null)
                     {
                         if (SelectedTag.Parent != null && SelectedTag.Parent.Id != cbxTag.Id)
@@ -143,23 +153,6 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
-        /// The PopulateTags method.
-        /// </summary>
-        private void PopulateTags()
-        {
-            // Add each folder tag to the combobox.
-            var index = -1;
-            foreach (var tag in MainForm.CurrentSystem.Tags.Where(t => t.IsFolder))
-            {
-                var tempIndex = cbxTags.Items.Add(new ComboboxItem { Text = tag.Name, Value = tag});
-                if (SelectedTag.Parent != null && SelectedTag.Parent.Id == tag.Id)
-                    index = tempIndex;
-            }
-
-            cbxTags.SelectedIndex = index;
-        }
-
-        /// <summary>
         /// The PopulateDataSources method.
         /// </summary>
         private void PopulateDataSources()
@@ -202,5 +195,24 @@ namespace ExampleClient.Source
                 lvTagDevices.Items.Add(lvItem);
             }
         }
+
+        /// <summary>
+        /// The PopulateTags method.
+        /// </summary>
+        private void PopulateTags()
+        {
+            // Add each folder tag to the combobox.
+            var index = -1;
+            foreach (var tag in MainForm.CurrentSystem.Tags.Where(t => t.IsFolder))
+            {
+                var tempIndex = cbxTags.Items.Add(new ComboboxItem { Text = tag.Name, Value = tag });
+                if (SelectedTag.Parent != null && SelectedTag.Parent.Id == tag.Id)
+                    index = tempIndex;
+            }
+
+            cbxTags.SelectedIndex = index;
+        }
+
+        #endregion Private Methods
     }
 }

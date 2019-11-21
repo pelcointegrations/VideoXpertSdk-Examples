@@ -7,9 +7,11 @@ namespace ExampleClient.Source
     /// <summary>
     /// The InputBox class.
     /// </summary>
-    /// <remarks>Provides a reusable dialog window for entering a numeric value.</remarks> 
+    /// <remarks>Provides a reusable dialog window for entering a numeric value.</remarks>
     public static class InputBox
     {
+        #region Public Methods
+
         /// <summary>
         /// The Show method.
         /// </summary>
@@ -71,5 +73,7 @@ namespace ExampleClient.Source
             value = numericUpDown.Value;
             return dialogResult;
         }
+
+        #endregion Public Methods
     }
 }

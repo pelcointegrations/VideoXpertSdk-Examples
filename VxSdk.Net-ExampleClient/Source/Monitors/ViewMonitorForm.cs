@@ -12,23 +12,7 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user to view a monitor.</remarks>
     public partial class ViewMonitorForm : Form
     {
-        /// <summary>
-        /// Gets or sets the currently selected monitor.
-        /// </summary>
-        /// <value>The current monitor.</value>
-        private Monitor CurrentMonitor { get; }
-
-        /// <summary>
-        /// Gets or sets the IsInitialized property.
-        /// </summary>
-        /// <value>Specifies whether the layout combo box has been initialized or not.</value>
-        private bool IsInitialized { get; set; }
-
-        /// <summary>
-        /// Gets or sets the LastSelectedPanel property.
-        /// </summary>
-        /// <value>The last panel selected by the user.</value>
-        private Panel LastSelectedPanel { get; set; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewMonitorForm" /> class.
@@ -47,6 +31,32 @@ namespace ExampleClient.Source
             SetCellLayout();
         }
 
+        #endregion Public Constructors
+
+        #region Private Properties
+
+        /// <summary>
+        /// Gets or sets the currently selected monitor.
+        /// </summary>
+        /// <value>The current monitor.</value>
+        private Monitor CurrentMonitor { get; }
+
+        /// <summary>
+        /// Gets or sets the IsInitialized property.
+        /// </summary>
+        /// <value>Specifies whether the layout combo box has been initialized or not.</value>
+        private bool IsInitialized { get; set; }
+
+        /// <summary>
+        /// Gets or sets the LastSelectedPanel property.
+        /// </summary>
+        /// <value>The last panel selected by the user.</value>
+        private Panel LastSelectedPanel { get; set; }
+
+        #endregion Private Properties
+
+        #region Private Methods
+
         /// <summary>
         /// Adds a right-click context menu to a label.
         /// </summary>
@@ -61,6 +71,27 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The MenuItemRemoveDataSource_OnClick method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private static void MenuItemRemoveDataSource_OnClick(object sender, EventArgs args)
+        {
+            // Get the menu item that was clicked.
+            var item = (MenuItem)sender;
+
+            // Get the label from the menu items tag.
+            var label = item.Tag as Label;
+            if (label == null)
+                return;
+
+            // Clear the label and remove the data source from the monitor cell.
+            label.Text = string.Empty;
+            var cell = label.Tag as MonitorCell;
+            cell?.Disconnect();
+        }
+
+        /// <summary>
         /// The ButtonLive_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -68,7 +99,7 @@ namespace ExampleClient.Source
         private void ButtonLive_Click(object sender, EventArgs args)
         {
             var label = LastSelectedPanel?.Controls.OfType<Label>().FirstOrDefault();
-            var cell = (MonitorCell) label?.Tag;
+            var cell = (MonitorCell)label?.Tag;
             cell?.GoToLive();
         }
 
@@ -93,7 +124,7 @@ namespace ExampleClient.Source
         private void ButtonSetSpeed_Click(object sender, EventArgs args)
         {
             var label = LastSelectedPanel?.Controls.OfType<Label>().FirstOrDefault();
-            var cell = (MonitorCell) label?.Tag;
+            var cell = (MonitorCell)label?.Tag;
             if (cell != null)
                 cell.Speed = (float)nudSpeed.Value;
         }
@@ -106,7 +137,7 @@ namespace ExampleClient.Source
         private void ButtonSetTime_Click(object sender, EventArgs args)
         {
             var label = LastSelectedPanel?.Controls.OfType<Label>().FirstOrDefault();
-            var cell = (MonitorCell) label?.Tag;
+            var cell = (MonitorCell)label?.Tag;
             if (cell != null)
                 cell.Time = dtpTime.Value.ToUniversalTime();
         }
@@ -213,27 +244,6 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
-        /// The MenuItemRemoveDataSource_OnClick method.
-        /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private static void MenuItemRemoveDataSource_OnClick(object sender, EventArgs args)
-        {
-            // Get the menu item that was clicked.
-            var item = (MenuItem)sender;
-
-            // Get the label from the menu items tag.
-            var label = item.Tag as Label;
-            if (label == null)
-                return;
-
-            // Clear the label and remove the data source from the monitor cell.
-            label.Text = string.Empty;
-            var cell = label.Tag as MonitorCell;
-            cell?.Disconnect();
-        }
-
-        /// <summary>
         /// Populates the list view with all available data sources.
         /// </summary>
         private void PopulateDataSources()
@@ -320,6 +330,7 @@ namespace ExampleClient.Source
                     tlpCells.RowStyles[0].Height = 100;
                     DisableExtraRows(1);
                     break;
+
                 case Monitor.Layouts.CellLayout1x2:
                     tlpCells.ColumnCount = 1;
                     tlpCells.ColumnStyles[0].Width = 100;
@@ -327,6 +338,7 @@ namespace ExampleClient.Source
                     tlpCells.RowStyles[1].Height = 50;
                     DisableExtraRows(2);
                     break;
+
                 case Monitor.Layouts.CellLayout2x1:
                     tlpCells.ColumnCount = 2;
                     tlpCells.ColumnStyles[0].Width = 50;
@@ -334,6 +346,7 @@ namespace ExampleClient.Source
                     tlpCells.RowStyles[0].Height = 100;
                     DisableExtraRows(1);
                     break;
+
                 case Monitor.Layouts.CellLayout2x2:
                     tlpCells.ColumnCount = 2;
                     tlpCells.ColumnStyles[0].Width = 50;
@@ -342,6 +355,7 @@ namespace ExampleClient.Source
                     tlpCells.RowStyles[1].Height = 50;
                     DisableExtraRows(2);
                     break;
+
                 case Monitor.Layouts.CellLayout2x3:
                     tlpCells.ColumnCount = 2;
                     tlpCells.ColumnStyles[0].Width = 50;
@@ -351,6 +365,7 @@ namespace ExampleClient.Source
                     tlpCells.RowStyles[2].Height = 33.3f;
                     DisableExtraRows(3);
                     break;
+
                 case Monitor.Layouts.CellLayout3x2:
                     tlpCells.ColumnCount = 3;
                     tlpCells.ColumnStyles[0].Width = 33.3f;
@@ -360,6 +375,7 @@ namespace ExampleClient.Source
                     tlpCells.RowStyles[1].Height = 50;
                     DisableExtraRows(2);
                     break;
+
                 case Monitor.Layouts.CellLayout3x3:
                     tlpCells.ColumnCount = 3;
                     tlpCells.ColumnStyles[0].Width = 33.3f;
@@ -370,6 +386,7 @@ namespace ExampleClient.Source
                     tlpCells.RowStyles[2].Height = 33.3f;
                     DisableExtraRows(3);
                     break;
+
                 case Monitor.Layouts.CellLayout4x3:
                     tlpCells.ColumnStyles[0].Width = 25;
                     tlpCells.ColumnStyles[1].Width = 25;
@@ -380,6 +397,7 @@ namespace ExampleClient.Source
                     tlpCells.RowStyles[2].Height = 33.3f;
                     DisableExtraRows(3);
                     break;
+
                 case Monitor.Layouts.CellLayout4x4:
                     tlpCells.ColumnStyles[0].Width = 25;
                     tlpCells.ColumnStyles[1].Width = 25;
@@ -390,6 +408,7 @@ namespace ExampleClient.Source
                     tlpCells.RowStyles[2].Height = 25;
                     tlpCells.RowStyles[3].Height = 25;
                     break;
+
                 case Monitor.Layouts.CellLayout1plus12:
                     tlpCells.SetColumnSpan(pnlCell_01, 2);
                     tlpCells.SetRowSpan(pnlCell_01, 2);
@@ -403,6 +422,7 @@ namespace ExampleClient.Source
                     tlpCells.RowStyles[3].Height = 25;
                     DisableExtraRows(4);
                     break;
+
                 case Monitor.Layouts.CellLayout2plus8:
                     tlpCells.SetColumnSpan(pnlCell_01, 2);
                     tlpCells.SetColumnSpan(pnlCell_02, 2);
@@ -418,6 +438,7 @@ namespace ExampleClient.Source
                     tlpCells.RowStyles[3].Height = 25;
                     DisableExtraRows(4);
                     break;
+
                 case Monitor.Layouts.CellLayout3plus4:
                     tlpCells.SetColumnSpan(pnlCell_01, 2);
                     tlpCells.SetColumnSpan(pnlCell_02, 2);
@@ -435,6 +456,7 @@ namespace ExampleClient.Source
                     tlpCells.RowStyles[3].Height = 25;
                     DisableExtraRows(4);
                     break;
+
                 case Monitor.Layouts.CellLayout1plus5:
                     tlpCells.ColumnCount = 3;
                     tlpCells.SetColumnSpan(pnlCell_01, 2);
@@ -447,6 +469,7 @@ namespace ExampleClient.Source
                     tlpCells.RowStyles[2].Height = 33.3f;
                     DisableExtraRows(3);
                     break;
+
                 case Monitor.Layouts.CellLayout1plus7:
                     tlpCells.SetColumnSpan(pnlCell_01, 3);
                     tlpCells.SetRowSpan(pnlCell_01, 3);
@@ -460,6 +483,7 @@ namespace ExampleClient.Source
                     tlpCells.RowStyles[3].Height = 25;
                     DisableExtraRows(4);
                     break;
+
                 case Monitor.Layouts.CellLayout12plus1:
                     tlpCells.SetColumnSpan(pnlCell_06, 2);
                     tlpCells.SetRowSpan(pnlCell_06, 2);
@@ -473,6 +497,7 @@ namespace ExampleClient.Source
                     tlpCells.RowStyles[3].Height = 25;
                     DisableExtraRows(4);
                     break;
+
                 case Monitor.Layouts.CellLayout8plus2:
                     tlpCells.SetColumnSpan(pnlCell_05, 2);
                     tlpCells.SetColumnSpan(pnlCell_06, 2);
@@ -488,6 +513,7 @@ namespace ExampleClient.Source
                     tlpCells.RowStyles[3].Height = 25;
                     DisableExtraRows(4);
                     break;
+
                 case Monitor.Layouts.CellLayout1plus4tall:
                     tlpCells.SetColumnSpan(pnlCell_01, 3);
                     tlpCells.SetRowSpan(pnlCell_01, 4);
@@ -501,6 +527,7 @@ namespace ExampleClient.Source
                     tlpCells.RowStyles[3].Height = 25;
                     DisableExtraRows(4);
                     break;
+
                 case Monitor.Layouts.CellLayout1plus4wide:
                     tlpCells.SetColumnSpan(pnlCell_01, 4);
                     tlpCells.SetRowSpan(pnlCell_01, 3);
@@ -514,6 +541,7 @@ namespace ExampleClient.Source
                     tlpCells.RowStyles[3].Height = 25;
                     DisableExtraRows(4);
                     break;
+
                 default:
                     MainForm.Instance.WriteToLog("Unknown Monitor Layout Selected.");
                     break;
@@ -523,5 +551,7 @@ namespace ExampleClient.Source
             SetCellLabels();
             Refresh();
         }
+
+        #endregion Private Methods
     }
 }

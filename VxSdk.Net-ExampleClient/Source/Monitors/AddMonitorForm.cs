@@ -9,9 +9,11 @@ namespace ExampleClient.Source
     /// The AddMonitorForm class.
     /// </summary>
     /// <remarks>Provides a dialog window that allows the user to select the settings
-    /// that will be used to create a new monitor.</remarks> 
+    /// that will be used to create a new monitor.</remarks>
     public partial class AddMonitorForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AddMonitorForm" /> class.
         /// </summary>
@@ -29,6 +31,10 @@ namespace ExampleClient.Source
                 cbxMonitorDevices.Items.Add(item);
             }
         }
+
+        #endregion Public Constructors
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonAdd_Click method
@@ -53,8 +59,8 @@ namespace ExampleClient.Source
                 {
                     HostDeviceId = item.Value.ToString(),
                     Name = tbxName.Text,
-                    Number = (int) nudNumber.Value,
-                    Layout = (Monitor.Layouts) cbxLayouts.SelectedIndex
+                    Number = (int)nudNumber.Value,
+                    Layout = (Monitor.Layouts)cbxLayouts.SelectedIndex
                 };
                 MainForm.CurrentSystem.AddVxMonitor(newMonitor);
             }
@@ -66,5 +72,7 @@ namespace ExampleClient.Source
 
             Close();
         }
+
+        #endregion Private Methods
     }
 }

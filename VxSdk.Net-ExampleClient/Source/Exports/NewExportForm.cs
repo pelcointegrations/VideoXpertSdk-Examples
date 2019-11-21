@@ -11,15 +11,11 @@ namespace ExampleClient.Source
     /// add them to a new export and begin the export process.</remarks>
     public partial class NewExportForm : Form
     {
-        /// <summary>
-        /// Gets the Instance property.
-        /// </summary>
-        /// <value>The current <see cref="NewExportForm"/> instance.</value>
-        public static NewExportForm Instance { get; private set; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NewExportForm" /> class.
-        /// </summary>        
+        /// </summary>
         public NewExportForm()
         {
             InitializeComponent();
@@ -36,6 +32,20 @@ namespace ExampleClient.Source
 
             Instance = this;
         }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets the Instance property.
+        /// </summary>
+        /// <value>The current <see cref="NewExportForm"/> instance.</value>
+        public static NewExportForm Instance { get; private set; }
+
+        #endregion Public Properties
+
+        #region Public Methods
 
         /// <summary>
         /// The ListViewDevices_ItemSelected method.
@@ -82,6 +92,10 @@ namespace ExampleClient.Source
             }
         }
 
+        #endregion Public Methods
+
+        #region Private Methods
+
         /// <summary>
         /// The ButtonAddClip_Click method.
         /// </summary>
@@ -102,7 +116,7 @@ namespace ExampleClient.Source
         /// The ButtonExportSettings_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>        
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonExportSettings_Click(object sender, EventArgs args)
         {
             DialogResult result;
@@ -125,5 +139,7 @@ namespace ExampleClient.Source
             if (lvAddedClips.SelectedItems.Count != 0)
                 lvAddedClips.SelectedItems[0].Remove();
         }
+
+        #endregion Private Methods
     }
 }

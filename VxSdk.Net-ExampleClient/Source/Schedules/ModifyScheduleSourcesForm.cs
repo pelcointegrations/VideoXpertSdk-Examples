@@ -13,17 +13,7 @@ namespace ExampleClient.Source
     /// settings of a schedule.</remarks>
     public partial class ModifyScheduleSourcesForm : Form
     {
-        /// <summary>
-        /// Gets or sets the SelectedSchedule property.
-        /// </summary>
-        /// <value>The currently selected schedule.</value>
-        private Schedule SelectedSchedule { get; }
-
-        /// <summary>
-        /// Gets or sets the CurrentSourceList property.
-        /// </summary>
-        /// <value>The list of sources for the currently selected schedule.</value>
-        private List<string> CurrentSourceList { get; set; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModifyScheduleSourcesForm" /> class.
@@ -36,28 +26,25 @@ namespace ExampleClient.Source
             PopulateDataSources();
         }
 
+        #endregion Public Constructors
+
+        #region Private Properties
+
         /// <summary>
-        /// The PopulateDataSources method.
+        /// Gets or sets the CurrentSourceList property.
         /// </summary>
-        private void PopulateDataSources()
-        {
-            CurrentSourceList = new List<string>();
-            foreach (var dataSource in SelectedSchedule.LinkedDataSources)
-                CurrentSourceList.Add(dataSource.Id);
+        /// <value>The list of sources for the currently selected schedule.</value>
+        private List<string> CurrentSourceList { get; set; }
 
-            // Clone each item in the MainForm ListView and add it to lvDataSources.
-            foreach (var dataSource in MainForm.CurrentDataSources)
-            {
-                var lvItem = new ListViewItem(string.Empty);
-                lvItem.SubItems.Add(dataSource.Number.ToString());
-                lvItem.SubItems.Add(dataSource.Name);
-                lvItem.Tag = dataSource;
-                if (CurrentSourceList.Any(s => dataSource.Id.Contains(s)))
-                    lvItem.Checked = true;
+        /// <summary>
+        /// Gets or sets the SelectedSchedule property.
+        /// </summary>
+        /// <value>The currently selected schedule.</value>
+        private Schedule SelectedSchedule { get; }
 
-                lvScheduleSources.Items.Add(lvItem);
-            }
-        }
+        #endregion Private Properties
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonSave_Click method.
@@ -91,5 +78,30 @@ namespace ExampleClient.Source
             if (unlinkList.Count > 0)
                 SelectedSchedule.Unlink(unlinkList);
         }
+
+        /// <summary>
+        /// The PopulateDataSources method.
+        /// </summary>
+        private void PopulateDataSources()
+        {
+            CurrentSourceList = new List<string>();
+            foreach (var dataSource in SelectedSchedule.LinkedDataSources)
+                CurrentSourceList.Add(dataSource.Id);
+
+            // Clone each item in the MainForm ListView and add it to lvDataSources.
+            foreach (var dataSource in MainForm.CurrentDataSources)
+            {
+                var lvItem = new ListViewItem(string.Empty);
+                lvItem.SubItems.Add(dataSource.Number.ToString());
+                lvItem.SubItems.Add(dataSource.Name);
+                lvItem.Tag = dataSource;
+                if (CurrentSourceList.Any(s => dataSource.Id.Contains(s)))
+                    lvItem.Checked = true;
+
+                lvScheduleSources.Items.Add(lvItem);
+            }
+        }
+
+        #endregion Private Methods
     }
 }

@@ -11,6 +11,8 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that contains the detailed info of the system license.</remarks>
     public partial class LicenseDetailsForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LicenseDetailsForm" /> class.
         /// </summary>
@@ -21,6 +23,10 @@ namespace ExampleClient.Source
             tvLicenseDetails.ExpandAll();
         }
 
+        #endregion Public Constructors
+
+        #region Public Methods
+
         /// <summary>
         /// The GetLicenseInfo method.
         /// </summary>
@@ -28,7 +34,7 @@ namespace ExampleClient.Source
         {
             // Get the license from the current system.
             var license = MainForm.CurrentSystem.GetLicense();
-            if (license == null) 
+            if (license == null)
                 return;
 
             // Create the base node.
@@ -54,6 +60,46 @@ namespace ExampleClient.Source
             // Populate the feature nodes if present.
             foreach (var feature in license.LicenseFeatures)
                 AddFeatureInfo(feature, licenseNode);
+        }
+
+        #endregion Public Methods
+
+        #region Private Methods
+
+        /// <summary>
+        /// The AddDeviceInfo method.
+        /// </summary>
+        /// <param name="device">The <paramref name="device"/> to add the info for.</param>
+        /// <param name="deviceNode">The node to add the info to.</param>
+        private static void AddDeviceInfo(Device device, TreeNode deviceNode)
+        {
+            // Change the device type to a more readable form.
+            string type;
+            switch (device.Type)
+            {
+                case Device.Types.Acc:
+                    type = "Accessory Server";
+                    break;
+
+                case Device.Types.AllInOne:
+                    type = "VxPro";
+                    break;
+
+                case Device.Types.Mg:
+                    type = "MediaGateway";
+                    break;
+
+                case Device.Types.Ui:
+                    type = "User Interface";
+                    break;
+
+                default:
+                    type = device.Type.ToString();
+                    break;
+            }
+
+            // Add the device info to the current node.
+            deviceNode.Nodes.Add($"{type}: {device.Name}");
         }
 
         /// <summary>
@@ -98,36 +144,6 @@ namespace ExampleClient.Source
                 AddDeviceInfo(device, deviceNode);
         }
 
-        /// <summary>
-        /// The AddDeviceInfo method.
-        /// </summary>
-        /// <param name="device">The <paramref name="device"/> to add the info for.</param>
-        /// <param name="deviceNode">The node to add the info to.</param>
-        private static void AddDeviceInfo(Device device, TreeNode deviceNode)
-        {
-            // Change the device type to a more readable form.
-            string type;
-            switch (device.Type)
-            {
-                case Device.Types.Acc:
-                    type = "Accessory Server";
-                    break;
-                case Device.Types.AllInOne:
-                    type = "VxPro";
-                    break;
-                case Device.Types.Mg:
-                    type = "MediaGateway";
-                    break;
-                case Device.Types.Ui:
-                    type = "User Interface";
-                    break;
-                default:
-                    type = device.Type.ToString();
-                    break;
-            }
-
-            // Add the device info to the current node.
-            deviceNode.Nodes.Add($"{type}: {device.Name}");
-        }
+        #endregion Private Methods
     }
 }

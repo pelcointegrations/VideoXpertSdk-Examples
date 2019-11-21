@@ -15,6 +15,27 @@ namespace ExampleClient.Source
     /// of the selected role.</remarks>
     public partial class ModifyRolePrivilegesForm : Form
     {
+        #region Public Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ModifyRolePrivilegesForm" /> class.
+        /// </summary>
+        /// <param name="role">The selected role.</param>
+        public ModifyRolePrivilegesForm(Role role)
+        {
+            InitializeComponent();
+            SelectedRole = role;
+            foreach (var comboBox in ComboBoxes)
+                comboBox.SelectedIndex = 0;
+
+            PopulateRoles();
+            IsInitialized = true;
+        }
+
+        #endregion Public Constructors
+
+        #region Private Properties
+
         /// <summary>
         /// Gets the ComboBoxes property.
         /// </summary>
@@ -39,62 +60,9 @@ namespace ExampleClient.Source
         /// <value>The currently selected role.</value>
         private Role SelectedRole { get; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ModifyRolePrivilegesForm" /> class.
-        /// </summary>
-        /// <param name="role">The selected role.</param>
-        public ModifyRolePrivilegesForm(Role role)
-        {
-            InitializeComponent();
-            SelectedRole = role;
-            foreach (var comboBox in ComboBoxes)
-                comboBox.SelectedIndex = 0;
+        #endregion Private Properties
 
-            PopulateRoles();
-            IsInitialized = true;
-        }
-
-        /// <summary>
-        /// The GetButtonByName method.
-        /// </summary>
-        /// <param name="name">The button name.</param>
-        /// <returns>A <c>Button</c> if found, otherwise <c>null</c>.</returns>
-        private Button GetButtonByName(string name)
-        {
-            var allButtons = tlpLeft.Controls.OfType<Button>().Concat(tlpRight.Controls.OfType<Button>());
-            return allButtons.FirstOrDefault(btn => btn.Name == name);
-        }
-
-        /// <summary>
-        /// The PopulateRoles method.
-        /// </summary>
-        private void PopulateRoles()
-        {
-            foreach (var privilege in SelectedRole.Privileges)
-                EnableRowControls(privilege);
-        }
-
-        /// <summary>
-        /// The EnableRowControls method.
-        /// </summary>
-        /// <param name="privilege">The privilege to enable the row for.</param>
-        private void EnableRowControls(Privilege privilege)
-        {
-            var comboBox = ComboBoxes.FirstOrDefault(cbx => cbx.Name == "cbx" + privilege.PermissionId);
-            if (comboBox == null)
-                return;
-
-            var priorityButton = GetButtonByName("pri" + privilege.PermissionId);
-            var sourceButton = GetButtonByName("btn" + privilege.PermissionId);
-            comboBox.SelectedIndex = privilege.IsRestricted ? 2 : 1;
-            priorityButton.Text = privilege.Priority.ToString();
-            priorityButton.Enabled = true;
-            priorityButton.Tag = privilege;
-            if (sourceButton != null)
-                sourceButton.Enabled = privilege.IsRestricted;
-
-            HandleRelations(comboBox);
-        }
+        #region Private Methods
 
         /// <summary>
         /// The TableLayoutPanel_CellPaint method.
@@ -109,17 +77,6 @@ namespace ExampleClient.Source
             var g = args.Graphics;
             var r = args.CellBounds;
             g.FillRectangle(Brushes.Gainsboro, r);
-        }
-
-        /// <summary>
-        /// The ModifyRolePrivilegesForm_Load method.
-        /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void ModifyRolePrivilegesForm_Load(object sender, EventArgs args)
-        {
-            tlpLeft.CellPaint += TableLayoutPanel_CellPaint;
-            tlpRight.CellPaint += TableLayoutPanel_CellPaint;
         }
 
         /// <summary>
@@ -157,6 +114,17 @@ namespace ExampleClient.Source
             {
                 modifyPrivilegeSourcesForm.ShowDialog();
             }
+        }
+
+        /// <summary>
+        /// The ComboBox_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ComboBox_Click(object sender, EventArgs args)
+        {
+            var cbx = (ComboBox)sender;
+            OriginalIndex = cbx.SelectedIndex;
         }
 
         /// <summary>
@@ -220,6 +188,39 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The EnableRowControls method.
+        /// </summary>
+        /// <param name="privilege">The privilege to enable the row for.</param>
+        private void EnableRowControls(Privilege privilege)
+        {
+            var comboBox = ComboBoxes.FirstOrDefault(cbx => cbx.Name == "cbx" + privilege.PermissionId);
+            if (comboBox == null)
+                return;
+
+            var priorityButton = GetButtonByName("pri" + privilege.PermissionId);
+            var sourceButton = GetButtonByName("btn" + privilege.PermissionId);
+            comboBox.SelectedIndex = privilege.IsRestricted ? 2 : 1;
+            priorityButton.Text = privilege.Priority.ToString();
+            priorityButton.Enabled = true;
+            priorityButton.Tag = privilege;
+            if (sourceButton != null)
+                sourceButton.Enabled = privilege.IsRestricted;
+
+            HandleRelations(comboBox);
+        }
+
+        /// <summary>
+        /// The GetButtonByName method.
+        /// </summary>
+        /// <param name="name">The button name.</param>
+        /// <returns>A <c>Button</c> if found, otherwise <c>null</c>.</returns>
+        private Button GetButtonByName(string name)
+        {
+            var allButtons = tlpLeft.Controls.OfType<Button>().Concat(tlpRight.Controls.OfType<Button>());
+            return allButtons.FirstOrDefault(btn => btn.Name == name);
+        }
+
+        /// <summary>
         /// The HandleRelations method.
         /// </summary>
         /// <param name="comboBox">The combo box to handle.</param>
@@ -243,12 +244,14 @@ namespace ExampleClient.Source
                     cbxRecordMedia.Enabled = enabled;
                     cbxUsePtzMode.Enabled = enabled;
                     break;
+
                 case Privilege.PermissionIds.UsePtzMode:
                     if (!enabled)
                         cbxLockPtzMode.SelectedIndex = 0;
 
                     cbxLockPtzMode.Enabled = enabled;
                     break;
+
                 case Privilege.PermissionIds.ViewRecordedMedia:
                     if (!enabled)
                     {
@@ -263,18 +266,21 @@ namespace ExampleClient.Source
                     cbxExportMediaClips.Enabled = enabled;
                     cbxManageExports.Enabled = enabled;
                     break;
+
                 case Privilege.PermissionIds.SystemBookmarks:
                     if (!enabled)
                         cbxSystemLocks.SelectedIndex = 0;
 
                     cbxSystemLocks.Enabled = enabled;
                     break;
+
                 case Privilege.PermissionIds.UseMap:
                     if (!enabled)
                         cbxViewMaps.SelectedIndex = 0;
 
                     cbxViewMaps.Enabled = enabled;
                     break;
+
                 case Privilege.PermissionIds.ViewMaps:
                     if (!enabled)
                     {
@@ -285,12 +291,14 @@ namespace ExampleClient.Source
                     cbxManageMapFiles.Enabled = enabled;
                     cbxPlaceCamerasOnMap.Enabled = enabled;
                     break;
+
                 case Privilege.PermissionIds.ManageSystemServers:
                     if (!enabled)
                         cbxManageMemberSystems.SelectedIndex = 0;
 
                     cbxManageMemberSystems.Enabled = enabled;
                     break;
+
                 case Privilege.PermissionIds.ManageUserAccounts:
                     if (!enabled)
                         cbxAssignRolesToUsers.SelectedIndex = 0;
@@ -301,14 +309,25 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
-        /// The ComboBox_Click method.
+        /// The ModifyRolePrivilegesForm_Load method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
         /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void ComboBox_Click(object sender, EventArgs args)
+        private void ModifyRolePrivilegesForm_Load(object sender, EventArgs args)
         {
-            var cbx = (ComboBox)sender;
-            OriginalIndex = cbx.SelectedIndex;
+            tlpLeft.CellPaint += TableLayoutPanel_CellPaint;
+            tlpRight.CellPaint += TableLayoutPanel_CellPaint;
         }
+
+        /// <summary>
+        /// The PopulateRoles method.
+        /// </summary>
+        private void PopulateRoles()
+        {
+            foreach (var privilege in SelectedRole.Privileges)
+                EnableRowControls(privilege);
+        }
+
+        #endregion Private Methods
     }
 }

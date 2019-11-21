@@ -10,11 +10,7 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user to modify a device.</remarks>
     public partial class ModifyDeviceForm : Form
     {
-        /// <summary>
-        /// Gets or sets the SelectedDevice property.
-        /// </summary>
-        /// <value>The currently selected device.</value>
-        private Device SelectedDevice { get; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModifyDeviceForm" /> class.
@@ -37,12 +33,26 @@ namespace ExampleClient.Source
                 if (device.DriverTypeId == driver.Type)
                     index = count;
 
-                cbxDriver.Items.Add(new ComboboxItem{ Text = driver.Name, Value = driver.Type });
+                cbxDriver.Items.Add(new ComboboxItem { Text = driver.Name, Value = driver.Type });
                 count++;
             }
 
             cbxDriver.SelectedIndex = index;
         }
+
+        #endregion Public Constructors
+
+        #region Private Properties
+
+        /// <summary>
+        /// Gets or sets the SelectedDevice property.
+        /// </summary>
+        /// <value>The currently selected device.</value>
+        private Device SelectedDevice { get; }
+
+        #endregion Private Properties
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonSave_Click method.
@@ -72,8 +82,10 @@ namespace ExampleClient.Source
             if (cbxDriver.Items.Count <= 0 || cbxDriver.SelectedIndex < 0)
                 return;
 
-            if (SelectedDevice.DriverTypeId != (string) ((ComboboxItem) cbxDriver.SelectedItem).Value)
-                SelectedDevice.DriverTypeId = (string) ((ComboboxItem) cbxDriver.SelectedItem).Value;
+            if (SelectedDevice.DriverTypeId != (string)((ComboboxItem)cbxDriver.SelectedItem).Value)
+                SelectedDevice.DriverTypeId = (string)((ComboboxItem)cbxDriver.SelectedItem).Value;
         }
+
+        #endregion Private Methods
     }
 }

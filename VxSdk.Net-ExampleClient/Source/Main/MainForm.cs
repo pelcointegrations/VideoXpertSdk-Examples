@@ -20,6 +20,8 @@ namespace ExampleClient.Source
     /// <remarks>This class contains the main UI form.</remarks>
     public partial class MainForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MainForm" /> class.
         /// </summary>
@@ -35,21 +37,24 @@ namespace ExampleClient.Source
             bgWorker.DoWork += Utilities.BackgroundWorker_DoWork;
             bgWorker.ProgressChanged += Utilities.BackgroundWorker_ProgressChanged;
             bgWorker.RunWorkerCompleted += Utilities.BackgroundWorker_RunWorkerCompleted;
-            LogPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) +
-                                 "\\Pelco\\VxSdk\\Logs";
+            LogPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\Pelco\\VxSdk\\Logs";
         }
 
-        /// <summary>
-        /// Gets or sets the CurrentDevices property.
-        /// </summary>
-        /// <value>The current list of devices found on the VideoXpert system.</value>
-        public static List<Device> CurrentDevices { get; set; }
+        #endregion Public Constructors
+
+        #region Public Properties
 
         /// <summary>
         /// Gets or sets the CurrentDataSources property.
         /// </summary>
         /// <value>The current list of data sources found on the VideoXpert system.</value>
         public static List<DataSource> CurrentDataSources { get; set; }
+
+        /// <summary>
+        /// Gets or sets the CurrentDevices property.
+        /// </summary>
+        /// <value>The current list of devices found on the VideoXpert system.</value>
+        public static List<Device> CurrentDevices { get; set; }
 
         /// <summary>
         /// Gets or sets the CurrentPassword property.
@@ -70,10 +75,22 @@ namespace ExampleClient.Source
         public static string CurrentUserName { get; set; }
 
         /// <summary>
+        /// Gets the Instance property.
+        /// </summary>
+        /// <value>The current <see cref="MainForm"/> instance.</value>
+        public static MainForm Instance { get; private set; }
+
+        /// <summary>
         /// Gets or sets the LogPath property.
         /// </summary>
         /// <value>The logging directory for the VxSDK.</value>
         public static string LogPath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the PtzForm property.
+        /// </summary>
+        /// <value>A <see cref="PtzControlForm"/>.</value>
+        public static PtzControlForm PtzForm { get; set; }
 
         /// <summary>
         /// Gets or sets the RecordingBasePath property.
@@ -88,22 +105,14 @@ namespace ExampleClient.Source
         public static string SnapshotBasePath { get; set; }
 
         /// <summary>
-        /// Gets the Instance property.
-        /// </summary>
-        /// <value>The current <see cref="MainForm"/> instance.</value>
-        public static MainForm Instance { get; private set; }
-
-        /// <summary>
-        /// Gets or sets the PtzForm property.
-        /// </summary>
-        /// <value>A <see cref="PtzControlForm"/>.</value>
-        public static PtzControlForm PtzForm { get; set; }
-
-        /// <summary>
         /// Gets or sets the Control property.
         /// </summary>
         /// <value>A <see cref="ControlManager"/>.</value>
         public ControlManager Control { get; set; }
+
+        #endregion Public Properties
+
+        #region Private Properties
 
         private DataSource SelectedDataSource
         {
@@ -113,6 +122,32 @@ namespace ExampleClient.Source
                 if (dgvDataSources.SelectedRows.Count >= 1)
                     dataSource = (DataSource)dgvDataSources.SelectedRows[0].Tag;
                 return dataSource;
+            }
+        }
+
+        #endregion Private Properties
+
+        #region Public Methods
+
+        public void EnableModeByState()
+        {
+            switch (Control.States.VcrState)
+            {
+                case ControlManager.VcrMode.Live:
+                    EnableLiveMode();
+                    break;
+
+                case ControlManager.VcrMode.Paused:
+                    EnablePauseMode();
+                    break;
+
+                case ControlManager.VcrMode.Playback:
+                    EnablePlaybackMode();
+                    break;
+
+                case ControlManager.VcrMode.Stopped:
+                    EnableStopMode();
+                    break;
             }
         }
 
@@ -161,22 +196,124 @@ namespace ExampleClient.Source
         /// <returns>The response message.</returns>
         public async Task<HttpResponseMessage> SendRequest(Uri uri)
         {
+            HttpResponseMessage response = null;
             // Create a new WebClient instance.
-            var client = new HttpClient();
+            using (var client = new HttpClient())
+            {
+                // Supply the username and password that was used to create the VideoXpert system.
+                var request = new HttpRequestMessage(HttpMethod.Get, uri);
+                request.Headers.Add("X-Serenity-User", EncodeToBase64(CurrentUserName));
+                request.Headers.Add("X-Serenity-Password", EncodeToBase64(CurrentPassword));
 
-            // Supply the username and password that was used to create the VideoXpert system.
-            var request = new HttpRequestMessage(HttpMethod.Get, uri);
-            request.Headers.Add("X-Serenity-User", EncodeToBase64(CurrentUserName));
-            request.Headers.Add("X-Serenity-Password", EncodeToBase64(CurrentPassword));
+                if (ServicePointManager.SecurityProtocol != (SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls | SecurityProtocolType.Ssl3))
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls | SecurityProtocolType.Ssl3;
 
-            if (ServicePointManager.SecurityProtocol != (SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls | SecurityProtocolType.Ssl3))
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls | SecurityProtocolType.Ssl3;
+                // Forces the WebClient to trust the security certificate handed back from the VideoXpert server.
+                ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
 
-            // Forces the WebClient to trust the security certificate handed back from the VideoXpert server.
-            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
-
-            var response = await client.SendAsync(request);
+                response = await client.SendAsync(request);
+            }
             return response;
+        }
+
+        /// <summary>
+        /// The ShowLicenseWarning method.
+        /// </summary>
+        /// <param name="expirationTime">The grace license expiration time.</param>
+        public void ShowLicenseWarning(DateTime expirationTime)
+        {
+            var message =
+                "This system has not been licensed to run this integration.  The grace period for this license\n is active but will" +
+                $" expire on:\n\n {expirationTime.ToLocalTime().ToShortDateString()} at {expirationTime.ToLocalTime().ToShortTimeString()}.\n\nThis integration will cease to function if the system remains unlicensed when the grace period expires.";
+
+            var form = new Form
+            {
+                TopMost = true,
+                Text = @"System License Warning",
+                ClientSize = new Size(500, 137),
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                StartPosition = FormStartPosition.CenterScreen,
+                MinimizeBox = false,
+                MaximizeBox = false
+            };
+
+            var label = new Label
+            {
+                Text = message,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Bounds = new Rectangle(9, 10, 480, 50),
+                AutoSize = true
+            };
+
+            var buttonOk = new Button
+            {
+                Text = @"OK",
+                Bounds = new Rectangle(228, 102, 75, 23),
+                Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
+                DialogResult = DialogResult.OK
+            };
+
+            buttonOk.Click += (sender, args) => form.Close();
+            form.AcceptButton = buttonOk;
+            form.Controls.AddRange(new Control[] { label, buttonOk });
+            form.Show();
+        }
+
+        /// <summary>
+        /// The StopStream method.
+        /// </summary>
+        public void StopStream()
+        {
+            try
+            {
+                if (Control.States.MediaController == null) return;
+
+                if (Control.States.IsReconnecting)
+                {
+                    Control.States.IsReconnecting = false;
+                    Control.States.VideoLossLabel.Visible = false;
+                }
+
+                Control.RemovePlaybackProgress();
+
+                Control.States.MediaController.Stop();
+
+                Control.UnsubscribeToTimestamps();
+                Control.UnsubscribeToStreamEvents();
+                Control.States.TimestampLabel.BeginInvoke((MethodInvoker)delegate
+                {
+                    Control.States.TimestampLabel.Text = string.Empty;
+                });
+
+                Control.States.StreamPanel.Refresh();
+
+                Control.States.PtzControl = null;
+                Control.States.VideoDataSource = null;
+                Control.States.ManualRecording = null;
+                btnManualRecord.Text = @"Record";
+                btnManualRecord.Enabled = false;
+                nudPostRecord.Enabled = false;
+                nudPreRecord.Enabled = false;
+                Control.ChangePtzFormState(false);
+
+                if (btnLocalRecord.Text == @"Stop Local Record")
+                    btnLocalRecord.Text = @"Start Local Record";
+
+                Control.States.MediaController.Dispose();
+                Control.States.MediaController = null;
+            }
+            catch (Exception ex)
+            {
+                WriteToLog($@"Error: {ex.Message}\n");
+            }
+        }
+
+        /// <summary>
+        /// Subscribes to internal VxSDK events.
+        /// </summary>
+        public void SubscribeToInternalEvents()
+        {
+            CurrentSystem.InternalEvent += OnInternalEvent;
         }
 
         /// <summary>
@@ -188,9 +325,24 @@ namespace ExampleClient.Source
             var time = DateTime.Now;
             txbxLog.BeginInvoke((MethodInvoker)delegate
             {
-                txbxLog.AppendText(time.ToLongTimeString() + ": " + message + "\n");
+                txbxLog.AppendText(time.ToLongTimeString() + ": " + message);
+                txbxLog.AppendText(Environment.NewLine);
             });
         }
+
+        #endregion Public Methods
+
+        #region Protected Methods
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            StopAllStreams();
+            base.OnFormClosing(e);
+        }
+
+        #endregion Protected Methods
+
+        #region Private Methods
 
         /// <summary>
         /// The EncodeToBase64 method.
@@ -202,6 +354,77 @@ namespace ExampleClient.Source
             var toEncodeAsBytes = Encoding.ASCII.GetBytes(toEncode);
             var returnValue = Convert.ToBase64String(toEncodeAsBytes);
             return returnValue;
+        }
+
+        /// <summary>
+        /// The SelectDataInterface method.
+        /// </summary>
+        /// <param name="selProtocol">The selected protocol.</param>
+        /// <param name="dataSource">The selected data source.</param>
+        /// <param name="showWindow">Selects the first available stream if False.</param>
+        /// <param name="useRtspTcp">Only valid if protocol is RtspRtp.  Selects TCP or UDP transport</param>
+        /// <param name="recordDateTime">Only show the data intefaces with recording if using playback</param>
+        /// <returns>The currently selected data interface.</returns>
+        private static DataInterface SelectDataInterface(DataInterface.StreamProtocols selProtocol, DataSource dataSource, bool showWindow, bool useRtspTcp, DateTime recordDateTime)
+        {
+            DataInterface dataInterface;
+            if (selProtocol == DataInterface.StreamProtocols.RtspRtp)
+            {
+                var interfaceList = dataSource.DataInterfaces.Where(iface =>
+                    iface.Protocol == DataInterface.StreamProtocols.RtspRtp).ToList();
+
+                if (useRtspTcp == true)
+                {
+                    interfaceList = interfaceList.Where(iface => iface.SupportsMulticast == false).ToList();
+                }
+
+                if (recordDateTime != default(DateTime))
+                {
+                    // Need to figure out which interfaces have the clip for the time you want
+                    interfaceList.Clear();
+                    var clips = dataSource.Clips;
+                    foreach (var clip in clips)
+                    {
+                        if ((recordDateTime >= clip.StartTime) && (recordDateTime < clip.EndTime))
+                        {
+                            // There is a problem in that the data interface on playback also includes a start time
+                            //   that will be used instead of the seek time to the seek call.
+                            //  So, go ahead and select the first interface, unless there is more than one
+                            interfaceList = clip.DataInterfaces;
+                            if (interfaceList.Count == 1)
+                            {
+                                interfaceList[0] = dataSource.DataInterfaces[0];
+                            }
+                            break;
+                        }
+                    }
+                }
+                if (interfaceList.Count == 0)
+                    return null;
+
+                if (!showWindow)
+                    return interfaceList[0];
+
+                if (interfaceList.Count > 1)
+                {
+                    using (var streamSelectionForm = new StreamSelectionForm(interfaceList))
+                    {
+                        streamSelectionForm.ShowDialog();
+                        if (streamSelectionForm.SelectedInterface == null)
+                            return null;
+                        dataInterface = streamSelectionForm.SelectedInterface;
+                    }
+                }
+                else
+                    dataInterface = interfaceList[0];
+            }
+            else
+            {
+                dataInterface = dataSource.DataInterfaces.First(iface =>
+                    iface.Protocol == DataInterface.StreamProtocols.MjpegPull);
+            }
+
+            return dataInterface;
         }
 
         /// <summary>
@@ -236,22 +459,22 @@ namespace ExampleClient.Source
         /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonLocalRecord_Click(object sender, EventArgs args)
         {
-            if (Control.Current == null || Control.CurrentDataSource == null)
+            if (Control.States.MediaController == null || Control.States.VideoDataSource == null)
                 return;
 
             if (btnLocalRecord.Text == @"Stop Local Record")
             {
-                Control.Current.StopLocalRecording();
+                Control.States.MediaController.StopLocalRecording();
                 var message = $"Video saved to: {RecordingBasePath}";
                 MessageBox.Show(message, @"Recording Complete");
                 btnLocalRecord.Text = @"Start Local Record";
             }
             else
             {
-                var temp = Control.CurrentDataSource.Name + "-" + DateTime.Now.ToString("yyyyMMddTHHmmss");
+                var temp = Control.States.VideoDataSource.Name + "-" + DateTime.Now.ToString("yyyyMMddTHHmmss");
                 var safeFileName = string.Join("_", temp.Split(Path.GetInvalidFileNameChars()));
 
-                if (Control.Current.StartLocalRecording(RecordingBasePath, safeFileName))
+                if (Control.States.MediaController.StartLocalRecording(RecordingBasePath, safeFileName))
                     btnLocalRecord.Text = @"Stop Local Record";
                 else
                     WriteToLog("Unable to start local recording.");
@@ -265,38 +488,38 @@ namespace ExampleClient.Source
         /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonManualRecord_Click(object sender, EventArgs args)
         {
-            if (Control.Current == null)
+            if (Control.States.MediaController == null)
                 return;
 
-            if (Control.CurrentDataSource == null)
+            if (Control.States.VideoDataSource == null)
                 return;
 
-            if (Control.CurrentManualRecording == null)
+            if (Control.States.ManualRecording == null)
             {
-                var newManualRecording = new NewManualRecording { DataSourceId = Control.CurrentDataSource.Id };
+                var newManualRecording = new NewManualRecording { DataSourceId = Control.States.VideoDataSource.Id };
 
-                Control.CurrentManualRecording = CurrentSystem.AddManualRecording(newManualRecording);
-                if (Control.CurrentManualRecording == null)
+                Control.States.ManualRecording = CurrentSystem.AddManualRecording(newManualRecording);
+                if (Control.States.ManualRecording == null)
                 {
                     WriteToLog("Unable to start manual recording.");
                     return;
                 }
 
-                WriteToLog($"Started manual recording on {Control.CurrentDataSource.Name}.");
+                WriteToLog($"Started manual recording on {Control.States.VideoDataSource.Name}.");
                 btnManualRecord.Text = @"Stop";
                 nudPreRecord.Enabled = false;
                 nudPostRecord.Enabled = false;
             }
             else
             {
-                var result = CurrentSystem.DeleteManualRecording(Control.CurrentManualRecording);
+                var result = CurrentSystem.DeleteManualRecording(Control.States.ManualRecording);
                 if (result != Results.Value.OK)
                     WriteToLog($"Error: {result}.");
 
-                WriteToLog($"Stopped manual recording on {Control.CurrentDataSource.Name}.");
-                Control.CurrentManualRecording = null;
+                WriteToLog($"Stopped manual recording on {Control.States.VideoDataSource.Name}.");
+                Control.States.ManualRecording = null;
                 btnManualRecord.Text = @"Record";
-                if (Control.Current.Mode != MediaControl.Modes.Live)
+                if (Control.States.MediaController.Mode != MediaControl.Modes.Live)
                     return;
 
                 nudPreRecord.Enabled = true;
@@ -311,23 +534,23 @@ namespace ExampleClient.Source
         /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonPause_Click(object sender, EventArgs args)
         {
-            if (SelectedDataSource == null || Control.Current == null) return;
+            if (SelectedDataSource == null || Control.States.MediaController == null) return;
 
-            if (Control.VcrState != ControlManager.VcrMode.Paused)
+            if (Control.States.VcrState != ControlManager.VcrMode.Paused)
             {
-                Control.Current.Pause();
+                Control.States.MediaController.Pause();
                 EnablePauseMode();
             }
             else
             {
-                if (Control.Current.Mode == MediaControl.Modes.Live)
+                if (Control.States.MediaController.Mode == MediaControl.Modes.Live)
                 {
-                    Control.Current.GoToLive();
+                    Control.States.MediaController.GoToLive();
                     EnableLiveMode();
                 }
                 else
                 {
-                    Control.Current.Play((float)nudSpeed.Value);
+                    Control.States.MediaController.Play((float)nudSpeed.Value);
                     EnablePlaybackMode();
                 }
             }
@@ -372,15 +595,22 @@ namespace ExampleClient.Source
                 // You may have selected a gap - check this case, let the user know,
                 //   and adjust
                 DateTime startTimeToUse = seekSelectForm.StartTime;
-                for (int i = 0; i < clips.Count - 1; i++)
+                for (int i = 0; i < clips.Count; i++)
                 {
+                    // The exact start time may return a 404 not found from the server, add a second
                     var clip = clips[i];
-                    if ((seekSelectForm.StartTime.ToUniversalTime() >= clip.EndTime) && (seekSelectForm.StartTime.ToUniversalTime() < clips[i + 1].StartTime))
+                    if (startTimeToUse.ToUniversalTime().Equals(clip.StartTime))
+                        startTimeToUse = startTimeToUse.AddSeconds(1);
+
+                    if (i + 1 < clips.Count)
                     {
-                        // in a gap - round up to the next clip start
-                        startTimeToUse = clips[i + 1].StartTime.ToLocalTime();
-                        MessageBox.Show("Start Time in gap:  will start at " + startTimeToUse.ToLocalTime().ToString());
-                        break;
+                        if ((startTimeToUse.ToUniversalTime() >= clip.EndTime) && (startTimeToUse.ToUniversalTime() < clips[i + 1].StartTime))
+                        {
+                            // in a gap - round up to the next clip start
+                            startTimeToUse = clips[i + 1].StartTime.AddSeconds(1).ToLocalTime();
+                            MessageBox.Show("Start Time in gap:  will start at " + startTimeToUse.ToString());
+                            break;
+                        }
                     }
                 }
 
@@ -388,7 +618,7 @@ namespace ExampleClient.Source
                 for (int i = 0; i < clips.Count - 1; i++)
                 {
                     var clip = clips[i];
-                    if ((seekSelectForm.EndTime.ToUniversalTime() > clip.EndTime) && (seekSelectForm.EndTime.ToUniversalTime() <= clips[i + 1].StartTime))
+                    if ((endTimeToUse.ToUniversalTime() > clip.EndTime) && (endTimeToUse.ToUniversalTime() <= clips[i + 1].StartTime))
                     {
                         // in a gap - round down to the last clip end
                         endTimeToUse = clips[i].EndTime.ToLocalTime();
@@ -412,13 +642,13 @@ namespace ExampleClient.Source
         /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonSnapshot_Click(object sender, EventArgs args)
         {
-            if (Control.Current == null) return;
+            if (Control.States.MediaController == null) return;
 
-            var dataSource = Control.Current.CurrentDataSource;
-            if (Control.Current.Mode == MediaControl.Modes.Live)
+            var dataSource = Control.States.MediaController.CurrentDataSource;
+            if (Control.States.MediaController.Mode == MediaControl.Modes.Live)
                 SaveSnapshotLive(dataSource);
 
-            if (Control.Current.Mode == MediaControl.Modes.Playback)
+            if (Control.States.MediaController.Mode == MediaControl.Modes.Playback)
                 SaveSnapshotRecorded(dataSource);
         }
 
@@ -429,16 +659,16 @@ namespace ExampleClient.Source
         /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonSnapshotFromVideo_Click(object sender, EventArgs e)
         {
-            if (Control.Current == null) return;
+            if (Control.States.MediaController == null) return;
 
-            var imageTime = Control.SelectedPanelTime.Replace(":", string.Empty);
+            var imageTime = Control.States.TimestampLabel.Text.Replace(":", string.Empty);
             var filename = "LiveFromVideo-" + imageTime;
             if (!Directory.Exists(SnapshotBasePath))
             {
                 WriteToLog($"Unable to take snapshot, path no longer exists {SnapshotBasePath}.");
                 return;
             }
-            Control.Current.SnapShot(SnapshotBasePath, filename);
+            Control.States.MediaController.SnapShot(SnapshotBasePath, filename);
             ShowSnapshotDialog(SnapshotBasePath + filename + ".jpg");
         }
 
@@ -449,10 +679,107 @@ namespace ExampleClient.Source
         /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonStop_Click(object sender, EventArgs args)
         {
-            if (Control.Current == null) return;
+            if (Control.States.MediaController == null) return;
 
             StopStream();
             EnableStopMode();
+        }
+
+        private void EnableLiveMode()
+        {
+            if (Control.States.MediaController == null) return;
+
+            Control.States.VcrState = ControlManager.VcrMode.Live;
+            btnLive.Enabled = false;
+            btnPause.Enabled = true;
+            btnSeek.Enabled = true;
+            btnStop.Enabled = true;
+
+            btnSnapshot.Enabled = true;
+            btnSnapshotFromVideo.Enabled = true;
+            btnRefreshDataSources.Enabled = true;
+            btnLocalRecord.Enabled = true;
+            nudSpeed.Enabled = false;
+            btnPause.Text = "Pause";
+            nudSpeed.Value = 1.0m;
+            SetManualRecordingStatus();
+            Control.ChangePtzFormState(Control.States.PtzControl != null);
+        }
+
+        private void EnableLoggedOutMode()
+        {
+            Control.SetVcrStates(ControlManager.VcrMode.Unknown);
+            btnLive.Enabled = false;
+            btnPause.Enabled = false;
+            btnSeek.Enabled = false;
+            btnStop.Enabled = false;
+
+            btnSnapshot.Enabled = false;
+            btnSnapshotFromVideo.Enabled = false;
+            btnRefreshDataSources.Enabled = false;
+            btnLocalRecord.Enabled = false;
+            nudSpeed.Enabled = false;
+            btnPause.Text = "Pause";
+            nudSpeed.Value = 1.0m;
+            SetManualRecordingStatus();
+        }
+
+        private void EnablePauseMode()
+        {
+            if (Control.States.MediaController == null) return;
+
+            Control.States.VcrState = ControlManager.VcrMode.Paused;
+            btnLive.Enabled = true;
+            btnPause.Enabled = true;
+            btnSeek.Enabled = true;
+            btnStop.Enabled = true;
+            btnManualRecord.Enabled = false;
+            nudPostRecord.Enabled = false;
+            nudPreRecord.Enabled = false;
+
+            btnSnapshot.Enabled = true;
+            btnSnapshotFromVideo.Enabled = true;
+            btnRefreshDataSources.Enabled = true;
+            btnLocalRecord.Enabled = true;
+            nudSpeed.Enabled = true;
+            btnPause.Text = "Play";
+            Control.ChangePtzFormState(false);
+        }
+
+        private void EnablePlaybackMode()
+        {
+            if (Control.States.MediaController == null) return;
+
+            Control.States.VcrState = ControlManager.VcrMode.Playback;
+            btnLive.Enabled = true;
+            btnPause.Enabled = true;
+            btnSeek.Enabled = true;
+            btnStop.Enabled = true;
+
+            btnSnapshot.Enabled = true;
+            btnSnapshotFromVideo.Enabled = true;
+            btnRefreshDataSources.Enabled = true;
+            btnLocalRecord.Enabled = true;
+            nudSpeed.Enabled = false;
+            btnPause.Text = "Pause";
+            SetManualRecordingStatus();
+        }
+
+        private void EnableStopMode()
+        {
+            Control.States.VcrState = ControlManager.VcrMode.Stopped;
+            btnLive.Enabled = true;
+            btnPause.Enabled = false;
+            btnSeek.Enabled = true;
+            btnStop.Enabled = false;
+
+            btnSnapshot.Enabled = false;
+            btnSnapshotFromVideo.Enabled = false;
+            btnRefreshDataSources.Enabled = false;
+            btnLocalRecord.Enabled = false;
+            nudSpeed.Enabled = true;
+            btnPause.Text = "Pause";
+            SetManualRecordingStatus();
         }
 
         /// <summary>
@@ -463,6 +790,29 @@ namespace ExampleClient.Source
         private void GridViewDataSources_CellDoubleClick(object sender, DataGridViewCellEventArgs args)
         {
             StartStream();
+            EnableLiveMode();
+        }
+
+        /// <summary>
+        /// The Logout method.
+        /// </summary>
+        private void Logout()
+        {
+            StopAllStreams();
+            CurrentSystem.SystemEvent -= OnSystemEvent;
+            CurrentSystem.InternalEvent -= OnInternalEvent;
+            dgvDataSources.Rows.Clear();
+            CurrentUserName = string.Empty;
+            CurrentPassword = string.Empty;
+            CurrentDataSources?.Clear();
+            CurrentDevices?.Clear();
+
+            CurrentDataSources = null;
+            CurrentDevices = null;
+            eventsToolStripMenuItem.Enabled = false;
+            manageToolStripMenuItem.Enabled = false;
+
+            EnableLoggedOutMode();
         }
 
         /// <summary>
@@ -474,27 +824,6 @@ namespace ExampleClient.Source
         {
             if (Program.LicenseString == "ENTER_LICENSE_KEY_HERE")
                 MessageBox.Show(Instance, Resources.LicenseStringMissingText, @"Default License Key", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-        }
-
-        /// <summary>
-        /// The MenuItemLog_Click method.
-        /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void MenuItemLog_Click(object sender, EventArgs args)
-        {
-            if (scOuter.Panel2Collapsed)
-            {
-                showLogToolStripMenuItem.Text = @"Hide Log";
-                ClientSize = new Size(ClientSize.Width, ClientSize.Height + 90);
-                scOuter.Panel2Collapsed = false;
-            }
-            else
-            {
-                showLogToolStripMenuItem.Text = @"Show Log";
-                ClientSize = new Size(ClientSize.Width, ClientSize.Height - 90);
-                scOuter.Panel2Collapsed = true;
-            }
         }
 
         /// <summary>
@@ -532,6 +861,19 @@ namespace ExampleClient.Source
             }
         }
 
+        private void MenuItemAspectRatio_Click(object sender, EventArgs e)
+        {
+            var item = sender as ToolStripMenuItem;
+            if (item == null)
+                return;
+
+            Control.States.AspectRatio = (MediaControl.AspectRatios)item.Tag;
+            UpdateSelectedAspectRatio();
+
+            if (Control.States.MediaController != null)
+                Control.States.MediaController.AspectRatio = Control.States.AspectRatio;
+        }
+
         /// <summary>
         /// The MenuItemBookmarkManager_Click method.
         /// </summary>
@@ -556,6 +898,19 @@ namespace ExampleClient.Source
             {
                 clusterConfigDetailsForm.GetClusterConfig(CurrentSystem);
                 clusterConfigDetailsForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// The MenuItemConnect_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void MenuItemConnect_Click(object sender, EventArgs args)
+        {
+            using (var connectForm = new ConnectForm())
+            {
+                connectForm.ShowDialog();
             }
         }
 
@@ -599,15 +954,38 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
-        /// The MenuItemConnect_Click method.
+        /// The MenuItemDeviceManager_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
         /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void MenuItemConnect_Click(object sender, EventArgs args)
+        private void MenuItemDeviceManager_Click(object sender, EventArgs args)
         {
-            using (var connectForm = new ConnectForm())
+            using (var deviceManagerForm = new DeviceManagerForm())
             {
-                connectForm.ShowDialog();
+                deviceManagerForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// The MenuItemDisplayEventDialogs_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void MenuItemDisplayEventDialogs_Click(object sender, EventArgs args)
+        {
+            displayEventDialogsToolStripMenuItem.Checked = !displayEventDialogsToolStripMenuItem.Checked;
+        }
+
+        /// <summary>
+        /// The MenuItemDrawingManager_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void MenuItemDrawingManager_Click(object sender, EventArgs args)
+        {
+            using (var drawingManagerForm = new DrawingManagerForm())
+            {
+                drawingManagerForm.ShowDialog();
             }
         }
 
@@ -622,28 +1000,15 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
-        /// The MenuItemDeviceManager_Click method.
+        /// The MenuItemExportLocal_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
         /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void MenuItemDeviceManager_Click(object sender, EventArgs args)
+        private void MenuItemExportLocal_Click(object sender, EventArgs e)
         {
-            using (var deviceManagerForm = new DeviceManagerForm())
+            using (var localExportForm = new Exports.LocalExportSelect())
             {
-                deviceManagerForm.ShowDialog();
-            }
-        }
-
-        /// <summary>
-        /// The MenuItemDrawingManager_Click method.
-        /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void MenuItemDrawingManager_Click(object sender, EventArgs args)
-        {
-            using (var drawingManagerForm = new DrawingManagerForm())
-            {
-                drawingManagerForm.ShowDialog();
+                localExportForm.ShowDialog();
             }
         }
 
@@ -661,19 +1026,6 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
-        /// The MenuItemExportLocal_Click method.
-        /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void MenuItemExportLocal_Click(object sender, EventArgs e)
-        {
-            using (var localExportForm = new Exports.LocalExportSelect())
-            {
-                localExportForm.ShowDialog();
-            }
-        }
-
-        /// <summary>
         /// The MenuItemInsertEvent_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -683,6 +1035,40 @@ namespace ExampleClient.Source
             using (var addEventForm = new AddEventForm())
             {
                 addEventForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// The MenuItemLicenseDetails_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void MenuItemLicenseDetails_Click(object sender, EventArgs args)
+        {
+            using (var licenseDetailsForm = new LicenseDetailsForm())
+            {
+                licenseDetailsForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// The MenuItemLog_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void MenuItemLog_Click(object sender, EventArgs args)
+        {
+            if (scOuter.Panel2Collapsed)
+            {
+                showLogToolStripMenuItem.Text = @"Hide Log";
+                ClientSize = new Size(ClientSize.Width, ClientSize.Height + 90);
+                scOuter.Panel2Collapsed = false;
+            }
+            else
+            {
+                showLogToolStripMenuItem.Text = @"Show Log";
+                ClientSize = new Size(ClientSize.Width, ClientSize.Height - 90);
+                scOuter.Panel2Collapsed = true;
             }
         }
 
@@ -709,19 +1095,6 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
-        /// The MenuItemLicenseDetails_Click method.
-        /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void MenuItemLicenseDetails_Click(object sender, EventArgs args)
-        {
-            using (var licenseDetailsForm = new LicenseDetailsForm())
-            {
-                licenseDetailsForm.ShowDialog();
-            }
-        }
-
-        /// <summary>
         /// The MenuItemLogout_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -731,28 +1104,6 @@ namespace ExampleClient.Source
             var name = CurrentSystem.Name;
             Logout();
             WriteToLog("Info: Logged out from " + name + ".");
-        }
-
-        /// <summary>
-        /// The Logout method.
-        /// </summary>
-        private void Logout()
-        {
-            StopAllStreams();
-            CurrentSystem.SystemEvent -= OnSystemEvent;
-            CurrentSystem.InternalEvent -= OnInternalEvent;
-            dgvDataSources.Rows.Clear();
-            CurrentUserName = string.Empty;
-            CurrentPassword = string.Empty;
-            CurrentDataSources?.Clear();
-            CurrentDevices?.Clear();
-
-            CurrentDataSources = null;
-            CurrentDevices = null;
-            eventsToolStripMenuItem.Enabled = false;
-            manageToolStripMenuItem.Enabled = false;
-
-            EnableLoggedOutMode();
         }
 
         /// <summary>
@@ -817,6 +1168,28 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The MenuItemPlaybackOptions_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void MenuItemPlaybackOptions_Click(object sender, EventArgs e)
+        {
+            var item = sender as ToolStripMenuItem;
+            if (item != null && item.Text == @"Skip Gaps")
+            {
+                normalToolStripMenuItem.Checked = false;
+                skipGapsToolStripMenuItem.Checked = true;
+            }
+            else
+            {
+                normalToolStripMenuItem.Checked = true;
+                skipGapsToolStripMenuItem.Checked = false;
+            }
+
+            StopAllStreams();
+        }
+
+        /// <summary>
         /// The MenuItemProtocol_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -847,29 +1220,6 @@ namespace ExampleClient.Source
             }
             StopAllStreams();
         }
-
-        /// <summary>
-        /// The MenuItemPlaybackOptions_Click method.
-        /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void MenuItemPlaybackOptions_Click(object sender, EventArgs e)
-        {
-            var item = sender as ToolStripMenuItem;
-            if (item != null && item.Text == @"Skip Gaps")
-            {
-                normalToolStripMenuItem.Checked = false;
-                skipGapsToolStripMenuItem.Checked = true;
-            }
-            else
-            {
-                normalToolStripMenuItem.Checked = true;
-                skipGapsToolStripMenuItem.Checked = false;
-            }
-
-            StopAllStreams();
-        }
-
 
         /// <summary>
         /// The MenuItemRecordingPath_Click method.
@@ -982,19 +1332,6 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
-        /// The MenuItemTagManager_Click method.
-        /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void MenuItemTagManager_Click(object sender, EventArgs args)
-        {
-            using (var tagForm = new TagManagerForm())
-            {
-                tagForm.ShowDialog();
-            }
-        }
-
-        /// <summary>
         /// The MenuItemSnapshotPath_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -1014,6 +1351,18 @@ namespace ExampleClient.Source
                 var message = $"Snapshot Path changed: {folderDialog.SelectedPath}";
                 MessageBox.Show(message, @"Snapshot Path");
             }
+        }
+
+        private void MenuItemStretchToFit_Click(object sender, EventArgs e)
+        {
+            var item = sender as ToolStripMenuItem;
+            if (item == null)
+                return;
+
+            Control.States.StretchToFit = item.Checked;
+
+            if (Control.States.MediaController != null)
+                Control.States.MediaController.StretchToFit = Control.States.StretchToFit;
         }
 
         /// <summary>
@@ -1078,13 +1427,16 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
-        /// The MenuItemDisplayEventDialogs_Click method.
+        /// The MenuItemTagManager_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
         /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void MenuItemDisplayEventDialogs_Click(object sender, EventArgs args)
+        private void MenuItemTagManager_Click(object sender, EventArgs args)
         {
-            displayEventDialogsToolStripMenuItem.Checked = !displayEventDialogsToolStripMenuItem.Checked;
+            using (var tagForm = new TagManagerForm())
+            {
+                tagForm.ShowDialog();
+            }
         }
 
         /// <summary>
@@ -1124,11 +1476,11 @@ namespace ExampleClient.Source
             if (panel == null)
                 return;
 
-            if (Control.SelectedPanel != panel)
+            if (Control.States.StreamPanel != panel)
                 return;
 
             var point = panel.PointToClient(Cursor.Position);
-            if (Control.PtzControl == null)
+            if (Control.States.PtzControl == null)
                 return;
 
             float relX;
@@ -1157,7 +1509,7 @@ namespace ExampleClient.Source
                 relY = adjustedY / yMidPoint * -100;
             }
 
-            var result = Control.PtzControl.RelativePercentageMove((int)relX, (int)relY);
+            var result = Control.States.PtzControl.RelativePercentageMove((int)relX, (int)relY);
             if (result != Results.Value.OK)
                 WriteToLog($"Error: {result}.");
         }
@@ -1173,10 +1525,10 @@ namespace ExampleClient.Source
             if (panel == null)
                 return;
 
-            if (Control.SelectedPanel != panel)
+            if (Control.States.StreamPanel != panel)
                 return;
 
-            if (Control.PtzControl == null)
+            if (Control.States.PtzControl == null)
                 return;
 
             panel.Cursor = Cursors.Cross;
@@ -1193,10 +1545,10 @@ namespace ExampleClient.Source
             if (panel == null)
                 return;
 
-            if (Control.SelectedPanel != panel)
+            if (Control.States.StreamPanel != panel)
                 return;
 
-            if (Control.PtzControl == null)
+            if (Control.States.PtzControl == null)
                 return;
 
             panel.Cursor = Cursors.Default;
@@ -1213,14 +1565,14 @@ namespace ExampleClient.Source
             if (panel == null)
                 return;
 
-            if (Control.SelectedPanel != panel)
+            if (Control.States.StreamPanel != panel)
                 return;
 
-            if (Control.PtzControl == null)
+            if (Control.States.PtzControl == null)
                 return;
 
             var zoomLevel = (float)args.Delta / 2;
-            var result = Control.PtzControl.RelativeMove(0, 0, (int)zoomLevel);
+            var result = Control.States.PtzControl.RelativeMove(0, 0, (int)zoomLevel);
             if (result != Results.Value.OK)
                 WriteToLog($"Error: {result}.");
         }
@@ -1230,17 +1582,19 @@ namespace ExampleClient.Source
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
         /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void PanelVideoStreamLeft_MouseClick(object sender, MouseEventArgs args)
+        private void PanelVideoStreamLeft_MouseClick(object sender, EventArgs args)
         {
             Control.SelectControl(ControlManager.Controls.Left);
+            UpdateSelectedAspectRatio();
+            Instance.BeginInvoke((MethodInvoker)delegate { stretchToFitToolStripMenuItem.Checked = Control.States.StretchToFit; });
 
-            if (Control.VcrState != ControlManager.VcrMode.Unknown)
+            if (Control.States.VcrState != ControlManager.VcrMode.Unknown)
                 EnableModeByState();
 
-            if (Control.PtzControl == null)
+            if (Control.States.PtzControl == null)
                 return;
 
-            Control.SelectedPanel.Cursor = Cursors.Cross;
+            Control.States.StreamPanel.Cursor = Cursors.Cross;
         }
 
         /// <summary>
@@ -1248,17 +1602,19 @@ namespace ExampleClient.Source
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
         /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void PanelVideoStreamRight_MouseClick(object sender, MouseEventArgs args)
+        private void PanelVideoStreamRight_MouseClick(object sender, EventArgs args)
         {
             Control.SelectControl(ControlManager.Controls.Right);
+            UpdateSelectedAspectRatio();
+            Instance.BeginInvoke((MethodInvoker)delegate { stretchToFitToolStripMenuItem.Checked = Control.States.StretchToFit; });
 
-            if (Control.VcrState != ControlManager.VcrMode.Unknown)
+            if (Control.States.VcrState != ControlManager.VcrMode.Unknown)
                 EnableModeByState();
 
-            if (Control.PtzControl == null)
+            if (Control.States.PtzControl == null)
                 return;
 
-            Control.SelectedPanel.Cursor = Cursors.Cross;
+            Control.States.StreamPanel.Cursor = Cursors.Cross;
         }
 
         /// <summary>
@@ -1276,7 +1632,7 @@ namespace ExampleClient.Source
             }
 
             var bytes = await response.Content.ReadAsByteArrayAsync();
-            var imageTime = Control.SelectedPanelTime.Replace(":", string.Empty);
+            var imageTime = Control.States.TimestampLabel.Text.Replace(":", string.Empty);
             var filename = SnapshotBasePath + "Live-" + imageTime + ".jpg";
             if (!Directory.Exists(SnapshotBasePath))
             {
@@ -1312,7 +1668,7 @@ namespace ExampleClient.Source
             Clip currentClip = null;
             foreach (var clip in clips)
             {
-                var time = DateTime.Parse(Control.SelectedPanelTime).ToUniversalTime();
+                var time = DateTime.Parse(Control.States.TimestampLabel.Text).ToUniversalTime();
                 if (time > clip.StartTime && time < clip.EndTime)
                     currentClip = clip;
             }
@@ -1326,8 +1682,8 @@ namespace ExampleClient.Source
 
             var filter = new SnapshotFilter
             {
-                StartTime = DateTime.Parse(Control.SelectedPanelTime).ToUniversalTime(),
-                EndTime = DateTime.Parse(Control.SelectedPanelTime).ToUniversalTime().AddSeconds(1),
+                StartTime = DateTime.Parse(Control.States.TimestampLabel.Text).ToUniversalTime(),
+                EndTime = DateTime.Parse(Control.States.TimestampLabel.Text).ToUniversalTime().AddSeconds(1),
                 Offset = 10
             };
 
@@ -1376,518 +1732,8 @@ namespace ExampleClient.Source
             }
         }
 
-        /// <summary>
-        /// The SetupPtzControls method.
-        /// </summary>
-        /// <param name="dataSource">The <paramref name="dataSource"/> parameter.</param>
-        /// <remarks>Checks if PTZ is enabled on the device.  If enabled, it also gets the
-        /// available presets and patterns for the device.</remarks>
-        private void SetupPtzControls(DataSource dataSource)
+        private void scInner_Panel2_Paint(object sender, PaintEventArgs e)
         {
-            Control.PtzControl = dataSource.IsPTZ ? dataSource.PTZController : null;
-            Control.ChangePtzFormState(dataSource.IsPTZ);
-        }
-
-        /// <summary>
-        /// The ShowLicenseWarning method.
-        /// </summary>
-        /// <param name="expirationTime">The grace license expiration time.</param>
-        public void ShowLicenseWarning(DateTime expirationTime)
-        {
-            var message =
-                "This system has not been licensed to run this integration.  The grace period for this license\n is active but will" +
-                $" expire on:\n\n {expirationTime.ToLocalTime().ToShortDateString()} at {expirationTime.ToLocalTime().ToShortTimeString()}.\n\nThis integration will cease to function if the system remains unlicensed when the grace period expires.";
-
-            var form = new Form
-            {
-                TopMost = true,
-                Text = @"System License Warning",
-                ClientSize = new Size(500, 137),
-                FormBorderStyle = FormBorderStyle.FixedDialog,
-                StartPosition = FormStartPosition.CenterScreen,
-                MinimizeBox = false,
-                MaximizeBox = false
-            };
-
-            var label = new Label
-            {
-                Text = message,
-                TextAlign = ContentAlignment.MiddleCenter,
-                Bounds = new Rectangle(9, 10, 480, 50),
-                AutoSize = true
-            };
-
-            var buttonOk = new Button
-            {
-                Text = @"OK",
-                Bounds = new Rectangle(228, 102, 75, 23),
-                Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
-                DialogResult = DialogResult.OK
-            };
-
-            buttonOk.Click += (sender, args) => form.Close();
-            form.AcceptButton = buttonOk;
-            form.Controls.AddRange(new Control[] { label, buttonOk });
-            form.Show();
-        }
-
-        /// <summary>
-        /// The SelectDataInterface method.
-        /// </summary>
-        /// <param name="selProtocol">The selected protocol.</param>
-        /// <param name="dataSource">The selected data source.</param>
-        /// <param name="showWindow">Selects the first available stream if False.</param>
-        /// <param name="useRtspTcp">Only valid if protocol is RtspRtp.  Selects TCP or UDP transport</param>
-        /// <param name="recordDateTime">Only show the data intefaces with recording if using playback</param>
-        /// <returns>The currently selected data interface.</returns>
-        private static DataInterface SelectDataInterface(DataInterface.StreamProtocols selProtocol, DataSource dataSource, bool showWindow, bool useRtspTcp, DateTime recordDateTime)
-        {
-            DataInterface dataInterface;
-            if (selProtocol == DataInterface.StreamProtocols.RtspRtp)
-            {
-                var interfaceList = dataSource.DataInterfaces.Where(iface =>
-                    iface.Protocol == DataInterface.StreamProtocols.RtspRtp).ToList();
-
-                if (useRtspTcp == true)
-                {
-                    interfaceList = interfaceList.Where(iface => iface.SupportsMulticast == false).ToList();
-                }
-
-                if (recordDateTime != default(DateTime))
-                {
-                    // Need to figure out which interfaces have the clip for the time you want
-                    interfaceList.Clear();
-                    var clips = dataSource.Clips;
-                    foreach (var clip in clips)
-                    {
-                        if ((recordDateTime >= clip.StartTime) && (recordDateTime < clip.EndTime))
-                        {
-                            // There is a problem in that the data interface on playback also includes a start time
-                            //   that will be used instead of the seek time to the seek call.  
-                            //  So, go ahead and select the first interface, unless there is more than one
-                            interfaceList = clip.DataInterfaces;
-                            if (interfaceList.Count == 1)
-                            {
-                                interfaceList[0] = dataSource.DataInterfaces[0];
-                            }
-                            break;
-                        }
-                    }
-                }
-                if (interfaceList.Count == 0)
-                    return null;
-
-                if (!showWindow)
-                    return interfaceList[0];
-
-                if (interfaceList.Count > 1)
-                {
-                    using (var streamSelectionForm = new StreamSelectionForm(interfaceList))
-                    {
-                        streamSelectionForm.ShowDialog();
-                        if (streamSelectionForm.SelectedInterface == null)
-                            return null;
-                        dataInterface = streamSelectionForm.SelectedInterface;
-                    }
-                }
-                else
-                    dataInterface = interfaceList[0];
-            }
-            else
-            {
-                dataInterface = dataSource.DataInterfaces.First(iface =>
-                    iface.Protocol == DataInterface.StreamProtocols.MjpegPull);
-            }
-
-            return dataInterface;
-        }
-
-        public void EnableModeByState(ControlManager.VcrMode state = ControlManager.VcrMode.Unknown)
-        {
-            if (state == ControlManager.VcrMode.Unknown)
-                state = Control.VcrState;
-
-            switch (state)
-            {
-                case ControlManager.VcrMode.Live:
-                    EnableLiveMode();
-                    break;
-                case ControlManager.VcrMode.Paused:
-                    EnablePauseMode();
-                    break;
-                case ControlManager.VcrMode.Playback:
-                    EnablePlaybackMode();
-                    break;
-                case ControlManager.VcrMode.Stopped:
-                    EnableStopMode();
-                    break;
-            }
-        }
-
-        private void EnableLiveMode()
-        {
-            if (Control.Current == null) return;
-
-            Control.VcrState = ControlManager.VcrMode.Live;
-            btnLive.Enabled = false;
-            btnPause.Enabled = true;
-            btnSeek.Enabled = true;
-            btnStop.Enabled = true;
-
-            btnSnapshot.Enabled = true;
-            btnSnapshotFromVideo.Enabled = true;
-            btnRefreshDataSources.Enabled = true;
-            btnLocalRecord.Enabled = true;
-            nudSpeed.Enabled = false;
-            btnPause.Text = "Pause";
-            nudSpeed.Value = 1.0m;
-            SetManualRecordingStatus();
-            Control.ChangePtzFormState(Control.PtzControl != null);
-        }
-
-        private void EnablePauseMode()
-        {
-            if (Control.Current == null) return;
-
-            Control.VcrState = ControlManager.VcrMode.Paused;
-            btnLive.Enabled = true;
-            btnPause.Enabled = true;
-            btnSeek.Enabled = true;
-            btnStop.Enabled = true;
-            btnManualRecord.Enabled = false;
-            nudPostRecord.Enabled = false;
-            nudPreRecord.Enabled = false;
-
-            btnSnapshot.Enabled = true;
-            btnSnapshotFromVideo.Enabled = true;
-            btnRefreshDataSources.Enabled = true;
-            btnLocalRecord.Enabled = true;
-            nudSpeed.Enabled = true;
-            btnPause.Text = "Play";
-            Control.ChangePtzFormState(false);
-        }
-
-        private void EnablePlaybackMode()
-        {
-            if (Control.Current == null) return;
-
-            Control.VcrState = ControlManager.VcrMode.Playback;
-            btnLive.Enabled = true;
-            btnPause.Enabled = true;
-            btnSeek.Enabled = true;
-            btnStop.Enabled = true;
-
-            btnSnapshot.Enabled = true;
-            btnSnapshotFromVideo.Enabled = true;
-            btnRefreshDataSources.Enabled = true;
-            btnLocalRecord.Enabled = true;
-            nudSpeed.Enabled = false;
-            btnPause.Text = "Pause";
-            SetManualRecordingStatus();
-        }
-
-        private void EnableStopMode()
-        {
-            Control.VcrState = ControlManager.VcrMode.Stopped;
-            btnLive.Enabled = true;
-            btnPause.Enabled = false;
-            btnSeek.Enabled = true;
-            btnStop.Enabled = false;
-
-            btnSnapshot.Enabled = false;
-            btnSnapshotFromVideo.Enabled = false;
-            btnRefreshDataSources.Enabled = false;
-            btnLocalRecord.Enabled = false;
-            nudSpeed.Enabled = true;
-            btnPause.Text = "Pause";
-            SetManualRecordingStatus();
-        }
-
-        private void EnableLoggedOutMode()
-        {
-            Control.VcrState = ControlManager.VcrMode.Unknown;
-            btnLive.Enabled = false;
-            btnPause.Enabled = false;
-            btnSeek.Enabled = false;
-            btnStop.Enabled = false;
-
-            btnSnapshot.Enabled = false;
-            btnSnapshotFromVideo.Enabled = false;
-            btnRefreshDataSources.Enabled = false;
-            btnLocalRecord.Enabled = false;
-            nudSpeed.Enabled = false;
-            btnPause.Text = "Pause";
-            nudSpeed.Value = 1.0m;
-            SetManualRecordingStatus();
-        }
-
-        /// <summary>
-        /// Sets the state of the manual recording UI elements based on the manual recording status of the current stream.
-        /// </summary>
-        private void SetManualRecordingStatus()
-        {
-            if (Control.CurrentDataSource == null)
-            {
-                btnManualRecord.Text = @"Record";
-                btnManualRecord.Enabled = false;
-                nudPreRecord.Enabled = false;
-                nudPostRecord.Enabled = false;
-                return;
-            }
-
-            var userUpn = CurrentSystem.Currentuser.Name + "@" + CurrentSystem.Currentuser.Domain;
-            foreach (var manualRecording in CurrentSystem.ManualRecordings)
-            {
-                if (manualRecording.DataSourceId != Control.CurrentDataSource.Id || manualRecording.OwnerName != userUpn)
-                    continue;
-
-                Control.CurrentManualRecording = manualRecording;
-                btnManualRecord.Text = @"Stop";
-                btnManualRecord.Enabled = true;
-                nudPreRecord.Enabled = false;
-                nudPostRecord.Enabled = false;
-                return;
-            }
-
-            btnManualRecord.Text = @"Record";
-            btnManualRecord.Enabled = Control.Current.Mode == MediaControl.Modes.Live;
-            nudPreRecord.Enabled = Control.Current.Mode == MediaControl.Modes.Live;
-            nudPostRecord.Enabled = Control.Current.Mode == MediaControl.Modes.Live;
-        }
-
-        /// <summary>
-        /// The StartStream method.
-        /// </summary>
-        /// <param name="seekTime">The <paramref name="seekTime"/> in UTC format.  If no value or a default 
-        /// DateTime object is given then the stream is started in live mode.</param>
-        /// <param name="endTime">The endTime in UTC format.  This value is only used in playback mode.  The
-        /// playback video will stop when the endtime is reached.  This allows a progress bar.</param>
-        private void StartStream(DateTime seekTime = default(DateTime), DateTime endTime = default(DateTime))
-        {
-            try
-            {
-                // Get the data sources for the selected device.
-                var protocol = jpegPullToolStripMenuItem.Checked ? DataInterface.StreamProtocols.MjpegPull : DataInterface.StreamProtocols.RtspRtp;
-                var showWindow = true;
-
-                bool startingLiveStream = seekTime.Equals(default(DateTime));
-                bool changingDataSource = Control.CurrentDataSource == null || SelectedDataSource.Id != Control.CurrentDataSource.Id;
-
-                StopStream();
-
-                if (Control.Current != null)
-                {
-                    if (Control.Current.Mode == MediaControl.Modes.Live && nudSpeed.Value < 0 && startingLiveStream)
-                    {
-                        WriteToLog("Warning: Reverse playback from live not supported.\n");
-                        return;
-                    }
-                    showWindow = Control.Current.Mode == MediaControl.Modes.Stopped;
-                }
-
-                var dataInterface = SelectDataInterface(protocol, SelectedDataSource, showWindow, rtspTcpToolStripMenuItem.Checked, seekTime);
-                if (dataInterface == null)
-                {
-                    WriteToLog("Error: No data interface found for selected camera and/or the seek time requested.\n");
-                    return;
-                }
-
-                DataSource audioDataSource;
-                DataInterface audioDataInterface;
-                var audioLink = SelectedDataSource.LinkedAudioRelation;
-                if (audioLink != null)
-                {
-                    audioDataSource = audioLink.Resource;
-                    audioDataInterface = SelectDataInterface(DataInterface.StreamProtocols.RtspRtp, audioDataSource, false, rtspTcpToolStripMenuItem.Checked, default(DateTime));
-                }
-                else
-                    SelectAudioData(SelectedDataSource, showWindow, out audioDataSource, out audioDataInterface, rtspTcpToolStripMenuItem.Checked);
-
-                // If the audioDataInterface is null, you cannot play audio
-                if (audioDataInterface == null)
-                {
-                    audioDataSource = null;
-                }
-
-                // If the media controller exists then a stream is running and the user is
-                // requesting a new action on it.  If it's null then this is either the
-                // first run or an existing stream has been stopped.  So a new media controller
-                // instance is needed.
-                if (Control.Current == null)
-                {
-                    Control.Current = new MediaControl(SelectedDataSource, dataInterface, audioDataSource, audioDataInterface);
-                    Control.SubscribeToTimestamps();
-                    Control.SubscribeToStreamEvents();
-                    Control.Current.SetVideoWindow(Control.SelectedPanel.Handle);
-                }
-                else
-                {
-                    // If a new device has been selected while another stream is running, stop the
-                    // old stream and set up the new stream using the new data source.
-                    if (changingDataSource)
-                    {
-                        Control.Current.Stop();
-                        Control.Current.SetDataSource(SelectedDataSource, dataInterface, audioDataSource, audioDataInterface);
-                    }
-                }
-
-                // Getting the clip informatoin is necessary to skip gaps on playback, but is not something
-                //   we want to do in the timestamp callback as it takes too long.  So, cache the clip information
-                //   before starting the video
-                Control.CachedClips = SelectedDataSource.Clips;
-                Control.SkipPlayback = skipGapsToolStripMenuItem.Checked;
-                // Print the clips as info
-                for (int i = 0; i < Control.CachedClips.Count; i++)
-                {
-                    WriteToLog("Info:  Clip Number " + i + " Start:  " + Control.CachedClips[i].StartTime.ToLocalTime() + "  End:  " + Control.CachedClips[i].EndTime.ToLocalTime());
-                }
-
-                Control.RemovePlaybackProgress();
-                var transport = (rtspTcpToolStripMenuItem.Checked == true) ? MediaControl.RTSPNetworkTransports.RTPOverRTSP : MediaControl.RTSPNetworkTransports.UDP;
-
-                string overlayString = SelectedDataSource.Id + "   " + SelectedDataSource.Name + "   " + dataInterface.Protocol.ToString();
-                // Add date time stamp.  
-                //   See https://en.cppreference.com/w/cpp/io/manip/put_time
-                overlayString += "  %Y-%m-%d %H:%M:%S";
-                Control.Current.AddVideoOverlayData(overlayString, MediaControl.VideoOverlayDataPositions.BottomCenter, true);
-
-                if (startingLiveStream)
-                {
-                    if (!Control.Current.Play((float)nudSpeed.Value, transport))
-                    {
-                        WriteToLog(
-                            $"Error: Unable to {(Control.Current.Mode == MediaControl.Modes.Playback ? "resume" : "start")} stream.\n");
-                        if (Control.Current.IsPipelineActive)
-                        {
-                            StopStream();
-                            return;
-                        }
-
-                        Control.Current.Dispose();
-                        Control.Current = null;
-                        Control.SelectedPanel.Refresh();
-                        return;
-                    }
-                }
-                else
-                {
-                    // In playback, we force TCP since it's the better protocol for the job
-                    transport = MediaControl.RTSPNetworkTransports.RTPOverRTSP;
-
-                    // In this case, demonstrate how to get the storage information for the clip
-                    foreach (Clip clip in Control.CachedClips)
-                    {
-                        if ((seekTime >= clip.StartTime) && (seekTime < clip.EndTime))
-                        {
-                            overlayString += "\n  Storage ID:  " + clip.DataStorageId;
-                            break;
-                        }
-                    }
-                    Control.Current.AddVideoOverlayData(overlayString, MediaControl.VideoOverlayDataPositions.BottomCenter, true);
-
-                    Control.EnablePlaybackProgress(seekTime, endTime);
-                    TimeSpan ts = (seekTime - new DateTime(1970, 1, 1, 0, 0, 0));
-                    double timePassedIn = ts.TotalSeconds;
-                    if (!Control.Current.Seek(seekTime, (float)nudSpeed.Value, transport))
-                    {
-                        WriteToLog("Error: Unable to start recorded stream.\n");
-                        if (Control.Current.IsPipelineActive)
-                        {
-                            StopStream();
-                            return;
-                        }
-
-                        Control.SelectedLabel.BeginInvoke((MethodInvoker)delegate
-                        {
-                            Control.SelectedLabel.Text = string.Empty;
-                        });
-                        Control.Current.Dispose();
-                        Control.Current = null;
-                        Control.SelectedPanel.Refresh();
-                        return;
-                    }
-                }
-
-                Control.SetPlayingIndex();
-                SetupPtzControls(SelectedDataSource);
-                Control.CurrentDataSource = SelectedDataSource;
-                SetManualRecordingStatus();
-            }
-            catch (Exception ex)
-            {
-                WriteToLog($@"Error: {ex.Message}\n");
-            }
-        }
-
-        /// <summary>
-        /// Subscribes to internal VxSDK events.
-        /// </summary>
-        public void SubscribeToInternalEvents()
-        {
-            CurrentSystem.InternalEvent += OnInternalEvent;
-        }
-
-        /// <summary>
-        /// The StopAllStreams method.
-        /// </summary>
-        private void StopAllStreams()
-        {
-            try
-            {
-                var selControl = Control.SelectedControl;
-                Control.SelectControl(ControlManager.Controls.Left);
-                StopStream();
-                Control.SelectControl(ControlManager.Controls.Right);
-                StopStream();
-                Control.SelectControl(selControl);
-            }
-            catch (Exception ex)
-            {
-                WriteToLog($@"Error: {ex.Message}\n");
-            }
-        }
-
-        /// <summary>
-        /// The StopStream method.
-        /// </summary>
-        public void StopStream()
-        {
-            try
-            {
-                if (Control.Current == null) return;
-
-                Control.RemovePlaybackProgress();
-
-                Control.Current.Stop();
-
-                Control.UnsubscribeToTimestamps();
-                Control.UnsubscribeToStreamEvents();
-                Control.SelectedLabel.BeginInvoke((MethodInvoker)delegate
-                {
-                    Control.SelectedLabel.Text = string.Empty;
-                });
-
-                Control.SelectedPanel.Refresh();
-
-                Control.PtzControl = null;
-                Control.CurrentDataSource = null;
-                Control.CurrentManualRecording = null;
-                btnManualRecord.Text = @"Record";
-                btnManualRecord.Enabled = false;
-                nudPostRecord.Enabled = false;
-                nudPreRecord.Enabled = false;
-                Control.ChangePtzFormState(false);
-
-                if (btnLocalRecord.Text == @"Stop Local Record")
-                    btnLocalRecord.Text = @"Start Local Record";
-
-                Control.Current.Dispose();
-                Control.Current = null;
-            }
-            catch (Exception ex)
-            {
-                WriteToLog($@"Error: {ex.Message}\n");
-            }
         }
 
         /// <summary>
@@ -1918,19 +1764,261 @@ namespace ExampleClient.Source
             }
         }
 
-        private void scInner_Panel2_Paint(object sender, PaintEventArgs e)
+        /// <summary>
+        /// Sets the state of the manual recording UI elements based on the manual recording status of the current stream.
+        /// </summary>
+        private void SetManualRecordingStatus()
         {
+            if (Control.States.VideoDataSource == null)
+            {
+                btnManualRecord.Text = @"Record";
+                btnManualRecord.Enabled = false;
+                nudPreRecord.Enabled = false;
+                nudPostRecord.Enabled = false;
+                return;
+            }
 
+            var userUpn = CurrentSystem.Currentuser.Name + "@" + CurrentSystem.Currentuser.Domain;
+            foreach (var manualRecording in CurrentSystem.ManualRecordings)
+            {
+                if (manualRecording.DataSourceId != Control.States.VideoDataSource.Id || manualRecording.OwnerName != userUpn)
+                    continue;
+
+                Control.States.ManualRecording = manualRecording;
+                btnManualRecord.Text = @"Stop";
+                btnManualRecord.Enabled = true;
+                nudPreRecord.Enabled = false;
+                nudPostRecord.Enabled = false;
+                return;
+            }
+
+            btnManualRecord.Text = @"Record";
+            btnManualRecord.Enabled = Control.States.MediaController.Mode == MediaControl.Modes.Live;
+            nudPreRecord.Enabled = Control.States.MediaController.Mode == MediaControl.Modes.Live;
+            nudPostRecord.Enabled = Control.States.MediaController.Mode == MediaControl.Modes.Live;
+        }
+
+        /// <summary>
+        /// The SetupPtzControls method.
+        /// </summary>
+        /// <param name="dataSource">The <paramref name="dataSource"/> parameter.</param>
+        /// <remarks>Checks if PTZ is enabled on the device.  If enabled, it also gets the
+        /// available presets and patterns for the device.</remarks>
+        private void SetupPtzControls(DataSource dataSource)
+        {
+            Control.States.PtzControl = dataSource.IsPTZ ? dataSource.PTZController : null;
+            Control.ChangePtzFormState(dataSource.IsPTZ);
+        }
+
+        /// <summary>
+        /// The StartStream method.
+        /// </summary>
+        /// <param name="seekTime">The <paramref name="seekTime"/> in UTC format.  If no value or a default
+        /// DateTime object is given then the stream is started in live mode.</param>
+        /// <param name="endTime">The endTime in UTC format.  This value is only used in playback mode.  The
+        /// playback video will stop when the endtime is reached.  This allows a progress bar.</param>
+        private void StartStream(DateTime seekTime = default(DateTime), DateTime endTime = default(DateTime))
+        {
+            try
+            {
+                // Get the data sources for the selected device.
+                var protocol = jpegPullToolStripMenuItem.Checked ? DataInterface.StreamProtocols.MjpegPull : DataInterface.StreamProtocols.RtspRtp;
+                var showWindow = true;
+
+                bool startingLiveStream = seekTime.Equals(default(DateTime));
+                bool changingDataSource = Control.States.VideoDataSource == null || SelectedDataSource.Id != Control.States.VideoDataSource.Id;
+
+                StopStream();
+
+                if (Control.States.MediaController != null)
+                {
+                    if (Control.States.MediaController.Mode == MediaControl.Modes.Live && nudSpeed.Value < 0 && startingLiveStream)
+                    {
+                        WriteToLog("Warning: Reverse playback from live not supported.\n");
+                        return;
+                    }
+                    showWindow = Control.States.MediaController.Mode == MediaControl.Modes.Stopped;
+                }
+
+                var dataInterface = SelectDataInterface(protocol, SelectedDataSource, showWindow, rtspTcpToolStripMenuItem.Checked, seekTime);
+                if (dataInterface == null)
+                {
+                    WriteToLog("Error: No data interface found for selected camera and/or the seek time requested.\n");
+                    return;
+                }
+
+                DataSource audioDataSource;
+                DataInterface audioDataInterface;
+                var audioLink = SelectedDataSource.LinkedAudioRelation;
+                if (audioLink != null)
+                {
+                    audioDataSource = audioLink.Resource;
+                    audioDataInterface = SelectDataInterface(DataInterface.StreamProtocols.RtspRtp, audioDataSource, false, rtspTcpToolStripMenuItem.Checked, default(DateTime));
+                }
+                else
+                    SelectAudioData(SelectedDataSource, showWindow, out audioDataSource, out audioDataInterface, rtspTcpToolStripMenuItem.Checked);
+
+                // If the audioDataInterface is null, you cannot play audio
+                if (audioDataInterface == null)
+                {
+                    audioDataSource = null;
+                }
+
+                // If the media controller exists then a stream is running and the user is
+                // requesting a new action on it.  If it's null then this is either the
+                // first run or an existing stream has been stopped.  So a new media controller
+                // instance is needed.
+                if (Control.States.MediaController == null)
+                {
+                    Control.States.MediaController = new MediaControl(SelectedDataSource, dataInterface, audioDataSource, audioDataInterface);
+                    Control.SubscribeToTimestamps();
+                    Control.SubscribeToStreamEvents();
+                    Control.States.MediaController.SetVideoWindow(Control.States.StreamPanel.Handle);
+                    Control.States.MediaController.AspectRatio = Control.States.AspectRatio;
+                    Control.States.MediaController.StretchToFit = Control.States.StretchToFit;
+                }
+                else
+                {
+                    // If a new device has been selected while another stream is running, stop the
+                    // old stream and set up the new stream using the new data source.
+                    if (changingDataSource)
+                    {
+                        Control.States.MediaController.Stop();
+                        Control.States.MediaController.SetDataSource(SelectedDataSource, dataInterface, audioDataSource, audioDataInterface);
+                    }
+                }
+
+                // Getting the clip informatoin is necessary to skip gaps on playback, but is not something
+                //   we want to do in the timestamp callback as it takes too long.  So, cache the clip information
+                //   before starting the video
+                Control.States.CachedClips = SelectedDataSource.Clips;
+                Control.States.SkipPlayback = skipGapsToolStripMenuItem.Checked;
+                // Print the clips as info
+                for (int i = 0; i < Control.States.CachedClips.Count; i++)
+                {
+                    WriteToLog("Info:  Clip Number " + i + " Start:  " + Control.States.CachedClips[i].StartTime.ToLocalTime() + "  End:  " + Control.States.CachedClips[i].EndTime.ToLocalTime());
+                }
+
+                Control.RemovePlaybackProgress();
+                var transport = (rtspTcpToolStripMenuItem.Checked == true) ? MediaControl.RTSPNetworkTransports.RTPOverRTSP : MediaControl.RTSPNetworkTransports.UDP;
+
+                var dataStorage = SelectedDataSource.AllDataStorages.FirstOrDefault(ds => ds.Type != DataStorage.DataStorageTypes.Edge && ds.Type != DataStorage.DataStorageTypes.Unknown);
+                string recorder = "None";
+                if (dataStorage != null)
+                    recorder = dataStorage.Name;
+
+                // Add date time stamp.
+                //   See https://en.cppreference.com/w/cpp/io/manip/put_time
+                string overlayString = "  %Y-%m-%d %H:%M:%S\n";
+                overlayString += $"Camera: {SelectedDataSource.Name}\n";
+                overlayString += $"Recorder: {recorder}";
+                Control.States.MediaController.AddVideoOverlayData(overlayString, MediaControl.VideoOverlayDataPositions.BottomLeft, true);
+
+                if (startingLiveStream)
+                {
+                    if (!Control.States.MediaController.Play((float)nudSpeed.Value, transport))
+                    {
+                        WriteToLog(
+                            $"Error: Unable to {(Control.States.MediaController.Mode == MediaControl.Modes.Playback ? "resume" : "start")} stream.\n");
+                        if (Control.States.MediaController.IsPipelineActive)
+                        {
+                            StopStream();
+                            return;
+                        }
+
+                        Control.States.MediaController.Dispose();
+                        Control.States.MediaController = null;
+                        Control.States.StreamPanel.Refresh();
+                        return;
+                    }
+                }
+                else
+                {
+                    // In playback, we force TCP since it's the better protocol for the job
+                    transport = MediaControl.RTSPNetworkTransports.RTPOverRTSP;
+
+                    // In this case, demonstrate how to get the storage information for the clip
+                    foreach (Clip clip in Control.States.CachedClips)
+                    {
+                        if ((seekTime >= clip.StartTime) && (seekTime < clip.EndTime))
+                        {
+                            overlayString += $"\nStorage ID: {clip.DataStorageId}";
+                            break;
+                        }
+                    }
+                    Control.States.MediaController.AddVideoOverlayData(overlayString, MediaControl.VideoOverlayDataPositions.BottomLeft, true);
+
+                    Control.EnablePlaybackProgress(seekTime, endTime);
+                    TimeSpan ts = (seekTime - new DateTime(1970, 1, 1, 0, 0, 0));
+                    double timePassedIn = ts.TotalSeconds;
+                    if (!Control.States.MediaController.Seek(seekTime, (float)nudSpeed.Value, transport))
+                    {
+                        WriteToLog("Error: Unable to start recorded stream.\n");
+                        if (Control.States.MediaController.IsPipelineActive)
+                        {
+                            StopStream();
+                            return;
+                        }
+
+                        Control.States.TimestampLabel.BeginInvoke((MethodInvoker)delegate
+                        {
+                            Control.States.TimestampLabel.Text = string.Empty;
+                        });
+                        Control.States.MediaController.Dispose();
+                        Control.States.MediaController = null;
+                        Control.States.StreamPanel.Refresh();
+                        return;
+                    }
+                }
+
+                Control.States.PlayingIndex = dgvDataSources.SelectedRows[0].Index;
+                SetupPtzControls(SelectedDataSource);
+                Control.States.VideoDataSource = SelectedDataSource;
+                Control.States.VideoDataInterface = dataInterface;
+                Control.States.Transport = transport;
+                Control.States.AudioDataSource = audioDataSource;
+                Control.States.AudioDataInterface = audioDataInterface;
+                SetManualRecordingStatus();
+            }
+            catch (Exception ex)
+            {
+                WriteToLog($@"Error: {ex.Message}\n");
+            }
+        }
+
+        /// <summary>
+        /// The StopAllStreams method.
+        /// </summary>
+        private void StopAllStreams()
+        {
+            try
+            {
+                var selControl = Control.SelectedControl;
+                Control.SelectControl(ControlManager.Controls.Left);
+                StopStream();
+                Control.SelectControl(ControlManager.Controls.Right);
+                StopStream();
+                Control.SelectControl(selControl);
+            }
+            catch (Exception ex)
+            {
+                WriteToLog($@"Error: {ex.Message}\n");
+            }
         }
 
         private void txbxLog_TextChanged(object sender, EventArgs e)
         {
-
         }
 
-        private void panelVideoStreamLeft_Paint(object sender, PaintEventArgs e)
+        private void UpdateSelectedAspectRatio()
         {
-
+            Instance.BeginInvoke((MethodInvoker)delegate { ratio16x9ToolStripMenuItem.Checked = Control.States.AspectRatio == MediaControl.AspectRatios.k16x9; });
+            Instance.BeginInvoke((MethodInvoker)delegate { ratio4x3ToolStripMenuItem.Checked = Control.States.AspectRatio == MediaControl.AspectRatios.k4x3; });
+            Instance.BeginInvoke((MethodInvoker)delegate { ratio1x1ToolStripMenuItem.Checked = Control.States.AspectRatio == MediaControl.AspectRatios.k1x1; });
+            Instance.BeginInvoke((MethodInvoker)delegate { ratio3x2ToolStripMenuItem.Checked = Control.States.AspectRatio == MediaControl.AspectRatios.k3x2; });
+            Instance.BeginInvoke((MethodInvoker)delegate { ratio5x4ToolStripMenuItem.Checked = Control.States.AspectRatio == MediaControl.AspectRatios.k5x4; });
         }
+
+        #endregion Private Methods
     }
 }

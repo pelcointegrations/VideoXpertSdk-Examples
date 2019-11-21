@@ -10,6 +10,8 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user to view alarm inputs on the VideoXpert system.</remarks>
     public partial class AlarmInputManagerForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AlarmInputManagerForm" /> class.
         /// </summary>
@@ -20,11 +22,15 @@ namespace ExampleClient.Source
             PopulateAlarmInputs();
         }
 
+        #endregion Public Constructors
+
+        #region Private Methods
+
         /// <summary>
         /// The ButtonModify_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param> 
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonModify_Click(object sender, EventArgs args)
         {
             if (lvAlarmInputManager.SelectedItems.Count == 0)
@@ -51,7 +57,7 @@ namespace ExampleClient.Source
         /// The ButtonRefresh_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param> 
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonRefresh_Click(object sender, EventArgs args)
         {
             // Refresh the items in the list view.
@@ -78,5 +84,7 @@ namespace ExampleClient.Source
                 lvAlarmInputManager.Items.Add(lvItem);
             }
         }
+
+        #endregion Private Methods
     }
 }

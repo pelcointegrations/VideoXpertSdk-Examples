@@ -10,11 +10,7 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that contains the info for any gaps found on the selected data source.</remarks>
     public partial class GapDetailsForm : Form
     {
-        /// <summary>
-        /// Gets or sets the SelectedDataSource property.
-        /// </summary>
-        /// <value>The currently selected dataSource.</value>
-        private DataSource SelectedDataSource { get; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GapDetailsForm" /> class.
@@ -24,6 +20,30 @@ namespace ExampleClient.Source
         {
             InitializeComponent();
             SelectedDataSource = dataSource;
+            PopulateGapInfo();
+        }
+
+        #endregion Public Constructors
+
+        #region Private Properties
+
+        /// <summary>
+        /// Gets or sets the SelectedDataSource property.
+        /// </summary>
+        /// <value>The currently selected dataSource.</value>
+        private DataSource SelectedDataSource { get; }
+
+        #endregion Private Properties
+
+        #region Private Methods
+
+        /// <summary>
+        /// The ButtonRefresh_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonRefresh_Click(object sender, System.EventArgs args)
+        {
             PopulateGapInfo();
         }
 
@@ -49,14 +69,6 @@ namespace ExampleClient.Source
             }
         }
 
-        /// <summary>
-        /// The ButtonRefresh_Click method.
-        /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void ButtonRefresh_Click(object sender, System.EventArgs args)
-        {
-            PopulateGapInfo();
-        }
+        #endregion Private Methods
     }
 }

@@ -11,6 +11,8 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that contains the detailed info for the selected schedule.</remarks>
     public partial class ScheduleDetailsForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ScheduleDetailsForm" /> class.
         /// </summary>
@@ -18,6 +20,10 @@ namespace ExampleClient.Source
         {
             InitializeComponent();
         }
+
+        #endregion Public Constructors
+
+        #region Public Methods
 
         /// <summary>
         /// The GetScheduleInfo method.
@@ -39,6 +45,10 @@ namespace ExampleClient.Source
                 AddScheduleTriggerInfo(trigger);
             }
         }
+
+        #endregion Public Methods
+
+        #region Private Methods
 
         /// <summary>
         /// The AddPropertyInfo method.
@@ -99,5 +109,7 @@ namespace ExampleClient.Source
                 lvScheduleDetails.Items.Add(lvItem);
             }
         }
+
+        #endregion Private Methods
     }
 }

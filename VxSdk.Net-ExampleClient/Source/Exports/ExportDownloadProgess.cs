@@ -1,33 +1,42 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ExampleClient.Source.Exports
 {
     public partial class ExportDownloadProgess : Form
     {
+        #region Private Fields
+
+        private bool _canceled = false;
+
+        #endregion Private Fields
+
+        #region Public Constructors
+
         public ExportDownloadProgess()
         {
             InitializeComponent();
         }
 
-        bool _canceled = false;
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        public bool Canceled { get { return _canceled; } }
+
+        #endregion Public Properties
+
+        #region Private Methods
+
         private void Button_cancel_Click(object sender, EventArgs e)
         {
             _canceled = true;
         }
 
-        public bool Canceled { get { return _canceled; } }
-
         private void ExportDownloadProgess_Load(object sender, EventArgs e)
         {
-
         }
+
+        #endregion Private Methods
     }
 }

@@ -9,23 +9,7 @@ namespace ExampleClient.Source
     /// </summary>
     public class ImageByteArray
     {
-        /// <summary>
-        /// Gets or sets the image <c>byte</c> array.
-        /// </summary>
-        /// <value>The <c>byte</c> array.</value>
-        public byte[] Bytes { get; set; }
-
-        /// <summary>
-        /// Gets or sets the content type of the <c>byte</c> array.
-        /// </summary>
-        /// <value>The content type.</value>
-        public string ContentType { get; set; }
-
-        /// <summary>
-        /// Gets or sets the <c>DateTime</c> of the snapshot image.
-        /// </summary>
-        /// <value>The <c>DateTime</c>.</value>
-        public DateTime ImageTime { get; set; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ImageByteArray" /> class.
@@ -66,5 +50,29 @@ namespace ExampleClient.Source
             if (headers.ContentType != null)
                 ContentType = headers.ContentType.MediaType;
         }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the image <c>byte</c> array.
+        /// </summary>
+        /// <value>The <c>byte</c> array.</value>
+        public byte[] Bytes { get; set; }
+
+        /// <summary>
+        /// Gets or sets the content type of the <c>byte</c> array.
+        /// </summary>
+        /// <value>The content type.</value>
+        public string ContentType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the <c>DateTime</c> of the snapshot image.
+        /// </summary>
+        /// <value>The <c>DateTime</c>.</value>
+        public DateTime ImageTime { get; set; }
+
+        #endregion Public Properties
     }
 }

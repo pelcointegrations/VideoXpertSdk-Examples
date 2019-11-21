@@ -13,6 +13,8 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that contains the cluster configuration info.</remarks>
     public partial class ClusterConfigDetailsForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ClusterConfigDetailsForm" /> class.
         /// </summary>
@@ -20,6 +22,10 @@ namespace ExampleClient.Source
         {
             InitializeComponent();
         }
+
+        #endregion Public Constructors
+
+        #region Public Methods
 
         /// <summary>
         /// The GetClusterConfig method.
@@ -42,6 +48,10 @@ namespace ExampleClient.Source
             lvClusterConfigDetails.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             lvClusterConfigDetails.Columns[0].Width = 0;
         }
+
+        #endregion Public Methods
+
+        #region Private Methods
 
         /// <summary>
         /// The AddPropertyInfo method.
@@ -87,5 +97,7 @@ namespace ExampleClient.Source
                 lvClusterConfigDetails.Items.Add(lvItem);
             }
         }
+
+        #endregion Private Methods
     }
 }

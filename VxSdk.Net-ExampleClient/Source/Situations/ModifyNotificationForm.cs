@@ -13,11 +13,7 @@ namespace ExampleClient.Source
     /// </remarks>
     public partial class ModifyNotificationForm : Form
     {
-        /// <summary>
-        /// Gets or sets the SelectedNotification property.
-        /// </summary>
-        /// <value>The currently selected notification.</value>
-        private Notification SelectedNotification { get; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModifyNotificationForm" /> class.
@@ -28,6 +24,20 @@ namespace ExampleClient.Source
             SelectedNotification = notification;
             PopulateRoles();
         }
+
+        #endregion Public Constructors
+
+        #region Private Properties
+
+        /// <summary>
+        /// Gets or sets the SelectedNotification property.
+        /// </summary>
+        /// <value>The currently selected notification.</value>
+        private Notification SelectedNotification { get; }
+
+        #endregion Private Properties
+
+        #region Public Methods
 
         /// <summary>
         /// The PopulateRoles method.
@@ -49,11 +59,15 @@ namespace ExampleClient.Source
             }
         }
 
+        #endregion Public Methods
+
+        #region Private Methods
+
         /// <summary>
         /// The ButtonSave_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param> 
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonSave_Click(object sender, EventArgs args)
         {
             var currentRoleIds = SelectedNotification.RoleIds;
@@ -75,5 +89,7 @@ namespace ExampleClient.Source
                 }
             }
         }
+
+        #endregion Private Methods
     }
 }

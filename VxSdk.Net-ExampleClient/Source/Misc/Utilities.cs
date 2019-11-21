@@ -15,23 +15,7 @@ namespace ExampleClient.Source
 {
     public static class Utilities
     {
-        /// <summary>
-        /// The AddRowToGridView method.
-        /// </summary>
-        /// <param name="item">The item to add to the list.</param>
-        private static int AddRowToGridView(object[] item)
-        {
-            var rowIndex = 0;
-            if (MainForm.Instance.dgvDataSources.InvokeRequired)
-            {
-                MainForm.Instance.dgvDataSources.Invoke(
-                    new MethodInvoker(delegate { rowIndex = MainForm.Instance.dgvDataSources.Rows.Add(item); }));
-            }
-            else
-                rowIndex = MainForm.Instance.dgvDataSources.Rows.Add(item);
-
-            return rowIndex;
-        }
+        #region Public Methods
 
         /// <summary>
         /// The BackgroundWorker_DoWork method.
@@ -54,7 +38,7 @@ namespace ExampleClient.Source
 
             var dataSourceTotal = MainForm.CurrentDataSources.Count;
             var dataSourceNum = 0;
-            foreach (var dataSource in MainForm.CurrentDataSources)
+            foreach (var dataSource in MainForm.CurrentDataSources.Where(ds => ds.HostDevice.IsCommissioned))
             {
                 dataSourceNum++;
                 if (dataSource.Type != DataSource.Types.Video)
@@ -87,7 +71,8 @@ namespace ExampleClient.Source
                 MainForm.Instance.eventsToolStripMenuItem.Enabled = true;
                 MainForm.Instance.manageToolStripMenuItem.Enabled = true;
 
-                MainForm.Instance.EnableModeByState(ControlManager.VcrMode.Stopped);
+                MainForm.Instance.Control.SetVcrStates(ControlManager.VcrMode.Stopped);
+                MainForm.Instance.EnableModeByState();
             });
         }
 
@@ -110,37 +95,6 @@ namespace ExampleClient.Source
         public static void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs args)
         {
             ChangeProgressViewState(false);
-        }
-
-        /// <summary>
-        /// The ChangeProgressViewState method.
-        /// </summary>
-        /// <param name="isVisible">The value to set the visible property to.</param>
-        private static void ChangeProgressViewState(bool isVisible)
-        {
-            if (MainForm.Instance.pbLoadCameras.InvokeRequired)
-            {
-                MainForm.Instance.pbLoadCameras.Invoke(
-                    new MethodInvoker(delegate { MainForm.Instance.pbLoadCameras.Visible = isVisible; }));
-            }
-            else
-                MainForm.Instance.pbLoadCameras.Visible = isVisible;
-
-            if (MainForm.Instance.lblAddingCameras.InvokeRequired)
-            {
-                MainForm.Instance.lblAddingCameras.Invoke(
-                    new MethodInvoker(delegate { MainForm.Instance.lblAddingCameras.Visible = isVisible; }));
-            }
-            else
-                MainForm.Instance.lblAddingCameras.Visible = isVisible;
-
-            if (MainForm.Instance.btnRefreshDataSources.InvokeRequired)
-            {
-                MainForm.Instance.btnRefreshDataSources.Invoke(
-                    new MethodInvoker(delegate { MainForm.Instance.btnRefreshDataSources.Visible = !isVisible; }));
-            }
-            else
-                MainForm.Instance.btnRefreshDataSources.Visible = !isVisible;
         }
 
         /// <summary>
@@ -215,5 +169,60 @@ namespace ExampleClient.Source
             var response = await client.SendAsync(request);
             return response;
         }
+
+        #endregion Public Methods
+
+        #region Private Methods
+
+        /// <summary>
+        /// The AddRowToGridView method.
+        /// </summary>
+        /// <param name="item">The item to add to the list.</param>
+        private static int AddRowToGridView(object[] item)
+        {
+            var rowIndex = 0;
+            if (MainForm.Instance.dgvDataSources.InvokeRequired)
+            {
+                MainForm.Instance.dgvDataSources.Invoke(
+                    new MethodInvoker(delegate { rowIndex = MainForm.Instance.dgvDataSources.Rows.Add(item); }));
+            }
+            else
+                rowIndex = MainForm.Instance.dgvDataSources.Rows.Add(item);
+
+            return rowIndex;
+        }
+
+        /// <summary>
+        /// The ChangeProgressViewState method.
+        /// </summary>
+        /// <param name="isVisible">The value to set the visible property to.</param>
+        private static void ChangeProgressViewState(bool isVisible)
+        {
+            if (MainForm.Instance.pbLoadCameras.InvokeRequired)
+            {
+                MainForm.Instance.pbLoadCameras.Invoke(
+                    new MethodInvoker(delegate { MainForm.Instance.pbLoadCameras.Visible = isVisible; }));
+            }
+            else
+                MainForm.Instance.pbLoadCameras.Visible = isVisible;
+
+            if (MainForm.Instance.lblAddingCameras.InvokeRequired)
+            {
+                MainForm.Instance.lblAddingCameras.Invoke(
+                    new MethodInvoker(delegate { MainForm.Instance.lblAddingCameras.Visible = isVisible; }));
+            }
+            else
+                MainForm.Instance.lblAddingCameras.Visible = isVisible;
+
+            if (MainForm.Instance.btnRefreshDataSources.InvokeRequired)
+            {
+                MainForm.Instance.btnRefreshDataSources.Invoke(
+                    new MethodInvoker(delegate { MainForm.Instance.btnRefreshDataSources.Visible = !isVisible; }));
+            }
+            else
+                MainForm.Instance.btnRefreshDataSources.Visible = !isVisible;
+        }
+
+        #endregion Private Methods
     }
 }

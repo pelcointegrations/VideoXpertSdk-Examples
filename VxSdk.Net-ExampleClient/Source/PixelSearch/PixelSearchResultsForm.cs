@@ -10,17 +10,7 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user to view pixel search results.</remarks>
     public partial class PixelSearchResultsForm : Form
     {
-        /// <summary>
-        /// Gets or sets the CurrentPixelSearch property.
-        /// </summary>
-        /// <value>The current pixel search.</value>
-        private PixelSearch CurrentPixelSearch { get; }
-
-        /// <summary>
-        /// Gets or sets the SelectedDataSource property.
-        /// </summary>
-        /// <value>The selected data source.</value>
-        private DataSource SelectedDataSource { get; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PixelSearchResultsForm" /> class.
@@ -42,6 +32,26 @@ namespace ExampleClient.Source
             lblStatus.Text = CurrentPixelSearch.Status.ToString();
             UpdateClips();
         }
+
+        #endregion Public Constructors
+
+        #region Private Properties
+
+        /// <summary>
+        /// Gets or sets the CurrentPixelSearch property.
+        /// </summary>
+        /// <value>The current pixel search.</value>
+        private PixelSearch CurrentPixelSearch { get; }
+
+        /// <summary>
+        /// Gets or sets the SelectedDataSource property.
+        /// </summary>
+        /// <value>The selected data source.</value>
+        private DataSource SelectedDataSource { get; }
+
+        #endregion Private Properties
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonOk_Click method.
@@ -86,5 +96,7 @@ namespace ExampleClient.Source
             }
             lvClips.Refresh();
         }
+
+        #endregion Private Methods
     }
 }

@@ -11,11 +11,7 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user create a new time range.</remarks>
     public partial class AddTimeRangeForm : Form
     {
-        /// <summary>
-        /// Gets or sets the TimeRangesListView property.
-        /// </summary>
-        /// <value>The time ranges ListView.</value>
-        private ListView TimeRangesListView { get; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AddTimeRangeForm" /> class.
@@ -31,6 +27,20 @@ namespace ExampleClient.Source
             dtpFrom.ValueChanged += DateTimePickerTime_ValueChanged;
             dtpTo.ValueChanged += DateTimePickerTime_ValueChanged;
         }
+
+        #endregion Public Constructors
+
+        #region Private Properties
+
+        /// <summary>
+        /// Gets or sets the TimeRangesListView property.
+        /// </summary>
+        /// <value>The time ranges ListView.</value>
+        private ListView TimeRangesListView { get; }
+
+        #endregion Private Properties
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonSave_Click method.
@@ -86,5 +96,7 @@ namespace ExampleClient.Source
                     dtpFrom.Value = dtpTo.Value.AddSeconds(-1);
             }
         }
+
+        #endregion Private Methods
     }
 }

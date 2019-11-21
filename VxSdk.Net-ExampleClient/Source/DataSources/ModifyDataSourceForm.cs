@@ -10,11 +10,7 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user to modify a dataSource.</remarks>
     public partial class ModifyDataSourceForm : Form
     {
-        /// <summary>
-        /// Gets or sets the SelectedDataSource property.
-        /// </summary>
-        /// <value>The currently selected dataSource.</value>
-        private DataSource SelectedDataSource { get; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModifyDataSourceForm" /> class.
@@ -29,6 +25,20 @@ namespace ExampleClient.Source
             nudRetentionLimit.Value = dataSource.RetentionLimit;
             chbxEnabled.Checked = dataSource.IsEnabled;
         }
+
+        #endregion Public Constructors
+
+        #region Private Properties
+
+        /// <summary>
+        /// Gets or sets the SelectedDataSource property.
+        /// </summary>
+        /// <value>The currently selected dataSource.</value>
+        private DataSource SelectedDataSource { get; }
+
+        #endregion Private Properties
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonSave_Click method.
@@ -49,5 +59,7 @@ namespace ExampleClient.Source
             if (SelectedDataSource.IsEnabled != chbxEnabled.Checked)
                 SelectedDataSource.IsEnabled = chbxEnabled.Checked;
         }
+
+        #endregion Private Methods
     }
 }

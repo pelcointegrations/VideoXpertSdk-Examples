@@ -12,6 +12,8 @@ namespace ExampleClient.Source
     /// situation to the VideoXpert system.</remarks>
     public partial class AddSituationForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AddSituationForm" /> class.
         /// </summary>
@@ -20,11 +22,15 @@ namespace ExampleClient.Source
             InitializeComponent();
         }
 
+        #endregion Public Constructors
+
+        #region Private Methods
+
         /// <summary>
         /// The ButtonAdd_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param> 
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonAdd_Click(object sender, EventArgs args)
         {
             var situation = new NewSituation
@@ -39,7 +45,7 @@ namespace ExampleClient.Source
                 ShouldLog = ckbxLog.Checked,
                 Name = txbxName.Text,
                 ShouldNotify = ckbxNotify.Checked,
-                Severity = (int) Math.Abs(nudSeverity.Value - 11),
+                Severity = (int)Math.Abs(nudSeverity.Value - 11),
                 SourceDeviceId = txbxSourceDeviceId.Text,
                 Type = txbxType.Text
             };
@@ -57,5 +63,7 @@ namespace ExampleClient.Source
             situation.SnoozeIntervals = intervalList;
             MainForm.CurrentSystem.AddSituation(situation);
         }
+
+        #endregion Private Methods
     }
 }

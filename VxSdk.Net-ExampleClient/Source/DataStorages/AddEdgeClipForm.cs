@@ -12,11 +12,7 @@ namespace ExampleClient.Source
     /// clip on the selected data storage.</remarks>
     public partial class AddEdgeClipForm : Form
     {
-        /// <summary>
-        /// Gets or sets the SelectedDataStorage property.
-        /// </summary>
-        /// <value>The selected data storage.</value>
-        public DataStorage SelectedDataStorage { get; set; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AddEdgeClipForm" /> class.
@@ -28,6 +24,20 @@ namespace ExampleClient.Source
             SelectedDataStorage = dataStorage;
             PopulateDataStorages();
         }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the SelectedDataStorage property.
+        /// </summary>
+        /// <value>The selected data storage.</value>
+        public DataStorage SelectedDataStorage { get; set; }
+
+        #endregion Public Properties
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonAdd_Click method.
@@ -104,7 +114,7 @@ namespace ExampleClient.Source
             var startTime = selectedClip.StartTime.ToLocalTime();
             var endTime = selectedClip.EndTime.ToLocalTime();
 
-            // Set up the DateTimePickers to only allow values within the selected 
+            // Set up the DateTimePickers to only allow values within the selected
             // clips time frame.
             dtpStartDate.MinDate = startTime;
             dtpStartDate.MaxDate = endTime;
@@ -130,5 +140,7 @@ namespace ExampleClient.Source
                 lvDataStorages.Items.Add(lvItem);
             }
         }
+
+        #endregion Private Methods
     }
 }

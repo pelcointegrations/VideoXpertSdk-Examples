@@ -11,6 +11,8 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user to create a new user.</remarks>
     public partial class AddUserForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AddUserForm" /> class.
         /// </summary>
@@ -18,6 +20,10 @@ namespace ExampleClient.Source
         {
             InitializeComponent();
         }
+
+        #endregion Public Constructors
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonAdd_Click method.
@@ -63,7 +69,7 @@ namespace ExampleClient.Source
             if (lvPhoneNumbers.SelectedItems.Count == 0)
                 return;
 
-            var phoneNumber = (KeyValuePair<User.PhoneType, string>) lvPhoneNumbers.SelectedItems[0].Tag;
+            var phoneNumber = (KeyValuePair<User.PhoneType, string>)lvPhoneNumbers.SelectedItems[0].Tag;
 
             // Show the ModifyPhoneNumberForm dialog.
             using (var modifyPhoneNumberForm = new ModifyPhoneNumberForm(phoneNumber))
@@ -124,5 +130,7 @@ namespace ExampleClient.Source
                 throw;
             }
         }
+
+        #endregion Private Methods
     }
 }

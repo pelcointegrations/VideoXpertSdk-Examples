@@ -11,6 +11,8 @@ namespace ExampleClient.Source
     /// on the VideoXpert system.</remarks>
     public partial class DataStorageManagerForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DataStorageManagerForm" /> class.
         /// </summary>
@@ -20,6 +22,10 @@ namespace ExampleClient.Source
 
             PopulateDataStorages();
         }
+
+        #endregion Public Constructors
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonAddClip_Click method.
@@ -152,5 +158,7 @@ namespace ExampleClient.Source
                 lvDataStorageManager.Items.Add(lvItem);
             }
         }
+
+        #endregion Private Methods
     }
 }

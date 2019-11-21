@@ -11,11 +11,7 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user to select a tag to merge with.</remarks>
     public partial class MergeTagForm : Form
     {
-        /// <summary>
-        /// Gets or sets the SelectedTag property.
-        /// </summary>
-        /// <value>The currently selected tag.</value>
-        private Tag SelectedTag { get; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MergeTagForm" /> class.
@@ -29,27 +25,19 @@ namespace ExampleClient.Source
             PopulateTags();
         }
 
+        #endregion Public Constructors
+
+        #region Private Properties
+
         /// <summary>
-        /// The PopulateTags method.
+        /// Gets or sets the SelectedTag property.
         /// </summary>
-        private void PopulateTags()
-        {
-            lvTags.Items.Clear();
+        /// <value>The currently selected tag.</value>
+        private Tag SelectedTag { get; }
 
-            // Get the existing tags from the VideoXpert system and add
-            // them to the list view.
-            foreach (var tag in  MainForm.CurrentSystem.Tags)
-            {
-                if (tag.Id == SelectedTag.Id)
-                    continue;
+        #endregion Private Properties
 
-                var lvItem = new ListViewItem(tag.Name);
-                lvItem.SubItems.Add(tag.Id);
-                lvItem.SubItems.Add(tag.OwnerName);
-                lvItem.Tag = tag;
-                lvTags.Items.Add(lvItem);
-            }
-        }
+        #region Private Methods
 
         /// <summary>
         /// The ButtonMerge_Click method.
@@ -64,5 +52,29 @@ namespace ExampleClient.Source
             var tag = (Tag)lvTags.SelectedItems[0].Tag;
             SelectedTag.Merge(tag);
         }
+
+        /// <summary>
+        /// The PopulateTags method.
+        /// </summary>
+        private void PopulateTags()
+        {
+            lvTags.Items.Clear();
+
+            // Get the existing tags from the VideoXpert system and add
+            // them to the list view.
+            foreach (var tag in MainForm.CurrentSystem.Tags)
+            {
+                if (tag.Id == SelectedTag.Id)
+                    continue;
+
+                var lvItem = new ListViewItem(tag.Name);
+                lvItem.SubItems.Add(tag.Id);
+                lvItem.SubItems.Add(tag.OwnerName);
+                lvItem.Tag = tag;
+                lvTags.Items.Add(lvItem);
+            }
+        }
+
+        #endregion Private Methods
     }
 }

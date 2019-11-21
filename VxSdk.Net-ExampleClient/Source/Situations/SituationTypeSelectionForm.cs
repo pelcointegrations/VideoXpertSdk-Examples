@@ -12,6 +12,8 @@ namespace ExampleClient.Source
     /// subscribe to.</remarks>
     public partial class SituationTypeSelectionForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SituationTypeSelectionForm" /> class.
         /// </summary>
@@ -29,6 +31,10 @@ namespace ExampleClient.Source
                 lvSituationTypes.Items.Add(lvItem);
             }
         }
+
+        #endregion Public Constructors
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonSubscribe_Click method.
@@ -50,5 +56,7 @@ namespace ExampleClient.Source
             MainForm.CurrentSystem.SubscribeToEventsByType(MainForm.Instance.OnSystemEvent, situations);
             MainForm.Instance.WriteToLog($"Subscribed to events for {situations.Count} situations.");
         }
+
+        #endregion Private Methods
     }
 }

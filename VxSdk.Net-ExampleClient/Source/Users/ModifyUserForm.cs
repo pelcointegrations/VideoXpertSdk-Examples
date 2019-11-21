@@ -13,23 +13,7 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user to modify a user.</remarks>
     public partial class ModifyUserForm : Form
     {
-        /// <summary>
-        /// Gets or sets the CurrentNumberList property.
-        /// </summary>
-        /// <value>The list of roles for the currently selected phone numbers.</value>
-        private List<KeyValuePair<User.PhoneType, string>> CurrentNumberList { get; set; }
-
-        /// <summary>
-        /// Gets or sets the CurrentRoleList property.
-        /// </summary>
-        /// <value>The list of roles for the currently selected user.</value>
-        private List<string> CurrentRoleList { get; set; }
-
-        /// <summary>
-        /// Gets or sets the SelectedUser property.
-        /// </summary>
-        /// <value>The currently selected user.</value>
-        private User SelectedUser { get; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModifyUserForm" /> class.
@@ -50,6 +34,32 @@ namespace ExampleClient.Source
             PopulateRoles();
             PopulateNumbers();
         }
+
+        #endregion Public Constructors
+
+        #region Private Properties
+
+        /// <summary>
+        /// Gets or sets the CurrentNumberList property.
+        /// </summary>
+        /// <value>The list of roles for the currently selected phone numbers.</value>
+        private List<KeyValuePair<User.PhoneType, string>> CurrentNumberList { get; set; }
+
+        /// <summary>
+        /// Gets or sets the CurrentRoleList property.
+        /// </summary>
+        /// <value>The list of roles for the currently selected user.</value>
+        private List<string> CurrentRoleList { get; set; }
+
+        /// <summary>
+        /// Gets or sets the SelectedUser property.
+        /// </summary>
+        /// <value>The currently selected user.</value>
+        private User SelectedUser { get; }
+
+        #endregion Private Properties
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonAdd_Click method.
@@ -95,7 +105,7 @@ namespace ExampleClient.Source
             if (lvPhoneNumbers.SelectedItems.Count == 0)
                 return;
 
-            var phoneNumber = (KeyValuePair<User.PhoneType, string>) lvPhoneNumbers.SelectedItems[0].Tag;
+            var phoneNumber = (KeyValuePair<User.PhoneType, string>)lvPhoneNumbers.SelectedItems[0].Tag;
 
             // Show the ModifyPhoneNumberForm dialog.
             using (var modifyPhoneNumberForm = new ModifyPhoneNumberForm(phoneNumber))
@@ -140,23 +150,23 @@ namespace ExampleClient.Source
 
             if (ckbxAccountEnabled.Checked != SelectedUser.AccountState)
                 SelectedUser.AccountState = ckbxAccountEnabled.Checked;
-            
-            if(SelectedUser.FirstName != tbxFirstName.Text)
+
+            if (SelectedUser.FirstName != tbxFirstName.Text)
                 SelectedUser.FirstName = tbxFirstName.Text;
-            
-            if(SelectedUser.LastName != tbxLastName.Text)
+
+            if (SelectedUser.LastName != tbxLastName.Text)
                 SelectedUser.LastName = tbxLastName.Text;
 
-            if(SelectedUser.EmployeeId != tbxEmployeeId.Text)
+            if (SelectedUser.EmployeeId != tbxEmployeeId.Text)
                 SelectedUser.EmployeeId = tbxEmployeeId.Text;
 
-            if(SelectedUser.Email != tbxEmailAddress.Text)
+            if (SelectedUser.Email != tbxEmailAddress.Text)
                 SelectedUser.Email = tbxEmailAddress.Text;
 
-            if(SelectedUser.Domain != tbxDomain.Text)
+            if (SelectedUser.Domain != tbxDomain.Text)
                 SelectedUser.Domain = tbxDomain.Text;
 
-            if(SelectedUser.Note != tbxNotes.Text)
+            if (SelectedUser.Note != tbxNotes.Text)
                 SelectedUser.Note = tbxNotes.Text;
 
             var numbers = new List<KeyValuePair<User.PhoneType, string>>();
@@ -168,6 +178,28 @@ namespace ExampleClient.Source
             SelectedUser.PhoneNumbers = numbers;
 
             LinkRoles();
+        }
+
+        /// <summary>
+        /// The LinkRoles method.
+        /// </summary>
+        private void LinkRoles()
+        {
+            foreach (ListViewItem item in lvUserRoles.Items)
+            {
+                var role = (Role)item.Tag;
+
+                if (item.Checked)
+                {
+                    if (!CurrentRoleList.Any(s => role.Id.Contains(s)))
+                        SelectedUser.AddToRole(role);
+                }
+                else
+                {
+                    if (CurrentRoleList.Any(s => role.Id.Contains(s)))
+                        SelectedUser.RemoveFromRole(role);
+                }
+            }
         }
 
         /// <summary>
@@ -212,26 +244,6 @@ namespace ExampleClient.Source
             }
         }
 
-        /// <summary>
-        /// The LinkRoles method.
-        /// </summary>
-        private void LinkRoles()
-        {
-            foreach (ListViewItem item in lvUserRoles.Items)
-            {
-                var role = (Role)item.Tag;
-
-                if (item.Checked)
-                {
-                    if (!CurrentRoleList.Any(s => role.Id.Contains(s)))
-                        SelectedUser.AddToRole(role);
-                }
-                else
-                {
-                    if (CurrentRoleList.Any(s => role.Id.Contains(s)))
-                        SelectedUser.RemoveFromRole(role);
-                }
-            }
-        }
+        #endregion Private Methods
     }
 }

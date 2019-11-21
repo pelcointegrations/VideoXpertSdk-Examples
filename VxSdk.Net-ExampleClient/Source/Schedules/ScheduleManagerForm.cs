@@ -11,6 +11,8 @@ namespace ExampleClient.Source
     /// schedules from the VideoXpert system.</remarks>
     public partial class ScheduleManagerForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ScheduleManagerForm" /> class.
         /// </summary>
@@ -21,28 +23,9 @@ namespace ExampleClient.Source
             PopulateSchedules();
         }
 
-        /// <summary>
-        /// The PopulateSchedules method.
-        /// </summary>
-        private void PopulateSchedules()
-        {
-            // Get the existing schedules from the VideoXpert system and add
-            // them to the list view.
-            foreach (var schedule in MainForm.CurrentSystem.Schedules)
-            {
-                var scheduleSources = schedule.LinkedDataSources;
+        #endregion Public Constructors
 
-                var lvItem = new ListViewItem(string.Empty);
-                lvItem.SubItems.Add(schedule.Name);
-                lvItem.SubItems.Add(schedule.Id);
-                lvItem.SubItems.Add(schedule.Action.ToString());
-                lvItem.SubItems.Add(schedule.UseAllDataSources.ToString());
-                lvItem.SubItems.Add(scheduleSources.Count.ToString());
-                lvItem.SubItems.Add(schedule.ScheduleTriggers.Count.ToString());
-                lvItem.Tag = schedule;
-                lvScheduleManager.Items.Add(lvItem);
-            }
-        }
+        #region Private Methods
 
         /// <summary>
         /// The ButtonDelete_Click method.
@@ -59,6 +42,35 @@ namespace ExampleClient.Source
                 MainForm.CurrentSystem.DeleteSchedule(schedule);
                 item.Remove();
             }
+        }
+
+        /// <summary>
+        /// The ButtonManageSources_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonManageSources_Click(object sender, EventArgs args)
+        {
+            if (lvScheduleManager.CheckedItems.Count != 1)
+                return;
+
+            var schedule = (Schedule)lvScheduleManager.CheckedItems[0].Tag;
+
+            // Show the ModifyScheduleSourcesForm dialog.
+            DialogResult result;
+            using (var modifySourcesForm = new ModifyScheduleSourcesForm(schedule))
+            {
+                result = modifySourcesForm.ShowDialog();
+            }
+
+            // If the dialog was closed without clicking OK then skip the refresh.
+            if (result != DialogResult.OK)
+                return;
+
+            // Refresh the items in the list view to include any new changes.
+            lvScheduleManager.Items.Clear();
+            PopulateSchedules();
+            lvScheduleManager.Refresh();
         }
 
         /// <summary>
@@ -105,32 +117,28 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
-        /// The ButtonManageSources_Click method.
+        /// The PopulateSchedules method.
         /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void ButtonManageSources_Click(object sender, EventArgs args)
+        private void PopulateSchedules()
         {
-            if (lvScheduleManager.CheckedItems.Count != 1)
-                return;
-
-            var schedule = (Schedule)lvScheduleManager.CheckedItems[0].Tag;
-
-            // Show the ModifyScheduleSourcesForm dialog.
-            DialogResult result;
-            using (var modifySourcesForm = new ModifyScheduleSourcesForm(schedule))
+            // Get the existing schedules from the VideoXpert system and add
+            // them to the list view.
+            foreach (var schedule in MainForm.CurrentSystem.Schedules)
             {
-                result = modifySourcesForm.ShowDialog();
+                var scheduleSources = schedule.LinkedDataSources;
+
+                var lvItem = new ListViewItem(string.Empty);
+                lvItem.SubItems.Add(schedule.Name);
+                lvItem.SubItems.Add(schedule.Id);
+                lvItem.SubItems.Add(schedule.Action.ToString());
+                lvItem.SubItems.Add(schedule.UseAllDataSources.ToString());
+                lvItem.SubItems.Add(scheduleSources.Count.ToString());
+                lvItem.SubItems.Add(schedule.ScheduleTriggers.Count.ToString());
+                lvItem.Tag = schedule;
+                lvScheduleManager.Items.Add(lvItem);
             }
-
-            // If the dialog was closed without clicking OK then skip the refresh.
-            if (result != DialogResult.OK)
-                return;
-
-            // Refresh the items in the list view to include any new changes.
-            lvScheduleManager.Items.Clear();
-            PopulateSchedules();
-            lvScheduleManager.Refresh();
         }
+
+        #endregion Private Methods
     }
 }

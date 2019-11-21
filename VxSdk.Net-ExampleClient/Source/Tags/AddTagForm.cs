@@ -10,11 +10,7 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user to create a new tag.</remarks>
     public partial class AddTagForm : Form
     {
-        /// <summary>
-        /// Gets or sets the SelectedTag property.
-        /// </summary>
-        /// <value>The currently selected tag.</value>
-        private Tag SelectedTag { get; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AddTagForm" /> class.
@@ -36,6 +32,20 @@ namespace ExampleClient.Source
             InitializeComponent();
         }
 
+        #endregion Public Constructors
+
+        #region Private Properties
+
+        /// <summary>
+        /// Gets or sets the SelectedTag property.
+        /// </summary>
+        /// <value>The currently selected tag.</value>
+        private Tag SelectedTag { get; }
+
+        #endregion Private Properties
+
+        #region Private Methods
+
         /// <summary>
         /// The ButtonOk_Click method.
         /// </summary>
@@ -45,7 +55,7 @@ namespace ExampleClient.Source
         {
             try
             {
-                var newTag = new NewTag { Name = txbxName.Text  };
+                var newTag = new NewTag { Name = txbxName.Text };
                 if (SelectedTag != null)
                 {
                     newTag.IsFolder = true;
@@ -75,5 +85,7 @@ namespace ExampleClient.Source
         {
             ckbxIsPublic.Enabled = !ckbxIsFolder.Checked;
         }
+
+        #endregion Private Methods
     }
 }

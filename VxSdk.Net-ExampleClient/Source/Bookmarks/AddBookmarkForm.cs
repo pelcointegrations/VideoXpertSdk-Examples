@@ -8,14 +8,20 @@ namespace ExampleClient.Source
     /// The AddBookmarkForm class.
     /// </summary>
     /// <remarks>Provides a dialog window that allows the user to select the settings
-    /// that will be used to create a new bookmark.</remarks> 
+    /// that will be used to create a new bookmark.</remarks>
     public partial class AddBookmarkForm : Form
     {
+        #region Private Fields
+
         /// <summary>
         /// The _lastItemChecked field.
-        /// </summary>  
+        /// </summary>
         /// <remarks>Holds the last item checked in the BookmarkManager list view.</remarks>
         private ListViewItem _lastItemChecked;
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AddBookmarkForm" /> class.
@@ -36,6 +42,10 @@ namespace ExampleClient.Source
                 lvDataSources.Items.Add(lvItem);
             }
         }
+
+        #endregion Public Constructors
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonAdd_Click method
@@ -75,6 +85,17 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The CheckboxLockEnabled_CheckedChanged method
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter</param>
+        /// <param name="args">The <paramref name="args"/> parameter</param>
+        private void CheckboxLockEnabled_CheckedChanged(object sender, EventArgs args)
+        {
+            gbxLockStartTime.Enabled = chbxLockEnabled.Checked;
+            gbxLockEndTime.Enabled = chbxLockEnabled.Checked;
+        }
+
+        /// <summary>
         /// The DateTimePickerLockTime_ValueChanged method
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter</param>
@@ -85,17 +106,6 @@ namespace ExampleClient.Source
             {
                 dtpLockEndTime.Value = dtpLockStartTime.Value.AddSeconds(1);
             }
-        }
-
-        /// <summary>
-        /// The CheckboxLockEnabled_CheckedChanged method
-        /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter</param>
-        /// <param name="args">The <paramref name="args"/> parameter</param>
-        private void CheckboxLockEnabled_CheckedChanged(object sender, EventArgs args)
-        {
-            gbxLockStartTime.Enabled = chbxLockEnabled.Checked;
-            gbxLockEndTime.Enabled = chbxLockEnabled.Checked;
         }
 
         /// <summary>
@@ -117,5 +127,7 @@ namespace ExampleClient.Source
             // Store the current item.
             _lastItemChecked = lvDataSources.Items[args.Index];
         }
+
+        #endregion Private Methods
     }
 }

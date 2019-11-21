@@ -10,6 +10,22 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user create a new zone.</remarks>
     public partial class AddZoneForm : Form
     {
+        #region Public Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AddZoneForm" /> class.
+        /// </summary>
+        /// <param name="listView">The <paramref name="listView"/> parameter.</param>
+        public AddZoneForm(ListView listView)
+        {
+            InitializeComponent();
+            ZonesListView = listView;
+        }
+
+        #endregion Public Constructors
+
+        #region Private Properties
+
         /// <summary>
         /// Gets or sets the IsHeightChanging property.
         /// </summary>
@@ -28,15 +44,9 @@ namespace ExampleClient.Source
         /// <value>The zone ListView.</value>
         private ListView ZonesListView { get; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AddZoneForm" /> class.
-        /// </summary>
-        /// <param name="listView">The <paramref name="listView"/> parameter.</param>
-        public AddZoneForm(ListView listView)
-        {
-            InitializeComponent();
-            ZonesListView = listView;
-        }
+        #endregion Private Properties
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonSave_Click method.
@@ -47,10 +57,10 @@ namespace ExampleClient.Source
         {
             var rect = new Rect
             {
-                Left = (int) nudLeft.Value,
-                Top = (int) nudTop.Value,
-                Width = (int) nudWidth.Value,
-                Height = (int) nudHeight.Value
+                Left = (int)nudLeft.Value,
+                Top = (int)nudTop.Value,
+                Width = (int)nudWidth.Value,
+                Height = (int)nudHeight.Value
             };
 
             // Add the rect info to the list view.
@@ -126,6 +136,7 @@ namespace ExampleClient.Source
             pnlSelection.Size = newSize;
             pnlSelection.Location = newLocation;
         }
-       
+
+        #endregion Private Methods
     }
 }

@@ -14,11 +14,7 @@ namespace ExampleClient.Source
     /// <remarks>Provides a window that displays event info.</remarks>
     public partial class EventDisplayForm : Form
     {
-        /// <summary>
-        /// Gets or sets the CurrentEvent property.
-        /// </summary>
-        /// <value>The event to display in this form.</value>
-        private Event CurrentEvent { get; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EventDisplayForm" /> class.
@@ -31,6 +27,20 @@ namespace ExampleClient.Source
             CurrentEvent = receivedEvent;
             PopulateEventInfo();
         }
+
+        #endregion Public Constructors
+
+        #region Private Properties
+
+        /// <summary>
+        /// Gets or sets the CurrentEvent property.
+        /// </summary>
+        /// <value>The event to display in this form.</value>
+        private Event CurrentEvent { get; }
+
+        #endregion Private Properties
+
+        #region Public Methods
 
         /// <summary>
         /// The FormatText method.
@@ -61,7 +71,7 @@ namespace ExampleClient.Source
         public static string FormatType(IEnumerable<string> typeArray)
         {
             var builder = new StringBuilder();
-            if (typeArray == null) 
+            if (typeArray == null)
                 return builder.ToString();
 
             foreach (var value in typeArray)
@@ -73,34 +83,9 @@ namespace ExampleClient.Source
             return builder.ToString();
         }
 
-        /// <summary>
-        /// The PopulateEventInfo method.
-        /// </summary>
-        private void PopulateEventInfo()
-        {
-            var situationType = CurrentEvent.SituationType.Split('/');
-            lblEventName.Text = FormatText(situationType.Last());
-            lblEventTypeValue.Text = FormatType(situationType.Take(situationType.Length - 1).ToArray());
-            lblStatusValue.Text = FormatText(CurrentEvent.AckState.ToString());
-            lblDateValue.Text = CurrentEvent.Time.ToString("MMMM dd, yyyy");
-            lblTimeValue.Text = CurrentEvent.Time.ToString("h:mm:ss tt");
-            lblSeverityValue.Text = Math.Abs(CurrentEvent.Severity - 11).ToString();
-            lblUserValue.Text = CurrentEvent.SourceUserName;
-            lblGeneratorValue.Text = CurrentEvent.GeneratorDeviceId;
-            lblSourceValue.Text = CurrentEvent.SourceDeviceId;
+        #endregion Public Methods
 
-            foreach (var device in MainForm.CurrentDevices.Where(device => device.Id == CurrentEvent.GeneratorDeviceId))
-                lblGeneratorValue.Text = device.Name;
-
-            foreach (var device in MainForm.CurrentDevices.Where(device => device.Id == CurrentEvent.SourceDeviceId))
-                lblSourceValue.Text = device.Name;
-
-            if (CurrentEvent.AckState == Event.AckStates.AckNeeded)
-                return;
-
-            btnAck.Enabled = false;
-            btnSilence.Enabled = false;
-        }
+        #region Private Methods
 
         /// <summary>
         /// The ButtonAck_Click method.
@@ -137,5 +122,36 @@ namespace ExampleClient.Source
             CurrentEvent.Silence((int)value);
             Close();
         }
+
+        /// <summary>
+        /// The PopulateEventInfo method.
+        /// </summary>
+        private void PopulateEventInfo()
+        {
+            var situationType = CurrentEvent.SituationType.Split('/');
+            lblEventName.Text = FormatText(situationType.Last());
+            lblEventTypeValue.Text = FormatType(situationType.Take(situationType.Length - 1).ToArray());
+            lblStatusValue.Text = FormatText(CurrentEvent.AckState.ToString());
+            lblDateValue.Text = CurrentEvent.Time.ToString("MMMM dd, yyyy");
+            lblTimeValue.Text = CurrentEvent.Time.ToString("h:mm:ss tt");
+            lblSeverityValue.Text = Math.Abs(CurrentEvent.Severity - 11).ToString();
+            lblUserValue.Text = CurrentEvent.SourceUserName;
+            lblGeneratorValue.Text = CurrentEvent.GeneratorDeviceId;
+            lblSourceValue.Text = CurrentEvent.SourceDeviceId;
+
+            foreach (var device in MainForm.CurrentDevices.Where(device => device.Id == CurrentEvent.GeneratorDeviceId))
+                lblGeneratorValue.Text = device.Name;
+
+            foreach (var device in MainForm.CurrentDevices.Where(device => device.Id == CurrentEvent.SourceDeviceId))
+                lblSourceValue.Text = device.Name;
+
+            if (CurrentEvent.AckState == Event.AckStates.AckNeeded)
+                return;
+
+            btnAck.Enabled = false;
+            btnSilence.Enabled = false;
+        }
+
+        #endregion Private Methods
     }
 }

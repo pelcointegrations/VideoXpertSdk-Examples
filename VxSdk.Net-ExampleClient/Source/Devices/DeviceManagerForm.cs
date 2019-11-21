@@ -12,6 +12,8 @@ namespace ExampleClient.Source
     /// devices from the VideoXpert system.</remarks>
     public partial class DeviceManagerForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DeviceManagerForm" /> class.
         /// </summary>
@@ -22,56 +24,9 @@ namespace ExampleClient.Source
             PopulateDevices();
         }
 
-        /// <summary>
-        /// The PopulateDevices method.
-        /// </summary>
-        private void PopulateDevices()
-        {
-            lvDevices.Items.Clear();
+        #endregion Public Constructors
 
-            // Get the existing Devices from the VideoXpert system and add
-            // them to the list view.
-            var drivers = MainForm.CurrentSystem.Drivers;
-            foreach (var device in  MainForm.CurrentSystem.Devices)
-            {
-                string type;
-                switch (device.Type)
-                {
-                    case Device.Types.Acc:
-                        type = "Accessory Server";
-                        break;
-                    case Device.Types.AllInOne:
-                        type = "VxPro";
-                        break;
-                    case Device.Types.Mg:
-                        type = "MediaGateway";
-                        break;
-                    case Device.Types.Ui:
-                        type = "User Interface";
-                        break;
-                    default:
-                        type = device.Type.ToString();
-                        break;
-                }
-
-                var lvItem = new ListViewItem(type);
-                lvItem.SubItems.Add(device.Name);
-                lvItem.SubItems.Add(device.Ip);
-                lvItem.SubItems.Add(device.Port.ToString());
-                lvItem.SubItems.Add(device.Id);
-                lvItem.SubItems.Add(device.Model);
-                lvItem.SubItems.Add(device.State.ToString());
-                if (!string.IsNullOrEmpty(device.DriverTypeId) && drivers.Any(drvr => drvr.Type == device.DriverTypeId))
-                    lvItem.SubItems.Add(drivers.First(driver => driver.Type == device.DriverTypeId).Name);
-                else
-                    lvItem.SubItems.Add(string.Empty);
-
-                lvItem.SubItems.Add(device.Version);
-                lvItem.SubItems.Add(device.IsCommissioned ? "Yes" : "No");
-                lvItem.Tag = device;
-                lvDevices.Items.Add(lvItem);
-            }
-        }
+        #region Private Methods
 
         /// <summary>
         /// The ButtonAdd_Click method.
@@ -96,6 +51,36 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The ButtonCommission_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonCommission_Click(object sender, EventArgs args)
+        {
+            if (lvDevices.SelectedItems.Count == 0)
+                return;
+
+            var device = (Device)lvDevices.SelectedItems[0].Tag;
+            MainForm.CurrentSystem.CommissionDevice(device);
+            PopulateDevices();
+        }
+
+        /// <summary>
+        /// The ButtonDecommission_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonDecommission_Click(object sender, EventArgs args)
+        {
+            if (lvDevices.SelectedItems.Count == 0)
+                return;
+
+            var device = (Device)lvDevices.SelectedItems[0].Tag;
+            MainForm.CurrentSystem.DecommissionDevice(device);
+            PopulateDevices();
+        }
+
+        /// <summary>
         /// The ButtonDelete_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -110,6 +95,25 @@ namespace ExampleClient.Source
             var device = (Device)lvDevices.SelectedItems[0].Tag;
             MainForm.CurrentSystem.DeleteDevice(device);
             PopulateDevices();
+        }
+
+        /// <summary>
+        /// The ButtonManageLogs_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonManageLogs_Click(object sender, EventArgs args)
+        {
+            if (lvDevices.SelectedItems.Count == 0)
+                return;
+
+            var device = (Device)lvDevices.SelectedItems[0].Tag;
+
+            // Show the LogManagerForm dialog.
+            using (var logManagerForm = new LogManagerForm(device))
+            {
+                logManagerForm.ShowDialog();
+            }
         }
 
         /// <summary>
@@ -150,55 +154,6 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
-        /// The ButtonCommission_Click method.
-        /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void ButtonCommission_Click(object sender, EventArgs args)
-        {
-            if (lvDevices.SelectedItems.Count == 0)
-                return;
-
-            var device = (Device)lvDevices.SelectedItems[0].Tag;
-            MainForm.CurrentSystem.CommissionDevice(device);
-            PopulateDevices();
-        }
-
-        /// <summary>
-        /// The ButtonDecommission_Click method.
-        /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void ButtonDecommission_Click(object sender, EventArgs args)
-        {
-            if (lvDevices.SelectedItems.Count == 0)
-                return;
-
-            var device = (Device)lvDevices.SelectedItems[0].Tag;
-            MainForm.CurrentSystem.DecommissionDevice(device);
-            PopulateDevices();
-        }
-
-        /// <summary>
-        /// The ButtonManageLogs_Click method.
-        /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void ButtonManageLogs_Click(object sender, EventArgs args)
-        {
-            if (lvDevices.SelectedItems.Count == 0)
-                return;
-
-            var device = (Device)lvDevices.SelectedItems[0].Tag;
-
-            // Show the LogManagerForm dialog.
-            using (var logManagerForm = new LogManagerForm(device))
-            {
-                logManagerForm.ShowDialog();
-            }
-        }
-
-        /// <summary>
         /// The ButtonSilence_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -225,5 +180,62 @@ namespace ExampleClient.Source
             var device = (Device)lvDevices.SelectedItems[0].Tag;
             btnManageLogs.Enabled = device.CanCreateLogs;
         }
+
+        /// <summary>
+        /// The PopulateDevices method.
+        /// </summary>
+        private void PopulateDevices()
+        {
+            lvDevices.Items.Clear();
+
+            // Get the existing Devices from the VideoXpert system and add
+            // them to the list view.
+            var drivers = MainForm.CurrentSystem.Drivers;
+            foreach (var device in MainForm.CurrentSystem.Devices)
+            {
+                string type;
+                switch (device.Type)
+                {
+                    case Device.Types.Acc:
+                        type = "Accessory Server";
+                        break;
+
+                    case Device.Types.AllInOne:
+                        type = "VxPro";
+                        break;
+
+                    case Device.Types.Mg:
+                        type = "MediaGateway";
+                        break;
+
+                    case Device.Types.Ui:
+                        type = "User Interface";
+                        break;
+
+                    default:
+                        type = device.Type.ToString();
+                        break;
+                }
+
+                var lvItem = new ListViewItem(type);
+                lvItem.SubItems.Add(device.Name);
+                lvItem.SubItems.Add(device.Ip);
+                lvItem.SubItems.Add(device.Port.ToString());
+                lvItem.SubItems.Add(device.Id);
+                lvItem.SubItems.Add(device.Model);
+                lvItem.SubItems.Add(device.State.ToString());
+                if (!string.IsNullOrEmpty(device.DriverTypeId) && drivers.Any(drvr => drvr.Type == device.DriverTypeId))
+                    lvItem.SubItems.Add(drivers.First(driver => driver.Type == device.DriverTypeId).Name);
+                else
+                    lvItem.SubItems.Add(string.Empty);
+
+                lvItem.SubItems.Add(device.Version);
+                lvItem.SubItems.Add(device.IsCommissioned ? "Yes" : "No");
+                lvItem.Tag = device;
+                lvDevices.Items.Add(lvItem);
+            }
+        }
+
+        #endregion Private Methods
     }
 }

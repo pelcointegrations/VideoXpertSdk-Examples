@@ -10,11 +10,7 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user to modify an alarm input.</remarks>
     public partial class ModifyAlarmInputForm : Form
     {
-        /// <summary>
-        /// Gets or sets the SelectedAlarmInput property.
-        /// </summary>
-        /// <value>The currently selected alarm input.</value>
-        private AlarmInput SelectedAlarmInput { get; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModifyAlarmInputForm" /> class.
@@ -27,6 +23,20 @@ namespace ExampleClient.Source
             tbxName.Text = alarmInput.Name;
             tbxDescription.Text = alarmInput.Description;
         }
+
+        #endregion Public Constructors
+
+        #region Private Properties
+
+        /// <summary>
+        /// Gets or sets the SelectedAlarmInput property.
+        /// </summary>
+        /// <value>The currently selected alarm input.</value>
+        private AlarmInput SelectedAlarmInput { get; }
+
+        #endregion Private Properties
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonSave_Click method.
@@ -41,5 +51,7 @@ namespace ExampleClient.Source
             if (!string.IsNullOrEmpty(tbxDescription.Text) && SelectedAlarmInput.Description != tbxDescription.Text)
                 SelectedAlarmInput.Description = tbxDescription.Text;
         }
+
+        #endregion Private Methods
     }
 }

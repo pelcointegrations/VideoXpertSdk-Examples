@@ -11,6 +11,8 @@ namespace ExampleClient.Source
     /// monitor walls from the VideoXpert system.</remarks>
     public partial class MonitorWallManagerForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MonitorWallManagerForm" /> class.
         /// </summary>
@@ -21,11 +23,15 @@ namespace ExampleClient.Source
             PopulateMonitorWalls();
         }
 
+        #endregion Public Constructors
+
+        #region Private Methods
+
         /// <summary>
         /// The ButtonDelete_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>  
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonDelete_Click(object sender, EventArgs args)
         {
             // Verify that an item is selected.
@@ -40,10 +46,32 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The ButtonModify_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonModify_Click(object sender, EventArgs args)
+        {
+            // Verify that an item is selected.
+            if (lvMonitorWallManager.SelectedItems.Count == 0)
+                return;
+
+            // Show the ModifyMonitorWallForm dialog.
+            var monitorWall = (MonitorWall)lvMonitorWallManager.SelectedItems[0].Tag;
+            using (var modifyMonitorWallForm = new ModifyMonitorWallForm(monitorWall))
+            {
+                modifyMonitorWallForm.ShowDialog();
+            }
+
+            // Refresh the items in the list view.
+            PopulateMonitorWalls();
+        }
+
+        /// <summary>
         /// The ButtonNewMonitorWall_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>  
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonNewMonitorWall_Click(object sender, EventArgs args)
         {
             // Show the AddMonitorWallForm dialog.
@@ -65,31 +93,9 @@ namespace ExampleClient.Source
         /// The ButtonRefresh_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param> 
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonRefresh_Click(object sender, EventArgs args)
         {
-            // Refresh the items in the list view.
-            PopulateMonitorWalls();
-        }
-
-        /// <summary>
-        /// The ButtonModify_Click method.
-        /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>  
-        private void ButtonModify_Click(object sender, EventArgs args)
-        {
-            // Verify that an item is selected.
-            if (lvMonitorWallManager.SelectedItems.Count == 0)
-                return;
-
-            // Show the ModifyMonitorWallForm dialog.
-            var monitorWall = (MonitorWall)lvMonitorWallManager.SelectedItems[0].Tag;
-            using (var modifyMonitorWallForm = new ModifyMonitorWallForm(monitorWall))
-            {
-                modifyMonitorWallForm.ShowDialog();
-            }
-
             // Refresh the items in the list view.
             PopulateMonitorWalls();
         }
@@ -113,5 +119,7 @@ namespace ExampleClient.Source
 
             lvMonitorWallManager.Refresh();
         }
+
+        #endregion Private Methods
     }
 }

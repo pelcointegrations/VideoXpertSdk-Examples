@@ -13,11 +13,17 @@ namespace ExampleClient.Source
     /// files from the VideoXpert system.</remarks>
     public partial class ExportManagerForm : Form
     {
+        #region Private Fields
+
         /// <summary>
         /// The _lastItemChecked field.
-        /// </summary>  
+        /// </summary>
         /// <remarks>Holds the last item checked in the ExportManager list view.</remarks>
         private ListViewItem _lastItemChecked;
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExportManagerForm" /> class.
@@ -29,60 +35,9 @@ namespace ExampleClient.Source
             PopulateExports();
         }
 
-        /// <summary>
-        /// The PopulateExports method.
-        /// </summary>
-        private void PopulateExports()
-        {
-            // Get the existing exports from the VideoXpert system and add
-            // them to the list view.
-            var trashedFilter = new Dictionary<Filters.Value, string> { { Filters.Value.Trashed, "true" } };
-            var exports = MainForm.CurrentSystem.GetExports(trashedFilter);
-            exports.AddRange(MainForm.CurrentSystem.Exports);
-            foreach (var export in exports)
-            {
-                var status = export.Status + (export.StatusReason != Export.StateReasons.Unknown ? " - " + export.StatusReason : string.Empty);
-                var lvItem = new ListViewItem(string.Empty);
-                lvItem.SubItems.Add(export.Name);
-                lvItem.SubItems.Add(export.Initiated.ToLocalTime().ToString("s"));
-                lvItem.SubItems.Add(export.OwnerName);
-                lvItem.SubItems.Add(export.FileSizeKb.ToString());
-                lvItem.SubItems.Add(status);
-                lvItem.SubItems.Add(export.IsTrashed.ToString());
-                lvItem.SubItems.Add(export.ExportPath);
-                lvItem.Tag = export;
-                lvExportManager.Items.Add(lvItem);
-            }
-        }
+        #endregion Public Constructors
 
-        /// <summary>
-        /// The ButtonDownload_Click method.
-        /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void ButtonDownload_Click(object sender, EventArgs args)
-        {
-            if (lvExportManager.CheckedItems.Count == 0)
-                return;
-
-            // Get the associated Export object from the selected item.
-            var export = (Export)lvExportManager.CheckedItems[0].Tag;
-            
-            // Open a save file dialog for the user to select a filename for the
-            // export download.
-            saveFileDialog.FileName = export.Name;
-            var result = saveFileDialog.ShowDialog();
-            saveFileDialog.Dispose();
-
-            if (result != DialogResult.OK)
-                return;
-
-            using (var downloadForm = new DownloadProgressForm(new Uri(export.DataUri), saveFileDialog.FileName, export.FileSizeKb))
-            {
-                downloadForm.StartDownload();
-                downloadForm.ShowDialog();
-            }
-        }
+        #region Private Methods
 
         /// <summary>
         /// The ButtonDelete_Click method.
@@ -99,6 +54,35 @@ namespace ExampleClient.Source
             var export = (Export)lvExportManager.CheckedItems[0].Tag;
             MainForm.CurrentSystem.DeleteExport(export);
             lvExportManager.CheckedItems[0].Remove();
+        }
+
+        /// <summary>
+        /// The ButtonDownload_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonDownload_Click(object sender, EventArgs args)
+        {
+            if (lvExportManager.CheckedItems.Count == 0)
+                return;
+
+            // Get the associated Export object from the selected item.
+            var export = (Export)lvExportManager.CheckedItems[0].Tag;
+
+            // Open a save file dialog for the user to select a filename for the
+            // export download.
+            saveFileDialog.FileName = export.Name;
+            var result = saveFileDialog.ShowDialog();
+            saveFileDialog.Dispose();
+
+            if (result != DialogResult.OK)
+                return;
+
+            using (var downloadForm = new DownloadProgressForm(new Uri(export.DataUri), saveFileDialog.FileName, export.FileSizeKb))
+            {
+                downloadForm.StartDownload();
+                downloadForm.ShowDialog();
+            }
         }
 
         /// <summary>
@@ -199,5 +183,33 @@ namespace ExampleClient.Source
 
             btnTrashRestore.Text = export.IsTrashed ? @"Restore" : @"Trash";
         }
+
+        /// <summary>
+        /// The PopulateExports method.
+        /// </summary>
+        private void PopulateExports()
+        {
+            // Get the existing exports from the VideoXpert system and add
+            // them to the list view.
+            var trashedFilter = new Dictionary<Filters.Value, string> { { Filters.Value.Trashed, "true" } };
+            var exports = MainForm.CurrentSystem.GetExports(trashedFilter);
+            exports.AddRange(MainForm.CurrentSystem.Exports);
+            foreach (var export in exports)
+            {
+                var status = export.Status + (export.StatusReason != Export.StateReasons.Unknown ? " - " + export.StatusReason : string.Empty);
+                var lvItem = new ListViewItem(string.Empty);
+                lvItem.SubItems.Add(export.Name);
+                lvItem.SubItems.Add(export.Initiated.ToLocalTime().ToString("s"));
+                lvItem.SubItems.Add(export.OwnerName);
+                lvItem.SubItems.Add(export.FileSizeKb.ToString());
+                lvItem.SubItems.Add(status);
+                lvItem.SubItems.Add(export.IsTrashed.ToString());
+                lvItem.SubItems.Add(export.ExportPath);
+                lvItem.Tag = export;
+                lvExportManager.Items.Add(lvItem);
+            }
+        }
+
+        #endregion Private Methods
     }
 }

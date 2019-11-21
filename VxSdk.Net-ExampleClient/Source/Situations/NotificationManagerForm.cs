@@ -13,11 +13,7 @@ namespace ExampleClient.Source
     /// notifications from the VideoXpert system.</remarks>
     public partial class NotificationManagerForm : Form
     {
-        /// <summary>
-        /// Gets or sets the SelectedSituation property.
-        /// </summary>
-        /// <value>The currently selected situation.</value>
-        private Situation SelectedSituation { get; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NotificationManagerForm" /> class.
@@ -28,6 +24,100 @@ namespace ExampleClient.Source
             SelectedSituation = situation;
 
             PopulateNotifications();
+        }
+
+        #endregion Public Constructors
+
+        #region Private Properties
+
+        /// <summary>
+        /// Gets or sets the SelectedSituation property.
+        /// </summary>
+        /// <value>The currently selected situation.</value>
+        private Situation SelectedSituation { get; }
+
+        #endregion Private Properties
+
+        #region Private Methods
+
+        /// <summary>
+        /// The ButtonDelete_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonDelete_Click(object sender, EventArgs args)
+        {
+            if (lvNotificationManager.SelectedItems.Count == 0)
+                return;
+
+            // Get the associated notification object from the selected item and delete
+            // it from the VideoXpert system.
+            var notification = (Notification)lvNotificationManager.SelectedItems[0].Tag;
+            SelectedSituation.RemoveNotification(notification);
+            lvNotificationManager.SelectedItems[0].Remove();
+        }
+
+        /// <summary>
+        /// The ButtonModifyNotification_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonModifyNotification_Click(object sender, EventArgs args)
+        {
+            // Show the ModifyNotificationForm dialog.
+            DialogResult result;
+            var notification = (Notification)lvNotificationManager.SelectedItems[0].Tag;
+            using (var modifyNotificationForm = new ModifyNotificationForm(notification))
+            {
+                result = modifyNotificationForm.ShowDialog();
+            }
+
+            // If the dialog was closed without clicking OK then skip the refresh.
+            if (result != DialogResult.OK)
+                return;
+
+            // Refresh the items in the list view to include the modified notification.
+            lvNotificationManager.Items.Clear();
+            PopulateNotifications();
+            lvNotificationManager.Refresh();
+        }
+
+        /// <summary>
+        /// The ButtonNewNotification_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonNewNotification_Click(object sender, EventArgs args)
+        {
+            // Show the AddNotificationForm dialog.
+            DialogResult result;
+            using (var addNotificationForm = new AddNotificationForm(SelectedSituation))
+            {
+                addNotificationForm.PopulateRoles();
+                result = addNotificationForm.ShowDialog();
+            }
+
+            // If the dialog was closed without clicking OK then skip the refresh.
+            if (result != DialogResult.OK)
+                return;
+
+            // Refresh the items in the list view to include the newly added notification.
+            lvNotificationManager.Items.Clear();
+            PopulateNotifications();
+            lvNotificationManager.Refresh();
+        }
+
+        /// <summary>
+        /// The ButtonRefresh_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonRefresh_Click(object sender, EventArgs args)
+        {
+            // Refresh the items in the list view to include the newly added notification.
+            lvNotificationManager.Items.Clear();
+            PopulateNotifications();
+            lvNotificationManager.Refresh();
         }
 
         /// <summary>
@@ -56,84 +146,6 @@ namespace ExampleClient.Source
             }
         }
 
-        /// <summary>
-        /// The ButtonDelete_Click method.
-        /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>  
-        private void ButtonDelete_Click(object sender, EventArgs args)
-        {
-            if (lvNotificationManager.SelectedItems.Count == 0)
-                return;
-
-            // Get the associated notification object from the selected item and delete
-            // it from the VideoXpert system.
-            var notification = (Notification)lvNotificationManager.SelectedItems[0].Tag;
-            SelectedSituation.RemoveNotification(notification);
-            lvNotificationManager.SelectedItems[0].Remove();
-        }
-
-        /// <summary>
-        /// The ButtonNewNotification_Click method.
-        /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>  
-        private void ButtonNewNotification_Click(object sender, EventArgs args)
-        {
-            // Show the AddNotificationForm dialog.
-            DialogResult result;
-            using (var addNotificationForm = new AddNotificationForm(SelectedSituation))
-            {
-                addNotificationForm.PopulateRoles();
-                result = addNotificationForm.ShowDialog();
-            }
-
-            // If the dialog was closed without clicking OK then skip the refresh.
-            if (result != DialogResult.OK)
-                return;
-
-            // Refresh the items in the list view to include the newly added notification.
-            lvNotificationManager.Items.Clear();
-            PopulateNotifications();
-            lvNotificationManager.Refresh();
-        }
-
-        /// <summary>
-        /// The ButtonRefresh_Click method.
-        /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param> 
-        private void ButtonRefresh_Click(object sender, EventArgs args)
-        {
-            // Refresh the items in the list view to include the newly added notification.
-            lvNotificationManager.Items.Clear();
-            PopulateNotifications();
-            lvNotificationManager.Refresh();
-        }
-
-        /// <summary>
-        /// The ButtonModifyNotification_Click method.
-        /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param> 
-        private void ButtonModifyNotification_Click(object sender, EventArgs args)
-        {
-            // Show the ModifyNotificationForm dialog.
-            DialogResult result;
-            var notification = (Notification)lvNotificationManager.SelectedItems[0].Tag;
-            using (var modifyNotificationForm = new ModifyNotificationForm(notification))
-            {
-                result = modifyNotificationForm.ShowDialog();
-            }
-
-            // If the dialog was closed without clicking OK then skip the refresh.
-            if (result != DialogResult.OK)
-                return;
-
-            // Refresh the items in the list view to include the modified notification.
-            lvNotificationManager.Items.Clear();
-            PopulateNotifications();
-            lvNotificationManager.Refresh();
-        }
+        #endregion Private Methods
     }
 }

@@ -12,17 +12,7 @@ namespace ExampleClient.Source
     /// newly created export.</remarks>
     public partial class DownloadProgressForm : Form
     {
-        /// <summary>
-        /// The _fileSize field.
-        /// </summary>
-        /// <remarks>Used to calculate the download completion percentage of the export.</remarks>
-        private double _fileSizeKb;
-
-        /// <summary>
-        /// The _webClient field.
-        /// </summary>
-        /// <remarks>Used to download the export file once it has completed.</remarks>
-        private WebClient _webClient;
+        #region Private Fields
 
         /// <summary>
         /// The _dataUri field.
@@ -35,6 +25,22 @@ namespace ExampleClient.Source
         /// </summary>
         /// <remarks>The name to use for the downloaded export file.</remarks>
         private readonly string _fileName;
+
+        /// <summary>
+        /// The _fileSize field.
+        /// </summary>
+        /// <remarks>Used to calculate the download completion percentage of the export.</remarks>
+        private double _fileSizeKb;
+
+        /// <summary>
+        /// The _webClient field.
+        /// </summary>
+        /// <remarks>Used to download the export file once it has completed.</remarks>
+        private WebClient _webClient;
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DownloadProgressForm" /> class.
@@ -50,11 +56,66 @@ namespace ExampleClient.Source
             InitializeComponent();
         }
 
+        #endregion Public Constructors
+
+        #region Public Methods
+
+        /// <summary>
+        /// The StartDownload method.
+        /// </summary>
+        public void StartDownload()
+        {
+            lblDownloading.Text = $@"Downloading file to {_fileName}";
+
+            // Create a new WebClient instance.
+            _webClient = new WebClient();
+
+            // Sets the WebClient to use the correct SecurityProtocol for the VideoXpert server.
+            if (ServicePointManager.SecurityProtocol != (SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls | SecurityProtocolType.Ssl3))
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls | SecurityProtocolType.Ssl3;
+
+            // Forces the WebClient to trust the security certificate handed back from the VideoXpert server.
+            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+
+            // Supply the username and password that was used to create the VideoXpert system.
+            _webClient.Headers.Add("X-Serenity-User", EncodeToBase64(MainForm.CurrentUserName));
+            _webClient.Headers.Add("X-Serenity-Password", EncodeToBase64(MainForm.CurrentPassword));
+
+            // Subscribe to the download events.
+            _webClient.DownloadProgressChanged += WebClientDownloadProgressChanged;
+            _webClient.DownloadFileCompleted += WebClientDownloadFileCompleted;
+            _webClient.DownloadFileAsync(_dataUri, _fileName);
+        }
+
+        /// <summary>
+        /// The WebClientDownloadFileCompleted method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        /// <remarks>Checks to see if the download completed event was due to an error or cancellation.</remarks>
+        public void WebClientDownloadFileCompleted(object sender, AsyncCompletedEventArgs args)
+        {
+            if (args?.Error == null)
+                return;
+
+            // Notify the user that the download has either been cancelled or had an error.
+            lblDownloading.Text = args.Cancelled ?
+                "Download cancelled." : $"Error: {args.Error.Message}";
+
+            btnCancel.Text = @"Close";
+            if (_webClient == null)
+                return;
+
+            _webClient.DownloadProgressChanged -= WebClientDownloadProgressChanged;
+            _webClient.DownloadFileCompleted -= WebClientDownloadFileCompleted;
+            _webClient.Dispose();
+        }
+
         /// <summary>
         /// The WebClientDownloadProgressChanged method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>        
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         public void WebClientDownloadProgressChanged(object sender, DownloadProgressChangedEventArgs args)
         {
             if (args.BytesReceived > 0)
@@ -91,63 +152,15 @@ namespace ExampleClient.Source
             btnCancel.Text = @"Close";
         }
 
-        /// <summary>
-        /// The WebClientDownloadFileCompleted method.
-        /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>
-        /// <remarks>Checks to see if the download completed event was due to an error or cancellation.</remarks>
-        public void WebClientDownloadFileCompleted(object sender, AsyncCompletedEventArgs args)
-        {
-            if (args?.Error == null)
-                return;
+        #endregion Public Methods
 
-
-            // Notify the user that the download has either been cancelled or had an error.
-            lblDownloading.Text = args.Cancelled ? 
-                "Download cancelled." : $"Error: {args.Error.Message}";
-
-            btnCancel.Text = @"Close";
-            if (_webClient == null)
-                return;
-
-            _webClient.DownloadProgressChanged -= WebClientDownloadProgressChanged;
-            _webClient.DownloadFileCompleted -= WebClientDownloadFileCompleted;
-            _webClient.Dispose();
-        }
-
-        /// <summary>
-        /// The StartDownload method.
-        /// </summary>
-        public void StartDownload()
-        {
-            lblDownloading.Text = $@"Downloading file to {_fileName}";
-
-            // Create a new WebClient instance.
-            _webClient = new WebClient();
-
-            // Sets the WebClient to use the correct SecurityProtocol for the VideoXpert server.
-            if (ServicePointManager.SecurityProtocol != (SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls | SecurityProtocolType.Ssl3))
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls | SecurityProtocolType.Ssl3;
-
-            // Forces the WebClient to trust the security certificate handed back from the VideoXpert server.
-            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
-
-            // Supply the username and password that was used to create the VideoXpert system.
-            _webClient.Headers.Add("X-Serenity-User", EncodeToBase64(MainForm.CurrentUserName));
-            _webClient.Headers.Add("X-Serenity-Password", EncodeToBase64(MainForm.CurrentPassword));
-
-            // Subscribe to the download events.
-            _webClient.DownloadProgressChanged += WebClientDownloadProgressChanged;
-            _webClient.DownloadFileCompleted += WebClientDownloadFileCompleted;
-            _webClient.DownloadFileAsync(_dataUri, _fileName);
-        }
+        #region Private Methods
 
         /// <summary>
         /// The EncodeToBase64 method.
         /// </summary>
         /// <param name="toEncode">The string to encode to Base64.</param>
-        /// <returns>The Base64 encoded string.</returns>        
+        /// <returns>The Base64 encoded string.</returns>
         private static string EncodeToBase64(string toEncode)
         {
             var toEncodeAsBytes = System.Text.Encoding.ASCII.GetBytes(toEncode);
@@ -159,7 +172,7 @@ namespace ExampleClient.Source
         /// The ButtonCancel_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>   
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonCancel_Click(object sender, EventArgs args)
         {
             if (_webClient != null)
@@ -170,5 +183,7 @@ namespace ExampleClient.Source
 
             Close();
         }
+
+        #endregion Private Methods
     }
 }

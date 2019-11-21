@@ -11,6 +11,8 @@ namespace ExampleClient.Source
     /// users from the VideoXpert system.</remarks>
     public partial class UserManagerForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UserManagerForm" /> class.
         /// </summary>
@@ -21,52 +23,9 @@ namespace ExampleClient.Source
             PopulateUsers();
         }
 
-        /// <summary>
-        /// The PopulateUsers method.
-        /// </summary>
-        private void PopulateUsers()
-        {
-            lvUsers.Items.Clear();
+        #endregion Public Constructors
 
-            // Get the existing users from the VideoXpert system and add
-            // them to the list view.
-            foreach (var user in MainForm.CurrentSystem.Users)
-            {
-                var passwordExpireDate = user.PasswordExpiration == default(DateTime) ?
-                    "Never" : user.PasswordExpiration.ToString("d");
-
-                var lvItem = new ListViewItem(user.Name);
-                lvItem.SubItems.Add(user.Id);
-                lvItem.SubItems.Add(user.Domain);
-                lvItem.SubItems.Add(user.AccountState ? "Enabled" : "Disabled");
-                lvItem.SubItems.Add(passwordExpireDate);
-                lvItem.SubItems.Add(user.PhoneNumbers.Count.ToString());
-                lvItem.Tag = user;
-                lvUsers.Items.Add(lvItem);
-            }
-        }
-
-        /// <summary>
-        /// The ButtonNewUser_Click method.
-        /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void ButtonNewUser_Click(object sender, EventArgs args)
-        {
-            // Show the AddUserForm dialog.
-            DialogResult result;
-            using (var userForm = new AddUserForm())
-            {
-                result = userForm.ShowDialog();
-            }
-
-            // If the dialog was closed without clicking OK then skip the refresh.
-            if (result != DialogResult.OK)
-                return;
-
-            // Refresh the items in the list view to include the newly added user.
-            PopulateUsers();
-        }
+        #region Private Methods
 
         /// <summary>
         /// The ButtonDelete_Click method.
@@ -113,6 +72,28 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The ButtonNewUser_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonNewUser_Click(object sender, EventArgs args)
+        {
+            // Show the AddUserForm dialog.
+            DialogResult result;
+            using (var userForm = new AddUserForm())
+            {
+                result = userForm.ShowDialog();
+            }
+
+            // If the dialog was closed without clicking OK then skip the refresh.
+            if (result != DialogResult.OK)
+                return;
+
+            // Refresh the items in the list view to include the newly added user.
+            PopulateUsers();
+        }
+
+        /// <summary>
         /// The ButtonRefresh_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -121,5 +102,32 @@ namespace ExampleClient.Source
         {
             PopulateUsers();
         }
+
+        /// <summary>
+        /// The PopulateUsers method.
+        /// </summary>
+        private void PopulateUsers()
+        {
+            lvUsers.Items.Clear();
+
+            // Get the existing users from the VideoXpert system and add
+            // them to the list view.
+            foreach (var user in MainForm.CurrentSystem.Users)
+            {
+                var passwordExpireDate = user.PasswordExpiration == default(DateTime) ?
+                    "Never" : user.PasswordExpiration.ToString("d");
+
+                var lvItem = new ListViewItem(user.Name);
+                lvItem.SubItems.Add(user.Id);
+                lvItem.SubItems.Add(user.Domain);
+                lvItem.SubItems.Add(user.AccountState ? "Enabled" : "Disabled");
+                lvItem.SubItems.Add(passwordExpireDate);
+                lvItem.SubItems.Add(user.PhoneNumbers.Count.ToString());
+                lvItem.Tag = user;
+                lvUsers.Items.Add(lvItem);
+            }
+        }
+
+        #endregion Private Methods
     }
 }

@@ -6,14 +6,10 @@ namespace ExampleClient.Source
     /// <summary>
     /// The NewPropertyForm class.
     /// </summary>
-    /// <remarks>Provides a dialog window that allows the user to add a new property.</remarks> 
+    /// <remarks>Provides a dialog window that allows the user to add a new property.</remarks>
     public partial class NewPropertyForm : Form
     {
-        /// <summary>
-        /// Gets or sets the PropertyListView property.
-        /// </summary>
-        /// <value>The list view to add the new property to.</value>
-        private ListView PropertyListView { get; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NewPropertyForm" /> class.
@@ -24,6 +20,20 @@ namespace ExampleClient.Source
             InitializeComponent();
             PropertyListView = listView;
         }
+
+        #endregion Public Constructors
+
+        #region Private Properties
+
+        /// <summary>
+        /// Gets or sets the PropertyListView property.
+        /// </summary>
+        /// <value>The list view to add the new property to.</value>
+        private ListView PropertyListView { get; }
+
+        #endregion Private Properties
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonAddSave_Click method.
@@ -36,5 +46,7 @@ namespace ExampleClient.Source
             lvItem.SubItems.Add(tbxValue.Text);
             PropertyListView.Items.Add(lvItem);
         }
+
+        #endregion Private Methods
     }
 }

@@ -11,6 +11,33 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user to add or modify a rule.</remarks>
     public partial class AddRuleForm : Form
     {
+        #region Public Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AddRuleForm" /> class.
+        /// </summary>
+        public AddRuleForm()
+        {
+            InitializeComponent();
+
+            DeviceList = MainForm.CurrentSystem.Devices;
+            DataSourceList = MainForm.CurrentSystem.DataSources;
+            DataStorageList = MainForm.CurrentSystem.DataStorages;
+            TagList = MainForm.CurrentSystem.Tags;
+
+            foreach (var timeTable in MainForm.CurrentSystem.TimeTables)
+            {
+                var lvItem = new ListViewItem(string.Empty);
+                lvItem.SubItems.Add(timeTable.Name);
+                lvItem.Tag = timeTable;
+                lvTimeTables.Items.Add(lvItem);
+            }
+        }
+
+        #endregion Public Constructors
+
+        #region Private Properties
+
         /// <summary>
         /// Gets or sets the DataSourceList property.
         /// </summary>
@@ -35,26 +62,9 @@ namespace ExampleClient.Source
         /// <value>The list of tags on the system.</value>
         private List<Tag> TagList { get; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AddRuleForm" /> class.
-        /// </summary>
-        public AddRuleForm()
-        {
-            InitializeComponent();
+        #endregion Private Properties
 
-            DeviceList = MainForm.CurrentSystem.Devices;
-            DataSourceList = MainForm.CurrentSystem.DataSources;
-            DataStorageList = MainForm.CurrentSystem.DataStorages;
-            TagList = MainForm.CurrentSystem.Tags;
-
-            foreach (var timeTable in MainForm.CurrentSystem.TimeTables)
-            {
-                var lvItem = new ListViewItem(string.Empty);
-                lvItem.SubItems.Add(timeTable.Name);
-                lvItem.Tag = timeTable;
-                lvTimeTables.Items.Add(lvItem);
-            }
-        }
+        #region Private Methods
 
         /// <summary>
         /// The ButtonAdd_Click method.
@@ -118,5 +128,7 @@ namespace ExampleClient.Source
 
             MainForm.CurrentSystem.AddRule(newRule);
         }
+
+        #endregion Private Methods
     }
 }

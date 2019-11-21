@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExampleClient.Properties;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -6,7 +7,6 @@ using System.Linq;
 using System.Net;
 using System.Windows.Forms;
 using VxSdkNet;
-using ExampleClient.Properties;
 
 namespace ExampleClient.Source
 {
@@ -16,59 +16,7 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user to modify a drawing.</remarks>
     public partial class ModifyDrawingForm : Form
     {
-        /// <summary>
-        /// Gets or sets the CurrentDrawing property.
-        /// </summary>
-        /// <value>The current drawing.</value>
-        private Drawing CurrentDrawing { get; }
-
-        /// <summary>
-        /// Gets or sets the ImageUri property.
-        /// </summary>
-        /// <value>The URI to the drawing image.</value>
-        private string ImageUri { get; set; }
-
-        /// <summary>
-        /// Gets or sets the NewDrawingName property.
-        /// </summary>
-        /// <value>The name to use for renaming the drawing.</value>
-        private string NewDrawingName { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the mouse is clicked.
-        /// </summary>
-        /// <value>The current mouse down status.</value>
-        private bool IsMouseDown { get; set; }
-
-        /// <summary>
-        /// Gets or sets the LastX property.
-        /// </summary>
-        /// <value>The last X coordinate.</value>
-        private int LastX { get; set; }
-
-        /// <summary>
-        /// Gets or sets the LastY property.
-        /// </summary>
-        /// <value>The last Y coordinate.</value>
-        private int LastY { get; set; }
-
-        /// <summary>
-        /// Gets or sets the MarkersToDelete property.
-        /// </summary>
-        /// <value>The list of markers to delete on save.</value>
-        private List<Marker> MarkersToDelete { get; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the image should be deleted.
-        /// </summary>
-        /// <value>Indicates whether the image should be deleted or not.</value>
-        private bool ShouldDeleteImage { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the image should be set.
-        /// </summary>
-        /// <value>Indicates whether the image should be set or not.</value>
-        private bool ShouldSetImage { get; set; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModifyDrawingForm" /> class.
@@ -97,34 +45,96 @@ namespace ExampleClient.Source
             Refresh();
         }
 
+        #endregion Public Constructors
+
+        #region Private Properties
+
         /// <summary>
-        /// The GetImage method.
+        /// Gets or sets the CurrentDrawing property.
         /// </summary>
-        public async void GetImage()
+        /// <value>The current drawing.</value>
+        private Drawing CurrentDrawing { get; }
+
+        /// <summary>
+        /// Gets or sets the ImageUri property.
+        /// </summary>
+        /// <value>The URI to the drawing image.</value>
+        private string ImageUri { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the mouse is clicked.
+        /// </summary>
+        /// <value>The current mouse down status.</value>
+        private bool IsMouseDown { get; set; }
+
+        /// <summary>
+        /// Gets or sets the LastX property.
+        /// </summary>
+        /// <value>The last X coordinate.</value>
+        private int LastX { get; set; }
+
+        /// <summary>
+        /// Gets or sets the LastY property.
+        /// </summary>
+        /// <value>The last Y coordinate.</value>
+        private int LastY { get; set; }
+
+        /// <summary>
+        /// Gets or sets the MarkersToDelete property.
+        /// </summary>
+        /// <value>The list of markers to delete on save.</value>
+        private List<Marker> MarkersToDelete { get; }
+
+        /// <summary>
+        /// Gets or sets the NewDrawingName property.
+        /// </summary>
+        /// <value>The name to use for renaming the drawing.</value>
+        private string NewDrawingName { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the image should be deleted.
+        /// </summary>
+        /// <value>Indicates whether the image should be deleted or not.</value>
+        private bool ShouldDeleteImage { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the image should be set.
+        /// </summary>
+        /// <value>Indicates whether the image should be set or not.</value>
+        private bool ShouldSetImage { get; set; }
+
+        #endregion Private Properties
+
+        #region Public Methods
+
+        /// <summary>
+        /// The AddPictureBox method.
+        /// </summary>
+        /// <param name="pictureBox">The picture box to add.</param>
+        /// <param name="markerName">The name of the marker.</param>
+        public void AddPictureBox(PictureBox pictureBox, string markerName)
         {
-            var imageUri = CurrentDrawing.GetImageUri();
-            if (!string.IsNullOrEmpty(imageUri))
-            {
-                var response = await Utilities.SendRequest(new Uri(imageUri));
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
-                    MessageBox.Show($@"Unable to get image, server returned {response.StatusCode}.");
-                    return;
-                }
+            pictureBox.BackColor = Color.Transparent;
+            pictureBox.Size = new Size(32, 32);
+            pictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
+            pictureBox.MouseClick += PictureBoxCamera_Click;
+            pictureBox.MouseDown += PictureBoxCamera_MouseDown;
+            pictureBox.MouseMove += PictureBoxCamera_MouseMove;
+            pictureBox.MouseUp += PictureBoxCamera_MouseUp;
 
-                var bytes = await response.Content.ReadAsByteArrayAsync();
-                using (var ms = new MemoryStream(bytes))
-                {
-                    pbxMain.Image = Image.FromStream(ms);
-                }
-            }
+            var menuStrip = new ContextMenuStrip();
+            var itemRemove = menuStrip.Items.Add("Remove camera");
+            itemRemove.Tag = pictureBox;
+            itemRemove.Click += ItemRemoveCamera_Click;
+            var itemRotate = menuStrip.Items.Add("Rotate camera");
+            itemRotate.Tag = pictureBox;
+            itemRotate.Click += ItemRotateCamera_Click;
+            pictureBox.ContextMenuStrip = menuStrip;
 
-            var markers = CurrentDrawing.Markers;
-            if (markers.Count == 0)
-                return;
+            var toolTip = new ToolTip();
+            toolTip.SetToolTip(pictureBox, markerName);
 
-            foreach (var marker in markers)
-                DisplayMarker(marker);
+            pbxMain.Controls.Add(pictureBox);
         }
 
         /// <summary>
@@ -180,34 +190,38 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
-        /// The AddPictureBox method.
+        /// The GetImage method.
         /// </summary>
-        /// <param name="pictureBox">The picture box to add.</param>
-        /// <param name="markerName">The name of the marker.</param>
-        public void AddPictureBox(PictureBox pictureBox, string markerName)
+        public async void GetImage()
         {
-            pictureBox.BackColor = Color.Transparent;
-            pictureBox.Size = new Size(32, 32);
-            pictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
-            pictureBox.MouseClick += PictureBoxCamera_Click;
-            pictureBox.MouseDown += PictureBoxCamera_MouseDown;
-            pictureBox.MouseMove += PictureBoxCamera_MouseMove;
-            pictureBox.MouseUp += PictureBoxCamera_MouseUp;
+            var imageUri = CurrentDrawing.GetImageUri();
+            if (!string.IsNullOrEmpty(imageUri))
+            {
+                var response = await Utilities.SendRequest(new Uri(imageUri));
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    MessageBox.Show($@"Unable to get image, server returned {response.StatusCode}.");
+                    return;
+                }
 
-            var menuStrip = new ContextMenuStrip();
-            var itemRemove = menuStrip.Items.Add("Remove camera");
-            itemRemove.Tag = pictureBox;
-            itemRemove.Click += ItemRemoveCamera_Click;
-            var itemRotate = menuStrip.Items.Add("Rotate camera");
-            itemRotate.Tag = pictureBox;
-            itemRotate.Click += ItemRotateCamera_Click;
-            pictureBox.ContextMenuStrip = menuStrip;
+                var bytes = await response.Content.ReadAsByteArrayAsync();
+                using (var ms = new MemoryStream(bytes))
+                {
+                    pbxMain.Image = Image.FromStream(ms);
+                }
+            }
 
-            var toolTip = new ToolTip();
-            toolTip.SetToolTip(pictureBox, markerName);
+            var markers = CurrentDrawing.Markers;
+            if (markers.Count == 0)
+                return;
 
-            pbxMain.Controls.Add(pictureBox);
+            foreach (var marker in markers)
+                DisplayMarker(marker);
         }
+
+        #endregion Public Methods
+
+        #region Private Methods
 
         /// <summary>
         /// The PictureBoxCamera_Click method.
@@ -221,40 +235,6 @@ namespace ExampleClient.Source
 
             var pbx = sender as PictureBox;
             pbx?.ContextMenuStrip.Show();
-        }
-
-        /// <summary>
-        /// The IsDataSourceUsed method.
-        /// </summary>
-        /// <param name="dataSource">The data source to check.</param>
-        /// <returns><c>true</c> if a marker exists with the associated data
-        /// source, otherwise <c>false</c>.</returns>
-        private bool IsDataSourceUsed(DataSource dataSource)
-        {
-            foreach (var pictureBoxCamera in pbxMain.Controls.OfType<PictureBox>())
-            {
-                if (pictureBoxCamera.Tag.GetType() == typeof(NewMarker))
-                {
-                    var newMarker = pictureBoxCamera.Tag as NewMarker;
-                    if (newMarker == null)
-                        return false;
-
-                    if (dataSource.Id == newMarker.AssociatedDataSourceId)
-                        return true;
-                }
-                else
-                {
-                    var kvPair = (KeyValuePair<Marker, float>)pictureBoxCamera.Tag;
-                    var markerDataSource = kvPair.Key.AssociatedDataSource;
-                    if (markerDataSource == null)
-                        continue;
-
-                    if (dataSource.Id == markerDataSource.Id)
-                        return true;
-                }
-            }
-
-            return false;
         }
 
         /// <summary>
@@ -386,6 +366,40 @@ namespace ExampleClient.Source
             ShouldDeleteImage = false;
             pbxMain.Image = Image.FromFile(ofdSelectImage.FileName);
             Refresh();
+        }
+
+        /// <summary>
+        /// The IsDataSourceUsed method.
+        /// </summary>
+        /// <param name="dataSource">The data source to check.</param>
+        /// <returns><c>true</c> if a marker exists with the associated data
+        /// source, otherwise <c>false</c>.</returns>
+        private bool IsDataSourceUsed(DataSource dataSource)
+        {
+            foreach (var pictureBoxCamera in pbxMain.Controls.OfType<PictureBox>())
+            {
+                if (pictureBoxCamera.Tag.GetType() == typeof(NewMarker))
+                {
+                    var newMarker = pictureBoxCamera.Tag as NewMarker;
+                    if (newMarker == null)
+                        return false;
+
+                    if (dataSource.Id == newMarker.AssociatedDataSourceId)
+                        return true;
+                }
+                else
+                {
+                    var kvPair = (KeyValuePair<Marker, float>)pictureBoxCamera.Tag;
+                    var markerDataSource = kvPair.Key.AssociatedDataSource;
+                    if (markerDataSource == null)
+                        continue;
+
+                    if (dataSource.Id == markerDataSource.Id)
+                        return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -535,5 +549,7 @@ namespace ExampleClient.Source
                 args.Effect = DragDropEffects.Move;
             }
         }
+
+        #endregion Private Methods
     }
 }

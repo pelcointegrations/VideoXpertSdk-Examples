@@ -11,6 +11,8 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that contains the detailed info for the selected situation.</remarks>
     public partial class SituationDetailsForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SituationDetailsForm" /> class.
         /// </summary>
@@ -19,13 +21,17 @@ namespace ExampleClient.Source
             InitializeComponent();
         }
 
+        #endregion Public Constructors
+
+        #region Public Methods
+
         /// <summary>
         /// The GetSituationInfo method.
         /// </summary>
         /// <param name="situation">The <paramref name="situation"/> to get information for.</param>
         public void GetSituationInfo(Situation situation)
         {
-            if (situation == null) 
+            if (situation == null)
                 return;
 
             // Use reflection to get each available property from the situation.
@@ -33,7 +39,7 @@ namespace ExampleClient.Source
             {
                 // Get the value from the property.
                 var val = prop.GetValue(situation, null);
-                
+
                 // Get each item if the value is a List type and generate a string.
                 string valList;
                 if (val.GetType() == typeof(List<string>))
@@ -51,5 +57,7 @@ namespace ExampleClient.Source
                 lvSituationDetails.Items.Add(lvItem);
             }
         }
+
+        #endregion Public Methods
     }
 }

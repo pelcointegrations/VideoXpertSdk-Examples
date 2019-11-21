@@ -13,17 +13,7 @@ namespace ExampleClient.Source
     /// of the selected privilege.</remarks>
     public partial class ModifyPrivilegeSourcesForm : Form
     {
-        /// <summary>
-        /// Gets or sets the SelectedPrivilege property.
-        /// </summary>
-        /// <value>The currently selected privilege.</value>
-        private Privilege SelectedPrivilege { get; }
-
-        /// <summary>
-        /// Gets or sets the _currentSourceList property.
-        /// </summary>
-        /// <value>The list of sources for the currently selected schedule.</value>
-        private List<string> CurrentSourceList { get; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModifyPrivilegeSourcesForm" /> class.
@@ -52,116 +42,31 @@ namespace ExampleClient.Source
                 PopulateUsers();
         }
 
-        /// <summary>
-        /// The PopulateDataSources method.
-        /// </summary>
-        private void PopulateDataSources()
-        {
-            foreach (var dataSource in SelectedPrivilege.LinkedDataSources)
-                CurrentSourceList.Add(dataSource.Id);
+        #endregion Public Constructors
 
-            // Add each data source to lvPrivilegeSources.
-            foreach (var dataSource in MainForm.CurrentDataSources)
-            {
-                var lvItem = new ListViewItem(string.Empty);
-                lvItem.SubItems.Add(dataSource.Name);
-                lvItem.Tag = dataSource;
-                if (CurrentSourceList.Any(s => dataSource.Id.Contains(s)))
-                    lvItem.Checked = true;
-
-                lvPrivilegeSources.Items.Add(lvItem);
-            }
-        }
+        #region Private Properties
 
         /// <summary>
-        /// The PopulateDevices method.
+        /// Gets or sets the _currentSourceList property.
         /// </summary>
-        private void PopulateDevices()
-        {
-            foreach (var device in SelectedPrivilege.LinkedDevices)
-                CurrentSourceList.Add(device.Id);
-
-            // Add each device to lvPrivilegeSources.
-            foreach (var device in MainForm.CurrentDevices)
-            {
-                var lvItem = new ListViewItem(string.Empty);
-                lvItem.SubItems.Add(device.Name);
-                lvItem.Tag = device;
-                if (CurrentSourceList.Any(s => device.Id.Contains(s)))
-                    lvItem.Checked = true;
-
-                lvPrivilegeSources.Items.Add(lvItem);
-            }
-        }
+        /// <value>The list of sources for the currently selected schedule.</value>
+        private List<string> CurrentSourceList { get; }
 
         /// <summary>
-        /// The PopulateDrawings method.
+        /// Gets or sets the SelectedPrivilege property.
         /// </summary>
-        private void PopulateDrawings()
-        {
-            foreach (var drawing in SelectedPrivilege.LinkedDrawings)
-                CurrentSourceList.Add(drawing.Id);
+        /// <value>The currently selected privilege.</value>
+        private Privilege SelectedPrivilege { get; }
 
-            // Add each drawing to lvPrivilegeSources.
-            foreach (var drawing in MainForm.CurrentSystem.Drawings)
-            {
-                var lvItem = new ListViewItem(string.Empty);
-                lvItem.SubItems.Add(drawing.Name);
-                lvItem.Tag = drawing;
-                if (CurrentSourceList.Any(s => drawing.Id.Contains(s)))
-                    lvItem.Checked = true;
+        #endregion Private Properties
 
-                lvPrivilegeSources.Items.Add(lvItem);
-            }
-        }
-
-        /// <summary>
-        /// The PopulateRelayOutputs method.
-        /// </summary>
-        private void PopulateRelayOutputs()
-        {
-            foreach (var relayOutput in SelectedPrivilege.LinkedRelayOutputs)
-                CurrentSourceList.Add(relayOutput.Id);
-
-            // Add each relay output to lvPrivilegeSources.
-            foreach (var relayOutput in MainForm.CurrentSystem.RelayOutputs)
-            {
-                var lvItem = new ListViewItem(string.Empty);
-                lvItem.SubItems.Add(relayOutput.Name);
-                lvItem.Tag = relayOutput;
-                if (CurrentSourceList.Any(s => relayOutput.Id.Contains(s)))
-                    lvItem.Checked = true;
-
-                lvPrivilegeSources.Items.Add(lvItem);
-            }
-        }
-
-        /// <summary>
-        /// The PopulateUsers method.
-        /// </summary>
-        private void PopulateUsers()
-        {
-            foreach (var user in SelectedPrivilege.LinkedUsers)
-                CurrentSourceList.Add(user.Id);
-
-            // Add each user to lvPrivilegeSources.
-            foreach (var user in MainForm.CurrentSystem.Users)
-            {
-                var lvItem = new ListViewItem(string.Empty);
-                lvItem.SubItems.Add(user.Name);
-                lvItem.Tag = user;
-                if (CurrentSourceList.Any(s => user.Id.Contains(s)))
-                    lvItem.Checked = true;
-
-                lvPrivilegeSources.Items.Add(lvItem);
-            }
-        }
+        #region Private Methods
 
         /// <summary>
         /// The ButtonSave_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>  
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonSave_Click(object sender, EventArgs args)
         {
             if (SelectedPrivilege.ResourceType == Privilege.ResourceTypes.DataSource)
@@ -344,5 +249,112 @@ namespace ExampleClient.Source
 
             SelectedPrivilege.IsRestricted = SelectedPrivilege.LinkedUsers.Count > 0;
         }
+
+        /// <summary>
+        /// The PopulateDataSources method.
+        /// </summary>
+        private void PopulateDataSources()
+        {
+            foreach (var dataSource in SelectedPrivilege.LinkedDataSources)
+                CurrentSourceList.Add(dataSource.Id);
+
+            // Add each data source to lvPrivilegeSources.
+            foreach (var dataSource in MainForm.CurrentDataSources)
+            {
+                var lvItem = new ListViewItem(string.Empty);
+                lvItem.SubItems.Add(dataSource.Name);
+                lvItem.Tag = dataSource;
+                if (CurrentSourceList.Any(s => dataSource.Id.Contains(s)))
+                    lvItem.Checked = true;
+
+                lvPrivilegeSources.Items.Add(lvItem);
+            }
+        }
+
+        /// <summary>
+        /// The PopulateDevices method.
+        /// </summary>
+        private void PopulateDevices()
+        {
+            foreach (var device in SelectedPrivilege.LinkedDevices)
+                CurrentSourceList.Add(device.Id);
+
+            // Add each device to lvPrivilegeSources.
+            foreach (var device in MainForm.CurrentDevices)
+            {
+                var lvItem = new ListViewItem(string.Empty);
+                lvItem.SubItems.Add(device.Name);
+                lvItem.Tag = device;
+                if (CurrentSourceList.Any(s => device.Id.Contains(s)))
+                    lvItem.Checked = true;
+
+                lvPrivilegeSources.Items.Add(lvItem);
+            }
+        }
+
+        /// <summary>
+        /// The PopulateDrawings method.
+        /// </summary>
+        private void PopulateDrawings()
+        {
+            foreach (var drawing in SelectedPrivilege.LinkedDrawings)
+                CurrentSourceList.Add(drawing.Id);
+
+            // Add each drawing to lvPrivilegeSources.
+            foreach (var drawing in MainForm.CurrentSystem.Drawings)
+            {
+                var lvItem = new ListViewItem(string.Empty);
+                lvItem.SubItems.Add(drawing.Name);
+                lvItem.Tag = drawing;
+                if (CurrentSourceList.Any(s => drawing.Id.Contains(s)))
+                    lvItem.Checked = true;
+
+                lvPrivilegeSources.Items.Add(lvItem);
+            }
+        }
+
+        /// <summary>
+        /// The PopulateRelayOutputs method.
+        /// </summary>
+        private void PopulateRelayOutputs()
+        {
+            foreach (var relayOutput in SelectedPrivilege.LinkedRelayOutputs)
+                CurrentSourceList.Add(relayOutput.Id);
+
+            // Add each relay output to lvPrivilegeSources.
+            foreach (var relayOutput in MainForm.CurrentSystem.RelayOutputs)
+            {
+                var lvItem = new ListViewItem(string.Empty);
+                lvItem.SubItems.Add(relayOutput.Name);
+                lvItem.Tag = relayOutput;
+                if (CurrentSourceList.Any(s => relayOutput.Id.Contains(s)))
+                    lvItem.Checked = true;
+
+                lvPrivilegeSources.Items.Add(lvItem);
+            }
+        }
+
+        /// <summary>
+        /// The PopulateUsers method.
+        /// </summary>
+        private void PopulateUsers()
+        {
+            foreach (var user in SelectedPrivilege.LinkedUsers)
+                CurrentSourceList.Add(user.Id);
+
+            // Add each user to lvPrivilegeSources.
+            foreach (var user in MainForm.CurrentSystem.Users)
+            {
+                var lvItem = new ListViewItem(string.Empty);
+                lvItem.SubItems.Add(user.Name);
+                lvItem.Tag = user;
+                if (CurrentSourceList.Any(s => user.Id.Contains(s)))
+                    lvItem.Checked = true;
+
+                lvPrivilegeSources.Items.Add(lvItem);
+            }
+        }
+
+        #endregion Private Methods
     }
 }

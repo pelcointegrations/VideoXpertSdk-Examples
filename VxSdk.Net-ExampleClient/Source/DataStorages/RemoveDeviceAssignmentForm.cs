@@ -11,11 +11,7 @@ namespace ExampleClient.Source
     /// a data storage.</remarks>
     public partial class RemoveDeviceAssignmentForm : Form
     {
-        /// <summary>
-        /// Gets or sets the SelectedDataStorage property.
-        /// </summary>
-        /// <value>The selected data storage.</value>
-        public DataStorage SelectedDataStorage { get; set; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RemoveDeviceAssignmentForm" /> class.
@@ -36,6 +32,20 @@ namespace ExampleClient.Source
             }
         }
 
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the SelectedDataStorage property.
+        /// </summary>
+        /// <value>The selected data storage.</value>
+        public DataStorage SelectedDataStorage { get; set; }
+
+        #endregion Public Properties
+
+        #region Private Methods
+
         /// <summary>
         /// The ButtonRemove_Click method.
         /// </summary>
@@ -44,7 +54,7 @@ namespace ExampleClient.Source
         private void ButtonRemove_Click(object sender, EventArgs args)
         {
             // Return unless a data source has been selected.
-            if (lvDataSources.SelectedItems.Count < 1) 
+            if (lvDataSources.SelectedItems.Count < 1)
                 return;
 
             // Get the selected data source.
@@ -55,5 +65,7 @@ namespace ExampleClient.Source
             if (result != Results.Value.OK)
                 MainForm.Instance.WriteToLog($"Warning: UnassignDevice returned {result}");
         }
+
+        #endregion Private Methods
     }
 }

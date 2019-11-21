@@ -10,6 +10,8 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user to view rules on the VideoXpert system.</remarks>
     public partial class RuleManagerForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RuleManagerForm" /> class.
         /// </summary>
@@ -20,11 +22,15 @@ namespace ExampleClient.Source
             PopulateRules();
         }
 
+        #endregion Public Constructors
+
+        #region Private Methods
+
         /// <summary>
         /// The ButtonAdd_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param> 
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonAdd_Click(object sender, EventArgs args)
         {
             // Show the AddRuleForm dialog.
@@ -46,7 +52,7 @@ namespace ExampleClient.Source
         /// The ButtonDelete_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param> 
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonDelete_Click(object sender, EventArgs args)
         {
             if (lvRuleManager.SelectedItems.Count == 0)
@@ -64,7 +70,7 @@ namespace ExampleClient.Source
         /// The ButtonHalt_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param> 
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonHalt_Click(object sender, EventArgs args)
         {
             if (lvRuleManager.SelectedItems.Count == 0)
@@ -78,7 +84,7 @@ namespace ExampleClient.Source
         /// The ButtonModify_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param> 
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonModify_Click(object sender, EventArgs args)
         {
             if (lvRuleManager.SelectedItems.Count == 0)
@@ -97,15 +103,15 @@ namespace ExampleClient.Source
             if (result != DialogResult.OK)
                 return;
 
-           // Refresh the items in the list view.
-           PopulateRules();
+            // Refresh the items in the list view.
+            PopulateRules();
         }
 
         /// <summary>
         /// The ButtonRefresh_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param> 
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonRefresh_Click(object sender, EventArgs args)
         {
             // Refresh the items in the list view.
@@ -132,5 +138,7 @@ namespace ExampleClient.Source
                 lvRuleManager.Items.Add(lvItem);
             }
         }
+
+        #endregion Private Methods
     }
 }

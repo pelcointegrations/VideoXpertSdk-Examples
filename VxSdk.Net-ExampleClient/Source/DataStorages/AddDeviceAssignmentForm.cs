@@ -11,6 +11,8 @@ namespace ExampleClient.Source
     /// a data storage.</remarks>
     public partial class AddDeviceAssignmentForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AddDeviceAssignmentForm" /> class.
         /// </summary>
@@ -23,11 +25,19 @@ namespace ExampleClient.Source
             PopulateStorageInfo();
         }
 
+        #endregion Public Constructors
+
+        #region Public Properties
+
         /// <summary>
         /// Gets or sets the SelectedDataStorage property.
         /// </summary>
         /// <value>The selected data storage.</value>
         public DataStorage SelectedDataStorage { get; set; }
+
+        #endregion Public Properties
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonAdd_Click method.
@@ -110,5 +120,7 @@ namespace ExampleClient.Source
             else
                 cbxDevices.SelectedIndex = 0;
         }
+
+        #endregion Private Methods
     }
 }

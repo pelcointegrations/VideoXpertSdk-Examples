@@ -10,11 +10,7 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user to modify a relay output.</remarks>
     public partial class ModifyRelayOutputForm : Form
     {
-        /// <summary>
-        /// Gets or sets the SelectedRelayOutput property.
-        /// </summary>
-        /// <value>The currently selected relay output.</value>
-        private RelayOutput SelectedRelayOutput { get; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModifyRelayOutputForm" /> class.
@@ -28,6 +24,20 @@ namespace ExampleClient.Source
             tbxDescription.Text = relayOutput.Description;
             ckbxEnabled.Checked = relayOutput.IsEnabled;
         }
+
+        #endregion Public Constructors
+
+        #region Private Properties
+
+        /// <summary>
+        /// Gets or sets the SelectedRelayOutput property.
+        /// </summary>
+        /// <value>The currently selected relay output.</value>
+        private RelayOutput SelectedRelayOutput { get; }
+
+        #endregion Private Properties
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonSave_Click method.
@@ -45,5 +55,7 @@ namespace ExampleClient.Source
             if (SelectedRelayOutput.IsEnabled != ckbxEnabled.Checked)
                 SelectedRelayOutput.IsEnabled = ckbxEnabled.Checked;
         }
+
+        #endregion Private Methods
     }
 }

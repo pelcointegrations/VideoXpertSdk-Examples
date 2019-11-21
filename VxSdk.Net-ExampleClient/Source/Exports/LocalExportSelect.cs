@@ -1,22 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using VxSdkNet;
-using System.Net;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
-using System.Diagnostics;
+using System.Linq;
+using System.Net;
+using System.Windows.Forms;
+using VxSdkNet;
 
 namespace ExampleClient.Source.Exports
 {
     public partial class LocalExportSelect : Form
     {
+        #region Private Fields
+
+        private WebClient _webClient;
+
+        private long _webClientBytesReceived = 0;
+
+        private bool _webClientDownloadComplete = false;
+
+        #endregion Private Fields
+
+        #region Public Constructors
+
         public LocalExportSelect()
         {
             InitializeComponent();
@@ -34,63 +41,41 @@ namespace ExampleClient.Source.Exports
                     listView_dataSources.Items.Add(lvItem);
                 }
             }
-
         }
 
-        private void listView_dataSources_SelectedIndexChanged(object sender, EventArgs e)
+        #endregion Public Constructors
+
+        #region Public Methods
+
+        /// <summary>
+        /// The WebClientDownloadFileCompleted method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        /// <remarks>Checks to see if the download completed event was due to an error or cancellation.</remarks>
+        public void WebClientDownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs args)
         {
-            if (listView_dataSources.SelectedItems.Count == 0)
-            {
-                // Gray out buttons
-                dateTimePicker_end.Enabled = false;
-                dateTimePicker_start.Enabled = false;
-                button_export.Enabled = false;
+            if (args?.Error == null)
                 return;
-            }
 
-            dateTimePicker_end.Enabled = true;
-            dateTimePicker_start.Enabled = true;
-            if (textBox_fileName.Text != "")
-            {
-                button_export.Enabled = true;
-            }
-
-            // Get the selected device.
-            var dataSource = (DataSource)listView_dataSources.SelectedItems[0].Tag;
-
-            var clips = dataSource.Clips;
-
-            dateTimePicker_start.MaxDate = clips[clips.Count - 1].EndTime.ToLocalTime().AddSeconds(-5);
-            dateTimePicker_start.MinDate = clips[0].StartTime.ToLocalTime();
-            dateTimePicker_start.Value = clips[0].StartTime.ToLocalTime();
-
-            dateTimePicker_end.MaxDate = clips[clips.Count - 1].EndTime.ToLocalTime();
-            dateTimePicker_end.MinDate = clips[0].StartTime.ToLocalTime().AddSeconds(5);
-            dateTimePicker_end.Value = clips[clips.Count - 1].EndTime.ToLocalTime();
+            _webClientDownloadComplete = true;
         }
 
-        private void button_fileSave_Click(object sender, EventArgs e)
+        public void WebClientDownloadProgressChanged(object sender, DownloadProgressChangedEventArgs args)
         {
-            SaveFileDialog dialog = new SaveFileDialog();
-            dialog.Filter = "MP4 File|*.mp4";
-            dialog.Title = "Save Export File As ...";
-            dialog.ShowDialog();
-            if (dialog.FileName != "")
-            {
-                textBox_fileName.Text = dialog.FileName;
-            }
-
-            if (listView_dataSources.SelectedItems.Count != 0)
-            {
-                button_export.Enabled = true;
-            }
+            _webClientBytesReceived = args.BytesReceived;
         }
-        private void textBox_fileName_TextChanged(object sender, EventArgs e)
+
+        #endregion Public Methods
+
+        #region Private Methods
+
+        /// <returns>The Base64 encoded string.</returns>
+        private static string EncodeToBase64(string toEncode)
         {
-            if (textBox_fileName.Text != "")
-            {
-                button_export.Enabled = true;
-            }
+            var toEncodeAsBytes = System.Text.Encoding.ASCII.GetBytes(toEncode);
+            var returnValue = Convert.ToBase64String(toEncodeAsBytes);
+            return returnValue;
         }
 
         private void button_export_Click(object sender, EventArgs e)
@@ -160,10 +145,11 @@ namespace ExampleClient.Source.Exports
             newExport.Clips = exportedClips;
             MainForm.CurrentSystem.AddExport(newExport);
 
-            // Wait for export to finish, then download, then unzip, 
+            // Wait for export to finish, then download, then unzip,
             //   then merge files if necessary
             Exports.ExportDownloadProgess exportDownloadProgess = new Exports.ExportDownloadProgess();
-            System.Threading.Tasks.Task exportProgress = new System.Threading.Tasks.Task(() => {
+            System.Threading.Tasks.Task exportProgress = new System.Threading.Tasks.Task(() =>
+            {
                 exportDownloadProgess.ShowDialog();
             });
             exportProgress.Start();
@@ -174,7 +160,7 @@ namespace ExampleClient.Source.Exports
             int lastSecondsRemaining = int.MaxValue;
             while (true)
             {
-                // First - get the export from the server.   It can take a little bit 
+                // First - get the export from the server.   It can take a little bit
                 //   for an export to show up.  Wait up to 30 seconds
                 var filter = new System.Collections.Generic.Dictionary<Filters.Value, string>();
                 filter.Add(Filters.Value.Name, newExport.Name);
@@ -195,12 +181,12 @@ namespace ExampleClient.Source.Exports
                     {
                         exportDownloadProgess.Close();
                     });
-                    Close(); 
+                    Close();
                     return;
                 }
                 addedExport = exportList[0];
 
-                // Check for done 
+                // Check for done
                 if (addedExport.Status == Export.States.Successful)
                 {
                     break;
@@ -209,7 +195,7 @@ namespace ExampleClient.Source.Exports
                 string status = "Vx Sever Progress:  ";
                 status += lastPerentComplete = (addedExport.PercentComplete > lastPerentComplete) ? addedExport.PercentComplete : lastPerentComplete;
                 status += "%     Time Left:  ";
-                status += lastSecondsRemaining = (addedExport.SecondsRemaining < lastSecondsRemaining) ? addedExport.SecondsRemaining : lastSecondsRemaining; 
+                status += lastSecondsRemaining = (addedExport.SecondsRemaining < lastSecondsRemaining) ? addedExport.SecondsRemaining : lastSecondsRemaining;
                 status += "s";
                 exportDownloadProgess.BeginInvoke((MethodInvoker)delegate
                 {
@@ -374,7 +360,7 @@ namespace ExampleClient.Source.Exports
                     exportDownloadProgess.Close();
                 });
 
-                MessageBox.Show("Error making MP4 File  " + exception.ToString() );
+                MessageBox.Show("Error making MP4 File  " + exception.ToString());
                 exportDownloadProgess.BeginInvoke((MethodInvoker)delegate
                 {
                     exportDownloadProgess.Close();
@@ -387,7 +373,7 @@ namespace ExampleClient.Source.Exports
 
             // Delete any temp files
             var filesToDelete = Directory.EnumerateFiles(tempDir);
-            foreach(var file in filesToDelete)
+            foreach (var file in filesToDelete)
             {
                 File.Delete(file);
             }
@@ -402,35 +388,63 @@ namespace ExampleClient.Source.Exports
             Close();
         }
 
-        private WebClient _webClient;
-        private long _webClientBytesReceived = 0;
-        private bool _webClientDownloadComplete = false;
-
-        public void WebClientDownloadProgressChanged(object sender, DownloadProgressChangedEventArgs args)
+        private void button_fileSave_Click(object sender, EventArgs e)
         {
-            _webClientBytesReceived = args.BytesReceived;
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "MP4 File|*.mp4";
+            dialog.Title = "Save Export File As ...";
+            dialog.ShowDialog();
+            if (dialog.FileName != "")
+            {
+                textBox_fileName.Text = dialog.FileName;
+            }
+
+            if (listView_dataSources.SelectedItems.Count != 0)
+            {
+                button_export.Enabled = true;
+            }
         }
 
-        /// <summary>
-        /// The WebClientDownloadFileCompleted method.
-        /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>
-        /// <remarks>Checks to see if the download completed event was due to an error or cancellation.</remarks>
-        public void WebClientDownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs args)
+        private void listView_dataSources_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (args?.Error == null)
+            if (listView_dataSources.SelectedItems.Count == 0)
+            {
+                // Gray out buttons
+                dateTimePicker_end.Enabled = false;
+                dateTimePicker_start.Enabled = false;
+                button_export.Enabled = false;
                 return;
+            }
 
-            _webClientDownloadComplete = true;
+            dateTimePicker_end.Enabled = true;
+            dateTimePicker_start.Enabled = true;
+            if (textBox_fileName.Text != "")
+            {
+                button_export.Enabled = true;
+            }
+
+            // Get the selected device.
+            var dataSource = (DataSource)listView_dataSources.SelectedItems[0].Tag;
+
+            var clips = dataSource.Clips;
+
+            dateTimePicker_start.MaxDate = clips[clips.Count - 1].EndTime.ToLocalTime().AddSeconds(-5);
+            dateTimePicker_start.MinDate = clips[0].StartTime.ToLocalTime();
+            dateTimePicker_start.Value = clips[0].StartTime.ToLocalTime();
+
+            dateTimePicker_end.MaxDate = clips[clips.Count - 1].EndTime.ToLocalTime();
+            dateTimePicker_end.MinDate = clips[0].StartTime.ToLocalTime().AddSeconds(5);
+            dateTimePicker_end.Value = clips[clips.Count - 1].EndTime.ToLocalTime();
         }
 
-        /// <returns>The Base64 encoded string.</returns>        
-        private static string EncodeToBase64(string toEncode)
+        private void textBox_fileName_TextChanged(object sender, EventArgs e)
         {
-            var toEncodeAsBytes = System.Text.Encoding.ASCII.GetBytes(toEncode);
-            var returnValue = Convert.ToBase64String(toEncodeAsBytes);
-            return returnValue;
+            if (textBox_fileName.Text != "")
+            {
+                button_export.Enabled = true;
+            }
         }
+
+        #endregion Private Methods
     }
 }

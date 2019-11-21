@@ -17,17 +17,54 @@ namespace ExampleClient.Source
     /// clip entry in the <see cref="NewExportForm"/> AvailableClips list view.</remarks>
     public partial class AddClipForm : Form
     {
-        /// <summary>
-        /// The _initialStartSet field.
-        /// </summary>  
-        /// <remarks>Used to determine if the clip snapshots should be refreshed.</remarks>
-        private bool _initialStartSet;
+        #region Private Fields
 
         /// <summary>
         /// The _initialEndSet field.
-        /// </summary>  
+        /// </summary>
         /// <remarks>Used to determine if the clip snapshots should be refreshed.</remarks>
         private bool _initialEndSet;
+
+        /// <summary>
+        /// The _initialStartSet field.
+        /// </summary>
+        /// <remarks>Used to determine if the clip snapshots should be refreshed.</remarks>
+        private bool _initialStartSet;
+
+        #endregion Private Fields
+
+        #region Public Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AddClipForm" /> class.
+        /// </summary>
+        public AddClipForm()
+        {
+            InitializeComponent();
+
+            if (SelectedClip == null)
+                return;
+
+            // Get the start and end time of the selected clip.
+            var startTime = SelectedClip.StartTime.ToLocalTime();
+            var endTime = SelectedClip.EndTime.ToLocalTime();
+
+            // Set up the DateTimePickers to only allow values within the selected
+            // clips time frame.
+            dtpStartDate.MinDate = startTime;
+            dtpStartDate.MaxDate = endTime;
+            dtpStartDate.Value = startTime;
+
+            dtpEndDate.MinDate = startTime;
+            dtpEndDate.MaxDate = endTime;
+            dtpEndDate.Value = endTime;
+
+            RefreshClipImages();
+        }
+
+        #endregion Public Constructors
+
+        #region Private Properties
 
         /// <summary>
         /// Gets the SelectedClip property.
@@ -45,32 +82,9 @@ namespace ExampleClient.Source
             }
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AddClipForm" /> class.
-        /// </summary>    
-        public AddClipForm()
-        {
-            InitializeComponent();
+        #endregion Private Properties
 
-            if (SelectedClip == null) 
-                return;
-
-            // Get the start and end time of the selected clip.
-            var startTime = SelectedClip.StartTime.ToLocalTime();
-            var endTime = SelectedClip.EndTime.ToLocalTime();
-
-            // Set up the DateTimePickers to only allow values within the selected 
-            // clips time frame.
-            dtpStartDate.MinDate = startTime;
-            dtpStartDate.MaxDate = endTime;
-            dtpStartDate.Value = startTime;
-
-            dtpEndDate.MinDate = startTime;
-            dtpEndDate.MaxDate = endTime;
-            dtpEndDate.Value = endTime;
-
-            RefreshClipImages();
-        }
+        #region Private Methods
 
         /// <summary>
         /// The GetMultiPartImages method.
@@ -104,7 +118,7 @@ namespace ExampleClient.Source
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter</param>
         /// <param name="args">The <paramref name="args"/> parameter</param>
-        /// <remarks>Uses the settings to add a new entry to the 
+        /// <remarks>Uses the settings to add a new entry to the
         /// <see cref="NewExportForm"/> AvailableClips list view.</remarks>
         private void ButtonAdd_Click(object sender, EventArgs args)
         {
@@ -124,15 +138,15 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
-        /// The DatePickerStart_ValueChanged method.
+        /// The DatePickerEnd_ValueChanged method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
         /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void DatePickerStart_ValueChanged(object sender, EventArgs args)
+        private void DatePickerEnd_ValueChanged(object sender, EventArgs args)
         {
-            if (!_initialStartSet)
+            if (!_initialEndSet)
             {
-                _initialStartSet = true;
+                _initialEndSet = true;
                 return;
             }
 
@@ -150,15 +164,15 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
-        /// The DatePickerEnd_ValueChanged method.
+        /// The DatePickerStart_ValueChanged method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
         /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void DatePickerEnd_ValueChanged(object sender, EventArgs args)
+        private void DatePickerStart_ValueChanged(object sender, EventArgs args)
         {
-            if (!_initialEndSet)
+            if (!_initialStartSet)
             {
-                _initialEndSet = true;
+                _initialStartSet = true;
                 return;
             }
 
@@ -195,7 +209,7 @@ namespace ExampleClient.Source
             var labels = new List<Label> { lblSnapshot1, lblSnapshot2, lblSnapshot3, lblSnapshot4, lblSnapshot5 };
 
             var listBytes = await GetMultiPartImages(snapshotFilter);
-            if ((listBytes == null) || (listBytes.Count == 0)) 
+            if ((listBytes == null) || (listBytes.Count == 0))
                 return;
 
             var i = 0;
@@ -225,5 +239,7 @@ namespace ExampleClient.Source
                     i++;
             }
         }
+
+        #endregion Private Methods
     }
 }

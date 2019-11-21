@@ -11,6 +11,8 @@ namespace ExampleClient.Source
     /// roles from the VideoXpert system.</remarks>
     public partial class RoleManagerForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RoleManagerForm" /> class.
         /// </summary>
@@ -21,43 +23,24 @@ namespace ExampleClient.Source
             PopulateRoles();
         }
 
-        /// <summary>
-        /// The PopulateRoles method.
-        /// </summary>
-        private void PopulateRoles()
-        {
-            lvRoles.Items.Clear();
+        #endregion Public Constructors
 
-            // Get the existing roles from the VideoXpert system and add them to the list view.
-            foreach (var role in MainForm.CurrentSystem.Roles)
-            {
-                var lvItem = new ListViewItem(role.Name);
-                lvItem.SubItems.Add(role.Id);
-                lvItem.SubItems.Add(role.IsReadOnly.ToString());
-                lvItem.Tag = role;
-                lvRoles.Items.Add(lvItem);
-            }
-        }
+        #region Private Methods
 
         /// <summary>
-        /// The ButtonNewRole_Click method.
+        /// The ButtonDelete_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
         /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void ButtonNewRole_Click(object sender, EventArgs args)
+        private void ButtonDelete_Click(object sender, EventArgs args)
         {
-            // Show the AddRoleForm dialog.
-            DialogResult result;
-            using (var addRoleForm = new AddRoleForm())
-            {
-                result = addRoleForm.ShowDialog();
-            }
-
-            // If the dialog was closed without clicking OK then skip the refresh.
-            if (result != DialogResult.OK)
+            if (lvRoles.SelectedItems.Count == 0)
                 return;
 
-            // Refresh the items in the list view to include the newly added role.
+            // Get the associated role from the selected item and delete
+            // it from the VideoXpert system.
+            var role = (Role)lvRoles.SelectedItems[0].Tag;
+            MainForm.CurrentSystem.DeleteRole(role);
             PopulateRoles();
         }
 
@@ -88,20 +71,45 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
-        /// The ButtonDelete_Click method.
+        /// The ButtonNewRole_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
         /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void ButtonDelete_Click(object sender, EventArgs args)
+        private void ButtonNewRole_Click(object sender, EventArgs args)
         {
-            if (lvRoles.SelectedItems.Count == 0)
+            // Show the AddRoleForm dialog.
+            DialogResult result;
+            using (var addRoleForm = new AddRoleForm())
+            {
+                result = addRoleForm.ShowDialog();
+            }
+
+            // If the dialog was closed without clicking OK then skip the refresh.
+            if (result != DialogResult.OK)
                 return;
 
-            // Get the associated role from the selected item and delete
-            // it from the VideoXpert system.
-            var role = (Role)lvRoles.SelectedItems[0].Tag;
-            MainForm.CurrentSystem.DeleteRole(role);
+            // Refresh the items in the list view to include the newly added role.
             PopulateRoles();
         }
+
+        /// <summary>
+        /// The PopulateRoles method.
+        /// </summary>
+        private void PopulateRoles()
+        {
+            lvRoles.Items.Clear();
+
+            // Get the existing roles from the VideoXpert system and add them to the list view.
+            foreach (var role in MainForm.CurrentSystem.Roles)
+            {
+                var lvItem = new ListViewItem(role.Name);
+                lvItem.SubItems.Add(role.Id);
+                lvItem.SubItems.Add(role.IsReadOnly.ToString());
+                lvItem.Tag = role;
+                lvRoles.Items.Add(lvItem);
+            }
+        }
+
+        #endregion Private Methods
     }
 }

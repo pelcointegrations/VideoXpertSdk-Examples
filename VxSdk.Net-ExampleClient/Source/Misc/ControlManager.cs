@@ -1,27 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VxSdkNet;
-
 
 namespace ExampleClient.Source
 {
     /// <summary>
     /// The ControlManager class.
     /// </summary>
-    /// <remarks>Manages the UI controls based on the selected video panel.</remarks> 
+    /// <remarks>Manages the UI controls based on the selected video panel.</remarks>
     public class ControlManager
     {
-        public enum VcrMode
+        #region Public Delegates
+
+        public delegate void SeekSkipGapDelegate(MediaControl mediaControl, System.DateTime startTime, float speed, MediaControl.RTSPNetworkTransports transport);
+
+        #endregion Public Delegates
+
+        #region Private Fields
+
+        private static readonly object _instanceLock = new object();
+
+        /// <summary>
+        /// Gets the Instance property.
+        /// </summary>
+        /// <value>The current <see cref="ControlManager"/> instance.</value>
+        private static ControlManager _instance;
+
+        private States _statesLeft = new States(true);
+
+        private States _statesRight = new States(false);
+
+        #endregion Private Fields
+
+        #region Private Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ControlManager" /> class.
+        /// </summary>
+        private ControlManager()
         {
-            Unknown,
-            Stopped,
-            Paused,
-            Live,
-            Playback
+            Task.Run(new Action(Init));
         }
+
+        #endregion Private Constructors
+
+        #region Public Enums
 
         /// <summary>
         /// The Controls enumeration.
@@ -36,19 +63,18 @@ namespace ExampleClient.Source
             Right
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ControlManager" /> class.
-        /// </summary>
-        private ControlManager()
+        public enum VcrMode
         {
-            _skipRecordingGaps = false;
-            Task.Run(new Action(Init));
+            Unknown,
+            Stopped,
+            Paused,
+            Live,
+            Playback
         }
 
-        private void Init()
-        {
-            SelectControl(Controls.Left);
-        }
+        #endregion Public Enums
+
+        #region Public Properties
 
         public static ControlManager Instance
         {
@@ -64,131 +90,118 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
-        /// Gets the Instance property.
-        /// </summary>
-        /// <value>The current <see cref="ControlManager"/> instance.</value>
-        private static ControlManager _instance;
-
-        private static readonly object _instanceLock = new object();
-
-        public bool SkipPlayback
-        {
-            get { return _skipRecordingGaps; }
-            set { _skipRecordingGaps = value; }
-        }
-
-        public List<Clip> CachedClips
-        {
-            set
-            {
-                if (SelectedControl == Controls.Left)
-                {
-                    _cachedClipsLeft = value;
-                    _justJumpedLeftTime = new System.DateTime(1970, 1, 1);
-                }
-                else
-                {
-                    _cachedClipsRight = value;
-                    _justJumpedRightTime = new System.DateTime(1970, 1, 1);
-                }
-            }
-            get
-            {
-                if (SelectedControl == Controls.Left)
-                {
-                    return _cachedClipsLeft;
-                }
-                else
-                {
-                    return _cachedClipsRight;
-                }
-            }
-        }
-
-        public bool EnablePlaybackProgress(System.DateTime startTime, System.DateTime endTime)
-        {
-            // Note:  Progress bars will go from 1 to 1000 - need to scale
-            if (SelectedControl == Controls.Left)
-            {
-                _startTimeLeft = startTime;
-                _endTimeLeft = endTime;
-                MainForm.Instance.progressBar_left.Enabled = true;
-                MainForm.Instance.progressBar_left.Visible = true;
-                MainForm.Instance.progressBar_left.Value = 0;
-            }
-            else
-            {
-                _startTimeRight = startTime;
-                _endTimeRight = endTime;
-                MainForm.Instance.progressBar_right.Enabled = true;
-                MainForm.Instance.progressBar_right.Visible = true;
-                MainForm.Instance.progressBar_left.Value = 0;
-            }
-            return true;
-        }
-
-        public bool RemovePlaybackProgress()
-        {
-            if (SelectedControl == Controls.Left)
-            {
-                MainForm.Instance.progressBar_left.Visible = false;
-            }
-            else
-            {
-                MainForm.Instance.progressBar_right.Visible = false;
-            }
-            return true;
-        }
-
-
-        /// <summary>
         /// Gets or sets the SelectedControl property.
         /// </summary>
         /// <value>A <see cref="Controls"/>.</value>
         public Controls SelectedControl { get; set; }
 
-        /// <summary>
-        /// The SubscribeToTimestamps method.
-        /// </summary>
-        public void SubscribeToTimestamps()
+        public States States
         {
-            if (SelectedControl == Controls.Left)
-                Current.TimestampEvent += OnTimestampEventLeft;
-            else
-                Current.TimestampEvent += OnTimestampEventRight;
+            get => SelectedControl == Controls.Left ? _statesLeft : _statesRight;
+            set
+            {
+                if (SelectedControl == Controls.Left)
+                    _statesLeft = value;
+                else
+                    _statesRight = value;
+            }
+        }
+
+        #endregion Public Properties
+
+        #region Public Methods
+
+        public void SetVcrStates(VcrMode vcrState)
+        {
+            _statesLeft.VcrState = vcrState;
+            _statesRight.VcrState = vcrState;
+        }
+
+        public static void SeekSkipGapMethod(MediaControl mediaControl, System.DateTime startTime, float speed, MediaControl.RTSPNetworkTransports transport)
+        {
+            mediaControl.Stop();
+            MainForm.Instance.WriteToLog("Info:  Skipping Gap.  Next Seek Time:  " + startTime.ToLocalTime().ToString());
+            mediaControl.Seek(startTime.AddSeconds(1), speed, transport);
         }
 
         /// <summary>
-        /// The UnsubscribeToTimestamps method.
+        /// The ChangePtzFormState method.
         /// </summary>
-        public void UnsubscribeToTimestamps()
+        /// <param name="enabled">The state to set the <c>PTZControlForm</c> controls.</param>
+        public void ChangePtzFormState(bool enabled)
         {
-            if (SelectedControl == Controls.Left)
-                Current.TimestampEvent -= OnTimestampEventLeft;
-            else
-                Current.TimestampEvent -= OnTimestampEventRight;
+            var isEnabled = enabled;
+            if (States.MediaController != null && States.MediaController.Mode != MediaControl.Modes.Live)
+                isEnabled = false;
+
+            foreach (Control control in PtzControlForm.Instance.Controls)
+                control.Enabled = isEnabled;
+
+            PtzControlForm.GetPatterns();
+            PtzControlForm.GetPresets();
         }
 
-        /// <summary>
-        /// The SubscribeToStreamEvents method.
-        /// </summary>
-        public void SubscribeToStreamEvents()
+        public bool EnablePlaybackProgress(System.DateTime startTime, System.DateTime endTime)
         {
-            if (SelectedControl == Controls.Left)
-                Current.StreamEvent += OnStreamEventLeft;
-            else
-                Current.StreamEvent += OnStreamEventRight;
+            States.StartTime = startTime;
+            States.EndTime = endTime;
+            States.ProgressBar.Enabled = true;
+            States.ProgressBar.Visible = true;
+            States.ProgressBar.Value = 0;
+
+            return true;
         }
 
-        /// <summary>
-        /// The UnsubscribeToStreamEvents method.
-        /// </summary>
-        public void UnsubscribeToStreamEvents()
+        public bool RemovePlaybackProgress()
         {
-            if (SelectedControl == Controls.Left)
-                Current.StreamEvent -= OnStreamEventLeft;
-            else
-                Current.StreamEvent -= OnStreamEventRight;
+            States.ProgressBar.Visible = false;
+            return true;
+        }
+
+        public void RestartStream(Controls control)
+        {
+            States state = control == Controls.Left ? _statesLeft : _statesRight;
+            if (state.VcrState != VcrMode.Live)
+            {
+                var selControl = SelectedControl;
+                SelectControl(control);
+                MainForm.Instance.BeginInvoke((MethodInvoker)delegate { MainForm.Instance.StopStream(); });
+                SelectControl(selControl);
+                return;
+            }
+
+            state.IsReconnecting = true;
+            MainForm.Instance.BeginInvoke((MethodInvoker)delegate { state.StreamPanel.Refresh(); });
+            MainForm.Instance.BeginInvoke((MethodInvoker)delegate { state.VideoLossLabel.Visible = true; });
+
+            var retryCount = 0;
+            while (state.IsReconnecting)
+            {
+                try
+                {
+                    retryCount += 1;
+                    MainForm.Instance.BeginInvoke((MethodInvoker)delegate { state.VideoLossLabel.Text = $"Stream Connection Lost: Attempting to reconnect... (attempt #{retryCount})"; });
+                    state.MediaController.Stop();
+                    state.MediaController.SetDataSource(state.VideoDataSource, state.VideoDataInterface, state.AudioDataSource, state.AudioDataInterface);
+                    state.IsReconnecting = !state.MediaController.Play(1.0f, state.Transport);
+                    if (!state.IsReconnecting)
+                        continue;
+
+                    var counter = 0;
+                    while (counter < 10)
+                    {
+                        counter += 1;
+                        if (!state.IsReconnecting) continue;
+                        Thread.Sleep(1000);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MainForm.Instance.BeginInvoke((MethodInvoker)delegate { MainForm.Instance.WriteToLog($@"Error: {ex.Message}\n"); });
+                }
+            }
+
+            MainForm.Instance.BeginInvoke((MethodInvoker)delegate { state.VideoLossLabel.Visible = false; });
         }
 
         /// <summary>
@@ -202,158 +215,94 @@ namespace ExampleClient.Source
                 SelectedControl = Controls.Left;
                 MainForm.Instance.scVideoPanels.Panel1.BackColor = Color.FromArgb(0, 125, 197);
                 MainForm.Instance.scVideoPanels.Panel2.BackColor = SystemColors.ControlDark;
-                ChangePtzFormState(PtzControl != null);
+                ChangePtzFormState(States.PtzControl != null);
                 if (MainForm.Instance.dgvDataSources.RowCount > 0)
-                    MainForm.Instance.dgvDataSources.Rows[_playingIndexLeft].Selected = true;
+                    MainForm.Instance.dgvDataSources.Rows[States.PlayingIndex].Selected = true;
             }
             else
             {
                 SelectedControl = Controls.Right;
                 MainForm.Instance.scVideoPanels.Panel1.BackColor = SystemColors.ControlDark;
                 MainForm.Instance.scVideoPanels.Panel2.BackColor = Color.FromArgb(0, 125, 197);
-                ChangePtzFormState(PtzControl != null);
+                ChangePtzFormState(States.PtzControl != null);
                 if (MainForm.Instance.dgvDataSources.RowCount > 0)
-                    MainForm.Instance.dgvDataSources.Rows[_playingIndexRight].Selected = true;
+                    MainForm.Instance.dgvDataSources.Rows[States.PlayingIndex].Selected = true;
             }
         }
 
         /// <summary>
-        /// The ChangePtzFormState method.
+        /// The SubscribeToStreamEvents method.
         /// </summary>
-        /// <param name="enabled">The state to set the <c>PTZControlForm</c> controls.</param>
-        public void ChangePtzFormState(bool enabled)
-        {
-            var isEnabled = enabled;
-            if (Current != null && Current.Mode != MediaControl.Modes.Live)
-                isEnabled = false;
-
-            foreach (Control control in PtzControlForm.Instance.Controls)
-                control.Enabled = isEnabled;
-
-            PtzControlForm.GetPatterns();
-            PtzControlForm.GetPresets();
-        }
-
-        /// <summary>
-        /// The SetPlayingIndex method.
-        /// </summary>
-        public void SetPlayingIndex()
+        public void SubscribeToStreamEvents()
         {
             if (SelectedControl == Controls.Left)
-                _playingIndexLeft = MainForm.Instance.dgvDataSources.SelectedRows[0].Index;
+                States.MediaController.StreamEvent += OnStreamEventLeft;
             else
-                _playingIndexRight = MainForm.Instance.dgvDataSources.SelectedRows[0].Index;
+                States.MediaController.StreamEvent += OnStreamEventRight;
         }
 
         /// <summary>
-        /// Gets or sets the Current property.
+        /// The SubscribeToTimestamps method.
         /// </summary>
-        /// <value>A <see cref="MediaControl"/>.</value>
-        public MediaControl Current
+        public void SubscribeToTimestamps()
         {
-            get
-            {
-                return SelectedControl == Controls.Left ? _mediaControllerLeft : _mediaControllerRight;
-            }
-
-            set
-            {
-                if (SelectedControl == Controls.Left)
-                    _mediaControllerLeft = value;
-                else
-                    _mediaControllerRight = value;
-            }
+            if (SelectedControl == Controls.Left)
+                States.MediaController.TimestampEvent += OnTimestampEventLeft;
+            else
+                States.MediaController.TimestampEvent += OnTimestampEventRight;
         }
 
         /// <summary>
-        /// Gets or sets the CurrentDataSource property.
+        /// The UnsubscribeToStreamEvents method.
         /// </summary>
-        /// <value>A <see cref="DataSource"/>.</value>
-        public DataSource CurrentDataSource
+        public void UnsubscribeToStreamEvents()
         {
-            get
-            {
-                return SelectedControl == Controls.Left ? _dataSourceLeft : _dataSourceRight;
-            }
-
-            set
-            {
-                if (SelectedControl == Controls.Left)
-                    _dataSourceLeft = value;
-                else
-                    _dataSourceRight = value;
-            }
+            if (SelectedControl == Controls.Left)
+                States.MediaController.StreamEvent -= OnStreamEventLeft;
+            else
+                States.MediaController.StreamEvent -= OnStreamEventRight;
         }
 
         /// <summary>
-        /// Gets or sets the CurrentManualRecording property.
+        /// The UnsubscribeToTimestamps method.
         /// </summary>
-        /// <value>A <see cref="ManualRecording"/>.</value>
-        public ManualRecording CurrentManualRecording
+        public void UnsubscribeToTimestamps()
         {
-            get
-            {
-                return SelectedControl == Controls.Left ? _manualRecordingLeft : _manualRecordingRight;
-            }
-
-            set
-            {
-                if (SelectedControl == Controls.Left)
-                    _manualRecordingLeft = value;
-                else
-                    _manualRecordingRight = value;
-            }
+            if (SelectedControl == Controls.Left)
+                States.MediaController.TimestampEvent -= OnTimestampEventLeft;
+            else
+                States.MediaController.TimestampEvent -= OnTimestampEventRight;
         }
 
+        #endregion Public Methods
+
+        #region Private Methods
+
         /// <summary>
-        /// Gets or sets the PtzControl property.
+        /// The OnStreamEventLeft method.
         /// </summary>
-        /// <value>A <see cref="PtzController"/>.</value>
-        public PtzController PtzControl
+        /// <param name="streamEvent">The <paramref name="streamEvent"/> parameter.</param>
+        private static void OnStreamEventLeft(StreamingEvent streamEvent)
         {
-            get
+            MainForm.Instance.BeginInvoke((MethodInvoker)delegate
             {
-                return SelectedControl == Controls.Left ? _ptzCtrlLeft : _ptzCtrlRight;
-            }
-
-            set
-            {
-                if (SelectedControl == Controls.Left)
-                    _ptzCtrlLeft = value;
-                else
-                    _ptzCtrlRight = value;
-            }
+                MainForm.Instance.WriteToLog("Stream Connection Lost.");
+                Task.Run(() => Instance.RestartStream(Controls.Left));
+            });
         }
 
         /// <summary>
-        /// Gets the SelectedPanel property.
+        /// The OnStreamEventRight method.
         /// </summary>
-        /// <value>The selected <see cref="Panel"/>.</value>
-        public Panel SelectedPanel => SelectedControl == Controls.Left ?
-            MainForm.Instance.panelVideoStreamLeft : MainForm.Instance.panelVideoStreamRight;
-
-        /// <summary>
-        /// Gets the SelectedPanelTime property.
-        /// </summary>
-        /// <value>The current time of the selected <see cref="Panel"/>.</value>
-        public string SelectedPanelTime => SelectedControl == Controls.Left ?
-            MainForm.Instance.lblTimestampLeft.Text : MainForm.Instance.lblTimestampRight.Text;
-
-        /// <summary>
-        /// Gets the SelectedLabel property.
-        /// </summary>
-        /// <value>The selected <see cref="Label"/>.</value>
-        public Label SelectedLabel => SelectedControl == Controls.Left ?
-            MainForm.Instance.lblTimestampLeft : MainForm.Instance.lblTimestampRight;
-
-        /// <summary>
-        /// The OnTimestampEventLeft method.
-        /// </summary>
-        /// <param name="timeEvent">The <paramref name="timeEvent"/> parameter.</param>
-        /// 
-        // For some synching
-        static System.DateTime _justJumpedLeftTime;
-        static System.DateTime _justJumpedRightTime;
+        /// <param name="streamEvent">The <paramref name="streamEvent"/> parameter.</param>
+        private static void OnStreamEventRight(StreamingEvent streamEvent)
+        {
+            MainForm.Instance.BeginInvoke((MethodInvoker)delegate
+            {
+                MainForm.Instance.WriteToLog("Stream Connection Lost.");
+                Task.Run(() => Instance.RestartStream(Controls.Right));
+            });
+        }
 
         private static void OnTimestampEventLeft(MediaEvent timeEvent)
         {
@@ -366,35 +315,35 @@ namespace ExampleClient.Source
             });
 
             var ticksIn = timeEvent.Timestamp.Ticks;
-            if (Instance._mediaControllerLeft.Mode == MediaControl.Modes.Playback)
+            if (Instance._statesLeft.MediaController.Mode == MediaControl.Modes.Playback)
             {
-                if (timeEvent.Timestamp.Ticks >= Instance._endTimeLeft.Ticks)
+                if (timeEvent.Timestamp.Ticks >= Instance._statesLeft.EndTime.Ticks)
                 {
                     // We are done - so Pause and show progress at 100%
                     MainForm.Instance.progressBar_left.BeginInvoke((MethodInvoker)delegate
                     {
                         MainForm.Instance.progressBar_left.Value = 1000;
                     });
-                    Instance._mediaControllerLeft.Pause();
+                    Instance._statesLeft.MediaController.Pause();
                     return;
                 }
                 MainForm.Instance.progressBar_left.BeginInvoke((MethodInvoker)delegate
                 {
-                    if (ticksIn < Instance._startTimeLeft.Ticks)
+                    if (ticksIn < Instance._statesLeft.StartTime.Ticks)
                     {
-                        ticksIn = Instance._startTimeLeft.Ticks;
+                        ticksIn = Instance._statesLeft.StartTime.Ticks;
                     }
-                    double ticksDone = (double)ticksIn - Instance._startTimeLeft.Ticks;
-                    ticksDone /= (Instance._endTimeLeft.Ticks - Instance._startTimeLeft.Ticks);
+                    double ticksDone = (double)ticksIn - Instance._statesLeft.StartTime.Ticks;
+                    ticksDone /= (Instance._statesLeft.EndTime.Ticks - Instance._statesLeft.StartTime.Ticks);
                     MainForm.Instance.progressBar_left.Value = (int)(ticksDone * 1000);
                 });
             }
             // Skip a gap if necessary
-            if ((Instance.SkipPlayback == true) && (Instance._mediaControllerLeft.Mode == MediaControl.Modes.Playback) && (_justJumpedLeftTime.AddSeconds(1) < timeEvent.Timestamp))
+            if ((Instance.States.SkipPlayback == true) && (Instance._statesLeft.MediaController.Mode == MediaControl.Modes.Playback) && (Instance._statesLeft.JustJumpedTime.AddSeconds(1) < timeEvent.Timestamp))
             {
                 // Are we in a gap? - If so seek to the next play time
                 // clips are ordered from oldest to newest
-                var clips = Instance._cachedClipsLeft;
+                var clips = Instance._statesLeft.CachedClips;
                 int i = 0;
                 for (; i < clips.Count; i++)
                 {
@@ -415,11 +364,11 @@ namespace ExampleClient.Source
                                 System.DateTime startTime = clips[i + 1].StartTime;
                                 float speed = (float)MainForm.Instance.nudSpeed.Value;
                                 object[] invokeArray = new object[4];
-                                invokeArray[0] = Instance._mediaControllerLeft;
+                                invokeArray[0] = Instance._statesLeft.MediaController;
                                 invokeArray[1] = startTime;
                                 invokeArray[2] = speed;
                                 invokeArray[3] = transport;
-                                _justJumpedLeftTime = timeEvent.Timestamp;
+                                Instance._statesLeft.JustJumpedTime = timeEvent.Timestamp;
                                 MainForm.Instance.BeginInvoke(new SeekSkipGapDelegate(SeekSkipGapMethod), invokeArray);
                                 break;
                             }
@@ -427,14 +376,6 @@ namespace ExampleClient.Source
                     }
                 }
             }
-        }
-        public delegate void SeekSkipGapDelegate(MediaControl mediaControl, System.DateTime startTime, float speed, MediaControl.RTSPNetworkTransports transport);
-
-        public static void SeekSkipGapMethod(MediaControl mediaControl, System.DateTime startTime, float speed, MediaControl.RTSPNetworkTransports transport)
-        {
-            mediaControl.Stop();
-            MainForm.Instance.WriteToLog("Info:  Skipping Gap.  Next Seek Time:  " + startTime.ToLocalTime().ToString());
-            mediaControl.Seek(startTime.AddSeconds(1), speed, transport);
         }
 
         /// <summary>
@@ -452,36 +393,36 @@ namespace ExampleClient.Source
             });
 
             var ticksIn = timeEvent.Timestamp.Ticks;
-            if (Instance._mediaControllerRight.Mode == MediaControl.Modes.Playback)
+            if (Instance._statesRight.MediaController.Mode == MediaControl.Modes.Playback)
             {
-                if (timeEvent.Timestamp.Ticks >= Instance._endTimeRight.Ticks)
+                if (timeEvent.Timestamp.Ticks >= Instance._statesRight.EndTime.Ticks)
                 {
                     // We are done - so Pause and show progress at 100%
                     MainForm.Instance.progressBar_right.BeginInvoke((MethodInvoker)delegate
                     {
                         MainForm.Instance.progressBar_right.Value = 1000;
                     });
-                    Instance._mediaControllerRight.Pause();
+                    Instance._statesRight.MediaController.Pause();
                     return;
                 }
                 MainForm.Instance.progressBar_right.BeginInvoke((MethodInvoker)delegate
                 {
-                    if (ticksIn < Instance._startTimeRight.Ticks)
+                    if (ticksIn < Instance._statesRight.StartTime.Ticks)
                     {
-                        ticksIn = Instance._startTimeRight.Ticks;
+                        ticksIn = Instance._statesRight.StartTime.Ticks;
                     }
-                    double ticksDone = (double)ticksIn - Instance._startTimeRight.Ticks;
-                    ticksDone /= (Instance._endTimeRight.Ticks - Instance._startTimeRight.Ticks);
+                    double ticksDone = (double)ticksIn - Instance._statesRight.StartTime.Ticks;
+                    ticksDone /= (Instance._statesRight.EndTime.Ticks - Instance._statesRight.StartTime.Ticks);
                     MainForm.Instance.progressBar_right.Value = (int)(ticksDone * 1000);
                 });
             }
 
             // Skip a gap if necessary
-            if ((Instance.SkipPlayback == true) && (Instance._mediaControllerRight.Mode == MediaControl.Modes.Playback) && (_justJumpedRightTime.AddSeconds(1) < timeEvent.Timestamp))
+            if ((Instance.States.SkipPlayback == true) && (Instance._statesRight.MediaController.Mode == MediaControl.Modes.Playback) && (Instance._statesRight.JustJumpedTime.AddSeconds(1) < timeEvent.Timestamp))
             {
                 // Are we in a gap? - If so seek to the next play time
                 // clips are ordered from oldest to newest
-                var clips = Instance._cachedClipsRight;
+                var clips = Instance._statesRight.CachedClips;
                 int i = 0;
                 for (; i < clips.Count; i++)
                 {
@@ -500,11 +441,11 @@ namespace ExampleClient.Source
                                 System.DateTime startTime = clips[i + 1].StartTime;
                                 float speed = (float)MainForm.Instance.nudSpeed.Value;
                                 object[] invokeArray = new object[4];
-                                invokeArray[0] = Instance._mediaControllerRight;
+                                invokeArray[0] = Instance._statesRight.MediaController;
                                 invokeArray[1] = startTime;
                                 invokeArray[2] = speed;
                                 invokeArray[3] = transport;
-                                _justJumpedRightTime = timeEvent.Timestamp;
+                                Instance._statesRight.JustJumpedTime = timeEvent.Timestamp;
                                 MainForm.Instance.BeginInvoke(new SeekSkipGapDelegate(SeekSkipGapMethod), invokeArray);
                                 break;
                             }
@@ -514,117 +455,71 @@ namespace ExampleClient.Source
             }
         }
 
-        /// <summary>
-        /// The OnStreamEventLeft method.
-        /// </summary>
-        /// <param name="streamEvent">The <paramref name="streamEvent"/> parameter.</param>
-        private static void OnStreamEventLeft(StreamingEvent streamEvent)
+        private void Init()
         {
-            MainForm.Instance.BeginInvoke((MethodInvoker)delegate
-            {
-                MainForm.Instance.WriteToLog("Stream Connection Lost.");
-                var currControl = MainForm.Instance.Control.SelectedControl;
-                MainForm.Instance.Control.SelectControl(Controls.Left);
-                MainForm.Instance.StopStream();
-                MainForm.Instance.Control.SelectControl(currControl);
-            });
+            SelectControl(Controls.Left);
         }
 
-        /// <summary>
-        /// The OnStreamEventRight method.
-        /// </summary>
-        /// <param name="streamEvent">The <paramref name="streamEvent"/> parameter.</param>
-        private static void OnStreamEventRight(StreamingEvent streamEvent)
+        #endregion Private Methods
+    }
+
+    /// <summary>
+    /// The States class.
+    /// </summary>
+    /// <remarks>Holds the various states for a control.</remarks>
+    public class States
+    {
+        #region Private Fields
+
+        private List<Clip> _cachedClips = new List<Clip>();
+
+        #endregion Private Fields
+
+        #region Public Constructors
+
+        public States(bool isLeft)
         {
-            MainForm.Instance.BeginInvoke((MethodInvoker)delegate
-            {
-                MainForm.Instance.WriteToLog("Stream Connection Lost.");
-                var currControl = MainForm.Instance.Control.SelectedControl;
-                MainForm.Instance.Control.SelectControl(Controls.Right);
-                MainForm.Instance.StopStream();
-                MainForm.Instance.Control.SelectControl(currControl);
-            });
+            IsLeft = isLeft;
         }
 
-        public VcrMode VcrState
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        public MediaControl.AspectRatios AspectRatio { get; set; }
+        public DataInterface AudioDataInterface { get; set; }
+        public DataSource AudioDataSource { get; set; }
+
+        public List<Clip> CachedClips
         {
-            get => SelectedControl == Controls.Left ? _vcrStateLeft : _vcrStateRight;
+            get => _cachedClips;
             set
             {
-                if (SelectedControl == Controls.Left)
-                    _vcrStateLeft = value;
-                else
-                    _vcrStateRight = value;
+                _cachedClips = value;
+                JustJumpedTime = new DateTime(1970, 1, 1);
             }
         }
 
-        private VcrMode _vcrStateLeft;
-        private VcrMode _vcrStateRight;
+        public DateTime EndTime { get; set; }
+        public bool IsLeft { get; set; }
+        public bool IsReconnecting { set; get; }
+        public DateTime JustJumpedTime { get; set; }
+        public ManualRecording ManualRecording { get; set; }
+        public MediaControl MediaController { get; set; }
+        public int PlayingIndex { get; set; }
+        public ProgressBar ProgressBar => IsLeft ? MainForm.Instance.progressBar_left : MainForm.Instance.progressBar_right;
+        public PtzController PtzControl { get; set; }
+        public bool SkipPlayback { get; set; }
+        public DateTime StartTime { get; set; }
+        public Panel StreamPanel => IsLeft ? MainForm.Instance.panelVideoStreamLeft : MainForm.Instance.panelVideoStreamRight;
+        public bool StretchToFit { get; set; }
+        public Label TimestampLabel => IsLeft ? MainForm.Instance.lblTimestampLeft : MainForm.Instance.lblTimestampRight;
+        public MediaControl.RTSPNetworkTransports Transport { get; set; }
+        public ControlManager.VcrMode VcrState { get; set; }
+        public DataInterface VideoDataInterface { get; set; }
+        public DataSource VideoDataSource { get; set; }
+        public Label VideoLossLabel => IsLeft ? MainForm.Instance.lblStreamLossLeft : MainForm.Instance.lblStreamLossRight;
 
-        /// <summary>
-        /// The _dataSourceLeft field.
-        /// </summary>  
-        private DataSource _dataSourceLeft;
-
-        /// <summary>
-        /// The _dataSourceRight field.
-        /// </summary>  
-        private DataSource _dataSourceRight;
-
-        /// <summary>
-        /// The _manualRecordingLeft field.
-        /// </summary>  
-        private ManualRecording _manualRecordingLeft;
-
-        /// <summary>
-        /// The _manualRecordingRight field.
-        /// </summary>  
-        private ManualRecording _manualRecordingRight;
-
-        /// <summary>
-        /// The _mediaControllerLeft field.
-        /// </summary>  
-        private MediaControl _mediaControllerLeft;
-
-        /// <summary>
-        /// The _mediaControllerRight field.
-        /// </summary>  
-        private MediaControl _mediaControllerRight;
-
-        /// <summary>
-        /// The _ptzCtrlLeft field.
-        /// </summary>  
-        private PtzController _ptzCtrlLeft;
-
-        /// <summary>
-        /// The _ptzCtrlRight field.
-        /// </summary>  
-        private PtzController _ptzCtrlRight;
-
-        /// <summary>
-        /// The _playingIndexLeft field.
-        /// </summary>  
-        private int _playingIndexLeft;
-
-        /// <summary>
-        /// The _playingIndexRight field.
-        /// </summary>  
-        private int _playingIndexRight;
-
-        /// <summary>
-        /// Used to determine if we should skip gaps on recorded video (during playback)
-        /// </summary>
-        private bool _skipRecordingGaps;
-
-        /// <summary>
-        /// Cache clips as getting them can take too long
-        /// </summary>
-        private List<Clip> _cachedClipsLeft;
-        private List<Clip> _cachedClipsRight;
-
-        private System.DateTime _startTimeLeft;
-        private System.DateTime _startTimeRight;
-        private System.DateTime _endTimeLeft;
-        private System.DateTime _endTimeRight;
+        #endregion Public Properties
     }
 }

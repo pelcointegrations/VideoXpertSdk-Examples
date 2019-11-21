@@ -11,6 +11,8 @@ namespace ExampleClient.Source
     /// and password of the VideoXpert system to connect to.</remarks>
     public partial class ConnectForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ConnectForm" /> class.
         /// </summary>
@@ -23,19 +25,9 @@ namespace ExampleClient.Source
             txbxPassword.Text = Properties.Settings.Default.Password;
         }
 
-        /// <summary>
-        /// The OnFormClosed method.
-        /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void OnFormClosed(object sender, FormClosedEventArgs args)
-        {
-            Properties.Settings.Default.IP = txbxIp.Text;
-            Properties.Settings.Default.Port = tbxPort.Text;
-            Properties.Settings.Default.UserName = txbxUserName.Text;
-            Properties.Settings.Default.Password = txbxPassword.Text;
-            Properties.Settings.Default.Save();
-        }
+        #endregion Public Constructors
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonConnect_Click method.
@@ -56,10 +48,10 @@ namespace ExampleClient.Source
                         $" expire on {expirationTime.ToLocalTime().ToShortDateString()} at {expirationTime.ToLocalTime().ToShortTimeString()}.  This integration will cease to function if the system remains unlicensed when the grace period expires.";
 
                     MainForm.Instance.WriteToLog("Warning: " + message);
-                    MainForm.Instance.BeginInvoke((MethodInvoker) delegate
-                    {
-                        MainForm.Instance.ShowLicenseWarning(expirationTime);
-                    });
+                    MainForm.Instance.BeginInvoke((MethodInvoker)delegate
+                   {
+                       MainForm.Instance.ShowLicenseWarning(expirationTime);
+                   });
                 }
                 else if (result != Results.Value.OK)
                 {
@@ -93,5 +85,21 @@ namespace ExampleClient.Source
 
             Close();
         }
+
+        /// <summary>
+        /// The OnFormClosed method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void OnFormClosed(object sender, FormClosedEventArgs args)
+        {
+            Properties.Settings.Default.IP = txbxIp.Text;
+            Properties.Settings.Default.Port = tbxPort.Text;
+            Properties.Settings.Default.UserName = txbxUserName.Text;
+            Properties.Settings.Default.Password = txbxPassword.Text;
+            Properties.Settings.Default.Save();
+        }
+
+        #endregion Private Methods
     }
 }

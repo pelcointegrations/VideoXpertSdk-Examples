@@ -6,9 +6,11 @@ namespace ExampleClient.Source
     /// <summary>
     /// The AddMonitorWallForm class.
     /// </summary>
-    /// <remarks>Provides a dialog window that allows the user to create a new monitor wall.</remarks> 
+    /// <remarks>Provides a dialog window that allows the user to create a new monitor wall.</remarks>
     public partial class AddMonitorWallForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AddMonitorWallForm" /> class.
         /// </summary>
@@ -16,6 +18,10 @@ namespace ExampleClient.Source
         {
             InitializeComponent();
         }
+
+        #endregion Public Constructors
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonAdd_Click method
@@ -35,5 +41,7 @@ namespace ExampleClient.Source
                 throw;
             }
         }
+
+        #endregion Private Methods
     }
 }

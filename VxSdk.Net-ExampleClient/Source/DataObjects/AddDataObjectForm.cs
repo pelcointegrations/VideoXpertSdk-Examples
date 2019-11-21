@@ -10,6 +10,8 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user to create a new data object.</remarks>
     public partial class AddDataObjectForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AddDataObjectForm" /> class.
         /// </summary>
@@ -17,6 +19,10 @@ namespace ExampleClient.Source
         {
             InitializeComponent();
         }
+
+        #endregion Public Constructors
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonOk_Click method.
@@ -42,5 +48,7 @@ namespace ExampleClient.Source
                 throw;
             }
         }
+
+        #endregion Private Methods
     }
 }

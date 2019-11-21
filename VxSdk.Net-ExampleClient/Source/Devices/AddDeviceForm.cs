@@ -10,6 +10,8 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user to create a new device.</remarks>
     public partial class AddDeviceForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AddDeviceForm" /> class.
         /// </summary>
@@ -18,28 +20,9 @@ namespace ExampleClient.Source
             InitializeComponent();
         }
 
-        /// <summary>
-        /// The PopulateDrivers method.
-        /// </summary>
-        private void PopulateDrivers()
-        {
-            cbxDriverType.Items.Clear();
+        #endregion Public Constructors
 
-            // Get the drivers from the data storage and add them to the combo box.
-            foreach (var driver in MainForm.CurrentSystem.Drivers)
-            {
-                var item = new ComboboxItem
-                {
-                    Text = driver.Name,
-                    Value = driver.Type
-                };
-
-                cbxDriverType.Items.Add(item);
-            }
-
-            if (cbxDriverType.Items.Count > 0)
-                cbxDriverType.SelectedIndex = 0;
-        }
+        #region Private Methods
 
         /// <summary>
         /// The ButtonOk_Click method.
@@ -106,5 +89,30 @@ namespace ExampleClient.Source
                 cbxDriverType.Text = string.Empty;
             }
         }
+
+        /// <summary>
+        /// The PopulateDrivers method.
+        /// </summary>
+        private void PopulateDrivers()
+        {
+            cbxDriverType.Items.Clear();
+
+            // Get the drivers from the data storage and add them to the combo box.
+            foreach (var driver in MainForm.CurrentSystem.Drivers)
+            {
+                var item = new ComboboxItem
+                {
+                    Text = driver.Name,
+                    Value = driver.Type
+                };
+
+                cbxDriverType.Items.Add(item);
+            }
+
+            if (cbxDriverType.Items.Count > 0)
+                cbxDriverType.SelectedIndex = 0;
+        }
+
+        #endregion Private Methods
     }
 }

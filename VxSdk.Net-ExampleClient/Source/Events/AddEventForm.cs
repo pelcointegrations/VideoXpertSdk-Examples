@@ -12,9 +12,11 @@ namespace ExampleClient.Source
     /// event and push it to the VideoXpert system.</remarks>
     public partial class AddEventForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AddEventForm" /> class.
-        /// </summary>    
+        /// </summary>
         public AddEventForm()
         {
             InitializeComponent();
@@ -33,14 +35,18 @@ namespace ExampleClient.Source
             dtpTime.Value = DateTime.Now;
         }
 
+        #endregion Public Constructors
+
+        #region Private Methods
+
         /// <summary>
         /// The ButtonAdd_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>     
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonAdd_Click(object sender, EventArgs args)
         {
-            var newEvent = new NewEvent 
+            var newEvent = new NewEvent
             {
                 GeneratorDeviceId = txbxGeneratorDeviceId.Text,
                 SituationType = cbxSituationType.Text,
@@ -63,5 +69,7 @@ namespace ExampleClient.Source
 
             MainForm.CurrentSystem.InjectEvent(newEvent);
         }
+
+        #endregion Private Methods
     }
 }

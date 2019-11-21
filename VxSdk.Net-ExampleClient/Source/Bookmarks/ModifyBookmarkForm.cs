@@ -7,14 +7,10 @@ namespace ExampleClient.Source
     /// <summary>
     /// The ModifyBookmarkForm class.
     /// </summary>
-    /// <remarks>Provides a dialog window that allows the user to modify a bookmark.</remarks> 
+    /// <remarks>Provides a dialog window that allows the user to modify a bookmark.</remarks>
     public partial class ModifyBookmarkForm : Form
     {
-        /// <summary>
-        /// Gets or sets the SelectedBookmark property.
-        /// </summary>
-        /// <value>The currently selected bookmark.</value>
-        private Bookmark SelectedBookmark { get; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModifyBookmarkForm" /> class.
@@ -31,6 +27,20 @@ namespace ExampleClient.Source
             dtpLockStartTime.Value = SelectedBookmark.Lock.StartTime.ToLocalTime();
             dtpLockEndTime.Value = SelectedBookmark.Lock.EndTime.ToLocalTime();
         }
+
+        #endregion Public Constructors
+
+        #region Private Properties
+
+        /// <summary>
+        /// Gets or sets the SelectedBookmark property.
+        /// </summary>
+        /// <value>The currently selected bookmark.</value>
+        private Bookmark SelectedBookmark { get; }
+
+        #endregion Private Properties
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonSave_Click method
@@ -66,6 +76,17 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The CheckboxLockEnabled_CheckedChanged method
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter</param>
+        /// <param name="args">The <paramref name="args"/> parameter</param>
+        private void CheckboxLockEnabled_CheckedChanged(object sender, EventArgs args)
+        {
+            gbxLockStartTime.Enabled = chbxLockEnabled.Checked;
+            gbxLockEndTime.Enabled = chbxLockEnabled.Checked;
+        }
+
+        /// <summary>
         /// The DateTimePickerLockTime_ValueChanged method
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter</param>
@@ -78,15 +99,6 @@ namespace ExampleClient.Source
             }
         }
 
-        /// <summary>
-        /// The CheckboxLockEnabled_CheckedChanged method
-        /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter</param>
-        /// <param name="args">The <paramref name="args"/> parameter</param>
-        private void CheckboxLockEnabled_CheckedChanged(object sender, EventArgs args)
-        {
-            gbxLockStartTime.Enabled = chbxLockEnabled.Checked;
-            gbxLockEndTime.Enabled = chbxLockEnabled.Checked;
-        }
+        #endregion Private Methods
     }
 }

@@ -12,11 +12,7 @@ namespace ExampleClient.Source
     /// situation on the VideoXpert system.</remarks>
     public partial class ModifySituationForm : Form
     {
-        /// <summary>
-        /// Gets or sets the SelectedBookmark property.
-        /// </summary>
-        /// <value>The currently selected bookmark.</value>
-        private Situation SelectedSituation { get; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModifySituationForm" /> class.
@@ -54,27 +50,41 @@ namespace ExampleClient.Source
             }
         }
 
+        #endregion Public Constructors
+
+        #region Private Properties
+
+        /// <summary>
+        /// Gets or sets the SelectedBookmark property.
+        /// </summary>
+        /// <value>The currently selected bookmark.</value>
+        private Situation SelectedSituation { get; }
+
+        #endregion Private Properties
+
+        #region Private Methods
+
         /// <summary>
         /// The ButtonSave_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param> 
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonSave_Click(object sender, EventArgs args)
         {
             if (SelectedSituation.IsAckNeeded != ckbxAckNeeded.Checked)
                 SelectedSituation.IsAckNeeded = ckbxAckNeeded.Checked;
 
-            if (SelectedSituation.AudibleLoopDelay != (int) nudAudibleLoopDelay.Value)
-                SelectedSituation.AudibleLoopDelay = (int) nudAudibleLoopDelay.Value;
+            if (SelectedSituation.AudibleLoopDelay != (int)nudAudibleLoopDelay.Value)
+                SelectedSituation.AudibleLoopDelay = (int)nudAudibleLoopDelay.Value;
 
             if (SelectedSituation.ShouldAudiblyNotify != ckbxAudibleNotify.Checked)
                 SelectedSituation.ShouldAudiblyNotify = ckbxAudibleNotify.Checked;
-            
-            if (SelectedSituation.AudiblePlayCount != (int) nudAudiblePlayCount.Value)
-                SelectedSituation.AudiblePlayCount = (int) nudAudiblePlayCount.Value;
 
-            if (SelectedSituation.AutoAcknowledge != (int) nudAutoAcknowledge.Value)
-                SelectedSituation.AutoAcknowledge = (int) nudAutoAcknowledge.Value;
+            if (SelectedSituation.AudiblePlayCount != (int)nudAudiblePlayCount.Value)
+                SelectedSituation.AudiblePlayCount = (int)nudAudiblePlayCount.Value;
+
+            if (SelectedSituation.AutoAcknowledge != (int)nudAutoAcknowledge.Value)
+                SelectedSituation.AutoAcknowledge = (int)nudAutoAcknowledge.Value;
 
             if (SelectedSituation.ShouldExpandBanner != ckbxExpandBanner.Checked)
                 SelectedSituation.ShouldExpandBanner = ckbxExpandBanner.Checked;
@@ -92,7 +102,7 @@ namespace ExampleClient.Source
                 SelectedSituation.ShouldNotify = ckbxNotify.Checked;
 
             if (Math.Abs(SelectedSituation.Severity - 11) != nudSeverity.Value)
-                SelectedSituation.Severity = (int) Math.Abs(nudSeverity.Value - 11);
+                SelectedSituation.Severity = (int)Math.Abs(nudSeverity.Value - 11);
 
             var intervalList = new List<int>();
             if (nudSnoozeIntervals1.Value != 0)
@@ -107,5 +117,7 @@ namespace ExampleClient.Source
             if (!intervalList.Equals(SelectedSituation.SnoozeIntervals))
                 SelectedSituation.SnoozeIntervals = intervalList;
         }
+
+        #endregion Private Methods
     }
 }

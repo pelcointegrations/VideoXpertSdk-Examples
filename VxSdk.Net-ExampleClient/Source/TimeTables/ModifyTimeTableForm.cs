@@ -11,29 +11,7 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user to add or modify a time table.</remarks>
     public partial class ModifyTimeTableForm : Form
     {
-        /// <summary>
-        /// Gets or sets the AddTimeTable property.
-        /// </summary>
-        /// <value>The time table to add.</value>
-        private NewTimeTable AddTimeTable { get; }
-
-        /// <summary>
-        /// Gets the IsAdd property.
-        /// </summary>
-        /// <value><c>true</c> if this form is adding a time table, otherwise <c>false</c>.</value>
-        private bool IsAdd => tbxId.Enabled;
-
-        /// <summary>
-        /// Gets the HaveTimeRangesChanged property.
-        /// </summary>
-        /// <value><c>true</c> if the weekly time ranges have been modified, otherwise <c>false</c>.</value>
-        private bool HaveTimeRangesChanged { get; set; }
-
-        /// <summary>
-        /// Gets or sets the SelectedTimeTable property.
-        /// </summary>
-        /// <value>The currently selected time table.</value>
-        private TimeTable SelectedTimeTable { get; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModifyTimeTableForm" /> class.
@@ -76,6 +54,38 @@ namespace ExampleClient.Source
                 lvTimeRanges.Items.Add(lvItem);
             }
         }
+
+        #endregion Public Constructors
+
+        #region Private Properties
+
+        /// <summary>
+        /// Gets or sets the AddTimeTable property.
+        /// </summary>
+        /// <value>The time table to add.</value>
+        private NewTimeTable AddTimeTable { get; }
+
+        /// <summary>
+        /// Gets the HaveTimeRangesChanged property.
+        /// </summary>
+        /// <value><c>true</c> if the weekly time ranges have been modified, otherwise <c>false</c>.</value>
+        private bool HaveTimeRangesChanged { get; set; }
+
+        /// <summary>
+        /// Gets the IsAdd property.
+        /// </summary>
+        /// <value><c>true</c> if this form is adding a time table, otherwise <c>false</c>.</value>
+        private bool IsAdd => tbxId.Enabled;
+
+        /// <summary>
+        /// Gets or sets the SelectedTimeTable property.
+        /// </summary>
+        /// <value>The currently selected time table.</value>
+        private TimeTable SelectedTimeTable { get; }
+
+        #endregion Private Properties
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonAdd_Click method.
@@ -210,5 +220,7 @@ namespace ExampleClient.Source
             if (dtpStartDate.Value >= dtpEndDate.Value)
                 dtpStartDate.Value = dtpEndDate.Value.AddDays(1);
         }
+
+        #endregion Private Methods
     }
 }

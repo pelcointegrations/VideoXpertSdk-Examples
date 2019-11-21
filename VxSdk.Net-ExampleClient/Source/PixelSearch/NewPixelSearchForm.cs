@@ -11,6 +11,8 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user to start a new pixel search.</remarks>
     public partial class NewPixelSearchForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="NewPixelSearchForm" /> class.
         /// </summary>
@@ -24,11 +26,15 @@ namespace ExampleClient.Source
                 cbxDataSources.Items.Add(new ComboboxItem { Text = dataSource.Name, Value = dataSource });
         }
 
+        #endregion Public Constructors
+
+        #region Private Methods
+
         /// <summary>
         /// The ButtonAddZone_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param> 
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonAddZone_Click(object sender, EventArgs args)
         {
             using (var addZoneForm = new AddZoneForm(lvZones))
@@ -44,7 +50,7 @@ namespace ExampleClient.Source
         /// The ButtonRemoveZone_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param> 
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonRemoveZone_Click(object sender, EventArgs args)
         {
             var remItems = lvZones.CheckedItems;
@@ -61,13 +67,13 @@ namespace ExampleClient.Source
         /// The ButtonSearch_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param> 
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonSearch_Click(object sender, EventArgs args)
         {
             var newPixelSearch = new NewPixelSearch
             {
-                Columns = (int) nudColumns.Value,
-                Rows = (int) nudRows.Value,
+                Columns = (int)nudColumns.Value,
+                Rows = (int)nudRows.Value,
                 SearchEndTime = dtpEndDate.Value,
                 SearchStartTime = dtpStartDate.Value
             };
@@ -87,7 +93,7 @@ namespace ExampleClient.Source
         /// The ComboboxDataSources_SelectedIndexChanged method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param> 
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ComboboxDataSources_SelectedIndexChanged(object sender, EventArgs args)
         {
             if (cbxDataSources.SelectedIndex < 0)
@@ -98,5 +104,7 @@ namespace ExampleClient.Source
             gbxSearchGrid.Enabled = true;
             gbxSearchZones.Enabled = true;
         }
+
+        #endregion Private Methods
     }
 }

@@ -1,10 +1,10 @@
-﻿using System;
+﻿using ExampleClient.Properties;
+using System;
 using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Windows.Forms;
 using VxSdkNet;
-using ExampleClient.Properties;
 
 namespace ExampleClient.Source
 {
@@ -14,11 +14,7 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user to view a drawing.</remarks>
     public partial class ViewDrawingForm : Form
     {
-        /// <summary>
-        /// Gets or sets the CurrentDrawing property.
-        /// </summary>
-        /// <value>The current drawing.</value>
-        private Drawing CurrentDrawing { get; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewDrawingForm" /> class.
@@ -33,6 +29,20 @@ namespace ExampleClient.Source
             GetMarkers();
             Refresh();
         }
+
+        #endregion Public Constructors
+
+        #region Private Properties
+
+        /// <summary>
+        /// Gets or sets the CurrentDrawing property.
+        /// </summary>
+        /// <value>The current drawing.</value>
+        private Drawing CurrentDrawing { get; }
+
+        #endregion Private Properties
+
+        #region Public Methods
 
         /// <summary>
         /// The GetImage method.
@@ -97,5 +107,7 @@ namespace ExampleClient.Source
                 pbxMain.Controls.Add(pbx);
             }
         }
+
+        #endregion Public Methods
     }
 }

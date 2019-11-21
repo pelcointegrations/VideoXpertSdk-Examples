@@ -13,17 +13,7 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user to select a stream.</remarks>
     public partial class StreamSelectionForm : Form
     {
-        /// <summary>
-        /// Gets or sets the SelectedInterface property.
-        /// </summary>
-        /// <value>The currently selected data interface.</value>
-        public DataInterface SelectedInterface { get; set; }
-
-        /// <summary>
-        /// Gets or sets the DisplayedListView property.
-        /// </summary>
-        /// <value>The list view to display to the user.</value>
-        public ListView DisplayedListView { get; set; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StreamSelectionForm" /> class.
@@ -80,6 +70,26 @@ namespace ExampleClient.Source
             }
         }
 
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the DisplayedListView property.
+        /// </summary>
+        /// <value>The list view to display to the user.</value>
+        public ListView DisplayedListView { get; set; }
+
+        /// <summary>
+        /// Gets or sets the SelectedInterface property.
+        /// </summary>
+        /// <value>The currently selected data interface.</value>
+        public DataInterface SelectedInterface { get; set; }
+
+        #endregion Public Properties
+
+        #region Private Methods
+
         /// <summary>
         /// The ButtonOk_Click method.
         /// </summary>
@@ -93,5 +103,7 @@ namespace ExampleClient.Source
 
             SelectedInterface = (DataInterface)DisplayedListView.SelectedItems[0].Tag;
         }
+
+        #endregion Private Methods
     }
 }

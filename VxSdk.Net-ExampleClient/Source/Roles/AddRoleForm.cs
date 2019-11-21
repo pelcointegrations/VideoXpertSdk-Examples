@@ -9,6 +9,8 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user to create a new role.</remarks>
     public partial class AddRoleForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AddRoleForm" /> class.
         /// </summary>
@@ -16,6 +18,10 @@ namespace ExampleClient.Source
         {
             InitializeComponent();
         }
+
+        #endregion Public Constructors
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonOk_Click method.
@@ -34,5 +40,7 @@ namespace ExampleClient.Source
                 throw;
             }
         }
+
+        #endregion Private Methods
     }
 }

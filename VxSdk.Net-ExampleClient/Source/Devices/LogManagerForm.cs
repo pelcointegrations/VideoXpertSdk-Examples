@@ -11,11 +11,7 @@ namespace ExampleClient.Source
     /// logs from a device.</remarks>
     public partial class LogManagerForm : Form
     {
-        /// <summary>
-        /// Gets or sets the SelectedDevice property.
-        /// </summary>
-        /// <value>The currently selected device.</value>
-        private Device SelectedDevice { get; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LogManagerForm" /> class.
@@ -28,25 +24,19 @@ namespace ExampleClient.Source
             PopulateLogs();
         }
 
-        /// <summary>
-        /// The PopulateLogs method.
-        /// </summary>
-        private void PopulateLogs()
-        {
-            lvLogs.Items.Clear();
+        #endregion Public Constructors
 
-            // Get the existing logs from the device and add
-            // them to the list view.
-            var logs = SelectedDevice.Logs;
-            foreach (var log in logs)
-            {
-                var lvItem = new ListViewItem(log.Id);
-                lvItem.SubItems.Add(log.Initiated.ToString("U"));
-                lvItem.SubItems.Add(log.Completed.ToString("U"));
-                lvItem.Tag = log;
-                lvLogs.Items.Add(lvItem);
-            }
-        }
+        #region Private Properties
+
+        /// <summary>
+        /// Gets or sets the SelectedDevice property.
+        /// </summary>
+        /// <value>The currently selected device.</value>
+        private Device SelectedDevice { get; }
+
+        #endregion Private Properties
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonAdd_Click method.
@@ -79,16 +69,6 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
-        /// The ButtonRefresh_Click method.
-        /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void ButtonRefresh_Click(object sender, EventArgs args)
-        {
-            PopulateLogs();
-        }
-
-        /// <summary>
         /// The ButtonDownload_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -116,5 +96,37 @@ namespace ExampleClient.Source
                 downloadForm.ShowDialog();
             }
         }
+
+        /// <summary>
+        /// The ButtonRefresh_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonRefresh_Click(object sender, EventArgs args)
+        {
+            PopulateLogs();
+        }
+
+        /// <summary>
+        /// The PopulateLogs method.
+        /// </summary>
+        private void PopulateLogs()
+        {
+            lvLogs.Items.Clear();
+
+            // Get the existing logs from the device and add
+            // them to the list view.
+            var logs = SelectedDevice.Logs;
+            foreach (var log in logs)
+            {
+                var lvItem = new ListViewItem(log.Id);
+                lvItem.SubItems.Add(log.Initiated.ToString("U"));
+                lvItem.SubItems.Add(log.Completed.ToString("U"));
+                lvItem.Tag = log;
+                lvLogs.Items.Add(lvItem);
+            }
+        }
+
+        #endregion Private Methods
     }
 }

@@ -11,6 +11,8 @@ namespace ExampleClient.Source
     /// monitors from the VideoXpert system.</remarks>
     public partial class MonitorManagerForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MonitorManagerForm" /> class.
         /// </summary>
@@ -21,11 +23,15 @@ namespace ExampleClient.Source
             PopulateMonitors();
         }
 
+        #endregion Public Constructors
+
+        #region Private Methods
+
         /// <summary>
         /// The ButtonDelete_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>  
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonDelete_Click(object sender, EventArgs args)
         {
             // Verify that an item is selected.
@@ -43,7 +49,7 @@ namespace ExampleClient.Source
         /// The ButtonNewMonitor_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>  
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonNewMonitor_Click(object sender, EventArgs args)
         {
             // Show the AddMonitorForm dialog.
@@ -67,7 +73,7 @@ namespace ExampleClient.Source
         /// The ButtonRefresh_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param> 
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonRefresh_Click(object sender, EventArgs args)
         {
             // Refresh the items in the list view.
@@ -80,7 +86,7 @@ namespace ExampleClient.Source
         /// The ButtonView_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>  
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonView_Click(object sender, EventArgs args)
         {
             // Verify that an item is selected.
@@ -116,5 +122,7 @@ namespace ExampleClient.Source
                 lvMonitorManager.Items.Add(lvItem);
             }
         }
+
+        #endregion Private Methods
     }
 }

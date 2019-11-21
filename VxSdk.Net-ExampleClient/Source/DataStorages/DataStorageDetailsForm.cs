@@ -10,6 +10,8 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that contains the detailed info for the selected data storage.</remarks>
     public partial class DataStorageDetailsForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DataStorageDetailsForm" /> class.
         /// </summary>
@@ -17,6 +19,10 @@ namespace ExampleClient.Source
         {
             InitializeComponent();
         }
+
+        #endregion Public Constructors
+
+        #region Public Methods
 
         /// <summary>
         /// The GetDataStorageInfo method.
@@ -32,6 +38,28 @@ namespace ExampleClient.Source
 
             if (dataStorage.DataSources.Count > 0)
                 AddDataSourceInfo(dataStorage);
+        }
+
+        #endregion Public Methods
+
+        #region Private Methods
+
+        /// <summary>
+        /// The AddDataSourceInfo method.
+        /// </summary>
+        /// <param name="dataStorage">The <paramref name="dataStorage"/> to add the info for.</param>
+        private void AddDataSourceInfo(DataStorage dataStorage)
+        {
+            var lvItem = new ListViewItem(string.Empty) { BackColor = Color.LightGray };
+            lvItem.SubItems.Add("Assignments");
+            lvDataStorageDetails.Items.Add(lvItem);
+            foreach (var dataSource in dataStorage.DataSources)
+            {
+                var lvSubItem = new ListViewItem(string.Empty);
+                lvSubItem.SubItems.Add("Camera");
+                lvSubItem.SubItems.Add(dataSource.Name);
+                lvDataStorageDetails.Items.Add(lvSubItem);
+            }
         }
 
         /// <summary>
@@ -67,24 +95,6 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
-        /// The AddDataSourceInfo method.
-        /// </summary>
-        /// <param name="dataStorage">The <paramref name="dataStorage"/> to add the info for.</param>
-        private void AddDataSourceInfo(DataStorage dataStorage)
-        {
-            var lvItem = new ListViewItem(string.Empty) { BackColor = Color.LightGray };
-            lvItem.SubItems.Add("Assignments");
-            lvDataStorageDetails.Items.Add(lvItem);
-            foreach (var dataSource in dataStorage.DataSources)
-            {
-                var lvSubItem = new ListViewItem(string.Empty);
-                lvSubItem.SubItems.Add("Camera");
-                lvSubItem.SubItems.Add(dataSource.Name);
-                lvDataStorageDetails.Items.Add(lvSubItem);
-            }
-        }
-
-        /// <summary>
         /// The AddStorageConfigInfo method.
         /// </summary>
         /// <param name="dataStorage">The <paramref name="dataStorage"/> to add the info for.</param>
@@ -108,5 +118,7 @@ namespace ExampleClient.Source
             lvSubItem2.SubItems.Add(config.RetentionLimit.ToString());
             lvDataStorageDetails.Items.Add(lvSubItem2);
         }
+
+        #endregion Private Methods
     }
 }

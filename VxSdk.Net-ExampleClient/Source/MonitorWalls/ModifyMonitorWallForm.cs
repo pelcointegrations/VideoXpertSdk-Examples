@@ -13,42 +13,7 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user to modify a monitor wall.</remarks>
     public partial class ModifyMonitorWallForm : Form
     {
-        /// <summary>
-        /// Gets or sets the CurrentMonitorWall property.
-        /// </summary>
-        /// <value>The current monitor wall.</value>
-        private MonitorWall CurrentMonitorWall { get; }
-
-        /// <summary>
-        /// Gets or sets the CurrentMonitorPositions property.
-        /// </summary>
-        /// <value>The current monitor positions.</value>
-        private List<MonitorPosition> CurrentMonitorPositions { get; }
-
-        /// <summary>
-        /// Gets or sets the NewMonitorWallName property.
-        /// </summary>
-        /// <value>The name to use for renaming the monitor wall.</value>
-        private string NewMonitorWallName { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the mouse is clicked.
-        /// </summary>
-        /// <value>The current mouse down status.</value>
-        private bool IsMouseDown { get; set; }
-
-        /// <summary>
-        /// Gets or sets the LastX property.
-        /// </summary>
-        /// <value>The last X coordinate.</value>
-        private int LastX { get; set; }
-
-        /// <summary>
-        /// Gets or sets the LastY property.
-        /// </summary>
-        /// <value>The last Y coordinate.</value>
-        private int LastY { get; set; }
-
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModifyMonitorWallForm" /> class.
@@ -80,6 +45,87 @@ namespace ExampleClient.Source
             Refresh();
         }
 
+        #endregion Public Constructors
+
+        #region Private Properties
+
+        /// <summary>
+        /// Gets or sets the CurrentMonitorPositions property.
+        /// </summary>
+        /// <value>The current monitor positions.</value>
+        private List<MonitorPosition> CurrentMonitorPositions { get; }
+
+        /// <summary>
+        /// Gets or sets the CurrentMonitorWall property.
+        /// </summary>
+        /// <value>The current monitor wall.</value>
+        private MonitorWall CurrentMonitorWall { get; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the mouse is clicked.
+        /// </summary>
+        /// <value>The current mouse down status.</value>
+        private bool IsMouseDown { get; set; }
+
+        /// <summary>
+        /// Gets or sets the LastX property.
+        /// </summary>
+        /// <value>The last X coordinate.</value>
+        private int LastX { get; set; }
+
+        /// <summary>
+        /// Gets or sets the LastY property.
+        /// </summary>
+        /// <value>The last Y coordinate.</value>
+        private int LastY { get; set; }
+
+        /// <summary>
+        /// Gets or sets the NewMonitorWallName property.
+        /// </summary>
+        /// <value>The name to use for renaming the monitor wall.</value>
+        private string NewMonitorWallName { get; set; }
+
+        #endregion Private Properties
+
+        #region Public Methods
+
+        /// <summary>
+        /// The AddMonitorPanel method.
+        /// </summary>
+        /// <param name="monitorPanel">The panel to add.</param>
+        /// <param name="monitorName">The name of the monitor.</param>
+        public void AddMonitorPanel(MonitorPanel monitorPanel, string monitorName)
+        {
+            var monitorLabel = new Label
+            {
+                BackColor = Color.Transparent,
+                ForeColor = Color.White,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Text = monitorName,
+                Location = Point.Empty,
+                Dock = DockStyle.Fill,
+                AutoSize = false,
+                Size = monitorPanel.Size
+            };
+
+            monitorLabel.MouseClick += MonitorLabel_Click;
+            monitorLabel.MouseDown += MonitorLabel_MouseDown;
+            monitorLabel.MouseMove += MonitorLabel_MouseMove;
+            monitorLabel.MouseUp += MonitorLabel_MouseUp;
+
+            var menuStrip = new ContextMenuStrip();
+            var itemRemove = menuStrip.Items.Add("Remove monitor");
+            itemRemove.Tag = monitorPanel;
+            itemRemove.Click += ItemRemoveMonitor_Click;
+            var itemResize = menuStrip.Items.Add("Resize monitor");
+            itemResize.Tag = monitorPanel;
+            itemResize.Click += ItemResizeMonitor_Click;
+            monitorLabel.ContextMenuStrip = menuStrip;
+
+            monitorPanel.BackColor = SystemColors.ControlDarkDark;
+            monitorPanel.Controls.Add(monitorLabel);
+            pnlMain.Controls.Add(monitorPanel);
+        }
 
         /// <summary>
         /// The DisplayMonitorPosition method.
@@ -140,43 +186,9 @@ namespace ExampleClient.Source
             AddMonitorPanel(monitorPanel, monitor.Name);
         }
 
-        /// <summary>
-        /// The AddMonitorPanel method.
-        /// </summary>
-        /// <param name="monitorPanel">The panel to add.</param>
-        /// <param name="monitorName">The name of the monitor.</param>
-        public void AddMonitorPanel(MonitorPanel monitorPanel, string monitorName)
-        {
-            var monitorLabel = new Label
-            {
-                BackColor = Color.Transparent,
-                ForeColor = Color.White,
-                TextAlign = ContentAlignment.MiddleCenter,
-                Text = monitorName,
-                Location = Point.Empty,
-                Dock = DockStyle.Fill,
-                AutoSize = false,
-                Size = monitorPanel.Size
-            };
+        #endregion Public Methods
 
-            monitorLabel.MouseClick += MonitorLabel_Click;
-            monitorLabel.MouseDown += MonitorLabel_MouseDown;
-            monitorLabel.MouseMove += MonitorLabel_MouseMove;
-            monitorLabel.MouseUp += MonitorLabel_MouseUp;
-
-            var menuStrip = new ContextMenuStrip();
-            var itemRemove = menuStrip.Items.Add("Remove monitor");
-            itemRemove.Tag = monitorPanel;
-            itemRemove.Click += ItemRemoveMonitor_Click;
-            var itemResize = menuStrip.Items.Add("Resize monitor");
-            itemResize.Tag = monitorPanel;
-            itemResize.Click += ItemResizeMonitor_Click;
-            monitorLabel.ContextMenuStrip = menuStrip;
-
-            monitorPanel.BackColor = SystemColors.ControlDarkDark;
-            monitorPanel.Controls.Add(monitorLabel);
-            pnlMain.Controls.Add(monitorPanel);
-        }
+        #region Private Methods
 
         /// <summary>
         /// The MonitorLabel_Click method.
@@ -190,30 +202,6 @@ namespace ExampleClient.Source
 
             var monitorLabel = sender as Label;
             monitorLabel?.ContextMenuStrip.Show();
-        }
-
-        /// <summary>
-        /// The IsMonitorUsed method.
-        /// </summary>
-        /// <param name="monitor">The monitor to check.</param>
-        /// <returns><c>true</c> if a monitor already exists within the current
-        /// monitor positions, otherwise <c>false</c>.</returns>
-        private bool IsMonitorUsed(Monitor monitor)
-        {
-            foreach (var monitorPanel in pnlMain.Controls.OfType<Panel>())
-            {
-                if (monitorPanel.Tag.GetType() != typeof(MonitorPosition))
-                    continue;
-
-                var monitorPosition = monitorPanel.Tag as MonitorPosition;
-                if (monitorPosition == null)
-                    return false;
-
-                if (monitor.Id == monitorPosition.MonitorId)
-                    return true;
-            }
-
-            return false;
         }
 
         /// <summary>
@@ -279,8 +267,31 @@ namespace ExampleClient.Source
             if (!string.IsNullOrEmpty(NewMonitorWallName))
                 CurrentMonitorWall.Name = NewMonitorWallName;
 
-
             CurrentMonitorWall.MonitorPositions = CurrentMonitorPositions;
+        }
+
+        /// <summary>
+        /// The IsMonitorUsed method.
+        /// </summary>
+        /// <param name="monitor">The monitor to check.</param>
+        /// <returns><c>true</c> if a monitor already exists within the current
+        /// monitor positions, otherwise <c>false</c>.</returns>
+        private bool IsMonitorUsed(Monitor monitor)
+        {
+            foreach (var monitorPanel in pnlMain.Controls.OfType<Panel>())
+            {
+                if (monitorPanel.Tag.GetType() != typeof(MonitorPosition))
+                    continue;
+
+                var monitorPosition = monitorPanel.Tag as MonitorPosition;
+                if (monitorPosition == null)
+                    return false;
+
+                if (monitor.Id == monitorPosition.MonitorId)
+                    return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -294,7 +305,6 @@ namespace ExampleClient.Source
             var monitorPanel = toolStripItem.Tag as MonitorPanel;
             if (monitorPanel == null)
                 return;
-
 
             var monitorPosition = (MonitorPosition)monitorPanel.Tag;
             if (monitorPosition != null)
@@ -314,7 +324,7 @@ namespace ExampleClient.Source
             var toolStripItem = (ToolStripItem)sender;
             var monitorPanel = toolStripItem.Tag as MonitorPanel;
 
-            var monitorPosition = (MonitorPosition) monitorPanel?.Tag;
+            var monitorPosition = (MonitorPosition)monitorPanel?.Tag;
             if (monitorPosition == null)
                 return;
 
@@ -399,7 +409,7 @@ namespace ExampleClient.Source
             var panelPoint = pnlMain.PointToClient(new Point(args.X, args.Y));
             if (!args.Data.GetDataPresent(typeof(ListViewItem)))
                 return;
-            
+
             var lvItem = args.Data.GetData(typeof(ListViewItem)) as ListViewItem;
             if (lvItem != null)
             {
@@ -431,15 +441,23 @@ namespace ExampleClient.Source
                 args.Effect = DragDropEffects.Move;
             }
         }
+
+        #endregion Private Methods
     }
 
     [System.ComponentModel.DesignerCategory("Code")]
     public class MonitorPanel : Panel
     {
-        public MonitorPanel() 
+        #region Public Constructors
+
+        public MonitorPanel()
         {
             SetStyle(ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
         }
+
+        #endregion Public Constructors
+
+        #region Protected Methods
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -448,5 +466,6 @@ namespace ExampleClient.Source
             e.Graphics.DrawRectangle(Pens.White, 0, 0, ClientSize.Width - 2, ClientSize.Height - 2);
         }
 
+        #endregion Protected Methods
     }
 }

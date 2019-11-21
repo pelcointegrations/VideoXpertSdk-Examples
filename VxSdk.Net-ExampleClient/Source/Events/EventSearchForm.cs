@@ -13,11 +13,7 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user to search for events.</remarks>
     public partial class EventSearchForm : Form
     {
-        /// <summary>
-        /// Gets or sets the StartIndex property.
-        /// </summary>
-        /// <value>The index of the first element returned in current page of the collection.</value>
-        private int StartIndex { get; set; }
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EventSearchForm" /> class.
@@ -38,6 +34,20 @@ namespace ExampleClient.Source
             dtpStartDate.Value = DateTime.Now - TimeSpan.FromDays(1);
             StartIndex = 0;
         }
+
+        #endregion Public Constructors
+
+        #region Private Properties
+
+        /// <summary>
+        /// Gets or sets the StartIndex property.
+        /// </summary>
+        /// <value>The index of the first element returned in current page of the collection.</value>
+        private int StartIndex { get; set; }
+
+        #endregion Private Properties
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonAck_Click method.
@@ -177,5 +187,7 @@ namespace ExampleClient.Source
 
             events.Clear();
         }
+
+        #endregion Private Methods
     }
 }

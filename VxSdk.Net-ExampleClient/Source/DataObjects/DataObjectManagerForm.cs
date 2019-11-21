@@ -10,6 +10,8 @@ namespace ExampleClient.Source
     /// data objects from the VideoXpert system.</remarks>
     public partial class DataObjectManagerForm : Form
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DataObjectManagerForm" /> class.
         /// </summary>
@@ -20,24 +22,25 @@ namespace ExampleClient.Source
             PopulateDataObjects();
         }
 
-        /// <summary>
-        /// The PopulateDataObjects method.
-        /// </summary>
-        private void PopulateDataObjects()
-        {
-            lvDataObjects.Items.Clear();
-            tbxData.Clear();
+        #endregion Public Constructors
 
-            // Get the existing data objects from the VideoXpert system and add
-            // them to the list view.
-            foreach (var dataObject in MainForm.CurrentSystem.DataObjects)
-            {
-                var lvItem = new ListViewItem(dataObject.ClientType);
-                lvItem.SubItems.Add(dataObject.Id);
-                lvItem.SubItems.Add(dataObject.OwnerName);
-                lvItem.Tag = dataObject;
-                lvDataObjects.Items.Add(lvItem);
-            }
+        #region Private Methods
+
+        /// <summary>
+        /// The ButtonDelete_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonDelete_Click(object sender, EventArgs args)
+        {
+            if (lvDataObjects.SelectedItems.Count == 0)
+                return;
+
+            // Get the associated data object from the selected item and delete
+            // it from the VideoXpert system.
+            var dataObject = (VxSdkNet.DataObject)lvDataObjects.SelectedItems[0].Tag;
+            MainForm.CurrentSystem.DeleteDataObject(dataObject);
+            PopulateDataObjects();
         }
 
         /// <summary>
@@ -59,23 +62,6 @@ namespace ExampleClient.Source
                 return;
 
             // Refresh the items in the list view to include the newly added data object.
-            PopulateDataObjects();
-        }
-
-        /// <summary>
-        /// The ButtonDelete_Click method.
-        /// </summary>
-        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
-        /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void ButtonDelete_Click(object sender, EventArgs args)
-        {
-            if (lvDataObjects.SelectedItems.Count == 0)
-                return;
-
-            // Get the associated data object from the selected item and delete
-            // it from the VideoXpert system.
-            var dataObject = (VxSdkNet.DataObject)lvDataObjects.SelectedItems[0].Tag;
-            MainForm.CurrentSystem.DeleteDataObject(dataObject);
             PopulateDataObjects();
         }
 
@@ -104,5 +90,27 @@ namespace ExampleClient.Source
             var dataObject = (VxSdkNet.DataObject)lvDataObjects.SelectedItems[0].Tag;
             tbxData.Text = dataObject.Data;
         }
+
+        /// <summary>
+        /// The PopulateDataObjects method.
+        /// </summary>
+        private void PopulateDataObjects()
+        {
+            lvDataObjects.Items.Clear();
+            tbxData.Clear();
+
+            // Get the existing data objects from the VideoXpert system and add
+            // them to the list view.
+            foreach (var dataObject in MainForm.CurrentSystem.DataObjects)
+            {
+                var lvItem = new ListViewItem(dataObject.ClientType);
+                lvItem.SubItems.Add(dataObject.Id);
+                lvItem.SubItems.Add(dataObject.OwnerName);
+                lvItem.Tag = dataObject;
+                lvDataObjects.Items.Add(lvItem);
+            }
+        }
+
+        #endregion Private Methods
     }
 }

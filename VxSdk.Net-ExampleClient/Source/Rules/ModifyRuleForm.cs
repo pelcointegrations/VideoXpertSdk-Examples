@@ -12,48 +12,7 @@ namespace ExampleClient.Source
     /// <remarks>Provides a dialog window that allows the user to add or modify a rule.</remarks>
     public partial class ModifyRuleForm : Form
     {
-        /// <summary>
-        /// Gets the HaveTriggersChanged property.
-        /// </summary>
-        /// <value><c>true</c> if the triggers have been modified, otherwise <c>false</c>.</value>
-        private bool HaveTriggersChanged { get; set; }
-
-        /// <summary>
-        /// Gets the HaveTimeTablesChanged property.
-        /// </summary>
-        /// <value><c>true</c> if the time tables have been modified, otherwise <c>false</c>.</value>
-        private bool HaveTimeTablesChanged { get; set; }
-
-        /// <summary>
-        /// Gets or sets the SelectedRule property.
-        /// </summary>
-        /// <value>The currently selected rule.</value>
-        public Rule SelectedRule { get; set; }
-
-        /// <summary>
-        /// Gets or sets the DataSourceList property.
-        /// </summary>
-        /// <value>The list of data sources on the system.</value>
-        private List<DataSource> DataSourceList { get; }
-
-        /// <summary>
-        /// Gets or sets the DataStorageList property.
-        /// </summary>
-        /// <value>The list of data storages on the system.</value>
-        private List<DataStorage> DataStorageList { get; }
-
-        /// <summary>
-        /// Gets or sets the DeviceList property.
-        /// </summary>
-        /// <value>The list of devices on the system.</value>
-        private List<Device> DeviceList { get; }
-
-        /// <summary>
-        /// Gets or sets the TagList property.
-        /// </summary>
-        /// <value>The list of tags on the system.</value>
-        private List<Tag> TagList { get; }
-
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModifyRuleForm" /> class.
@@ -93,6 +52,60 @@ namespace ExampleClient.Source
             }
             lvRuleTriggers.Refresh();
         }
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the SelectedRule property.
+        /// </summary>
+        /// <value>The currently selected rule.</value>
+        public Rule SelectedRule { get; set; }
+
+        #endregion Public Properties
+
+        #region Private Properties
+
+        /// <summary>
+        /// Gets or sets the DataSourceList property.
+        /// </summary>
+        /// <value>The list of data sources on the system.</value>
+        private List<DataSource> DataSourceList { get; }
+
+        /// <summary>
+        /// Gets or sets the DataStorageList property.
+        /// </summary>
+        /// <value>The list of data storages on the system.</value>
+        private List<DataStorage> DataStorageList { get; }
+
+        /// <summary>
+        /// Gets or sets the DeviceList property.
+        /// </summary>
+        /// <value>The list of devices on the system.</value>
+        private List<Device> DeviceList { get; }
+
+        /// <summary>
+        /// Gets the HaveTimeTablesChanged property.
+        /// </summary>
+        /// <value><c>true</c> if the time tables have been modified, otherwise <c>false</c>.</value>
+        private bool HaveTimeTablesChanged { get; set; }
+
+        /// <summary>
+        /// Gets the HaveTriggersChanged property.
+        /// </summary>
+        /// <value><c>true</c> if the triggers have been modified, otherwise <c>false</c>.</value>
+        private bool HaveTriggersChanged { get; set; }
+
+        /// <summary>
+        /// Gets or sets the TagList property.
+        /// </summary>
+        /// <value>The list of tags on the system.</value>
+        private List<Tag> TagList { get; }
+
+        #endregion Private Properties
+
+        #region Private Methods
 
         /// <summary>
         /// The ButtonAdd_Click method.
@@ -194,5 +207,7 @@ namespace ExampleClient.Source
 
             SelectedRule.Triggers = ruleTriggers;
         }
+
+        #endregion Private Methods
     }
 }

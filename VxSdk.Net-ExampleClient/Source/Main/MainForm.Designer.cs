@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.panelVideoStreamLeft = new System.Windows.Forms.Panel();
+            this.lblStreamLossLeft = new System.Windows.Forms.Label();
             this.btnPause = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.lblTimestampLeft = new System.Windows.Forms.Label();
@@ -67,6 +68,13 @@
             this.playbackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.normalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.skipGapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aspectRatioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ratio16x9ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ratio4x3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ratio1x1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ratio3x2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ratio5x4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.stretchToFitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.alarmInputsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bookmarkManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -107,9 +115,12 @@
             this.nudPreRecord = new System.Windows.Forms.NumericUpDown();
             this.btnSnapshot = new System.Windows.Forms.Button();
             this.scVideoPanels = new System.Windows.Forms.SplitContainer();
+            this.tlpLeftStreamAndTimeline = new System.Windows.Forms.TableLayoutPanel();
             this.progressBar_left = new System.Windows.Forms.ProgressBar();
-            this.progressBar_right = new System.Windows.Forms.ProgressBar();
+            this.tlpRightStreamAndTimeline = new System.Windows.Forms.TableLayoutPanel();
             this.panelVideoStreamRight = new System.Windows.Forms.Panel();
+            this.lblStreamLossRight = new System.Windows.Forms.Label();
+            this.progressBar_right = new System.Windows.Forms.ProgressBar();
             this.btnManualRecord = new System.Windows.Forms.Button();
             this.nudPostRecord = new System.Windows.Forms.NumericUpDown();
             this.lblPostRecord = new System.Windows.Forms.Label();
@@ -118,6 +129,7 @@
             this.scOuter = new System.Windows.Forms.SplitContainer();
             this.txbxLog = new System.Windows.Forms.TextBox();
             this.bgWorker = new System.ComponentModel.BackgroundWorker();
+            this.panelVideoStreamLeft.SuspendLayout();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.scInner)).BeginInit();
@@ -130,6 +142,9 @@
             this.scVideoPanels.Panel1.SuspendLayout();
             this.scVideoPanels.Panel2.SuspendLayout();
             this.scVideoPanels.SuspendLayout();
+            this.tlpLeftStreamAndTimeline.SuspendLayout();
+            this.tlpRightStreamAndTimeline.SuspendLayout();
+            this.panelVideoStreamRight.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudPostRecord)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.scOuter)).BeginInit();
             this.scOuter.Panel1.SuspendLayout();
@@ -145,16 +160,29 @@
             this.panelVideoStreamLeft.BackColor = System.Drawing.SystemColors.WindowText;
             this.panelVideoStreamLeft.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panelVideoStreamLeft.BackgroundImage")));
             this.panelVideoStreamLeft.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.panelVideoStreamLeft.Controls.Add(this.lblStreamLossLeft);
             this.panelVideoStreamLeft.Location = new System.Drawing.Point(3, 3);
             this.panelVideoStreamLeft.Name = "panelVideoStreamLeft";
-            this.panelVideoStreamLeft.Size = new System.Drawing.Size(584, 340);
+            this.panelVideoStreamLeft.Size = new System.Drawing.Size(584, 345);
             this.panelVideoStreamLeft.TabIndex = 2;
             this.panelVideoStreamLeft.Click += new System.EventHandler(this.PanelVideoStream_Click);
-            this.panelVideoStreamLeft.Paint += new System.Windows.Forms.PaintEventHandler(this.panelVideoStreamLeft_Paint);
             this.panelVideoStreamLeft.MouseClick += new System.Windows.Forms.MouseEventHandler(this.PanelVideoStreamLeft_MouseClick);
             this.panelVideoStreamLeft.MouseEnter += new System.EventHandler(this.PanelVideoStream_MouseEnter);
             this.panelVideoStreamLeft.MouseLeave += new System.EventHandler(this.PanelVideoStream_MouseLeave);
             this.panelVideoStreamLeft.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.PanelVideoStream_MouseWheel);
+            // 
+            // lblStreamLossLeft
+            // 
+            this.lblStreamLossLeft.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblStreamLossLeft.ForeColor = System.Drawing.Color.White;
+            this.lblStreamLossLeft.Location = new System.Drawing.Point(0, 0);
+            this.lblStreamLossLeft.Name = "lblStreamLossLeft";
+            this.lblStreamLossLeft.Size = new System.Drawing.Size(584, 345);
+            this.lblStreamLossLeft.TabIndex = 0;
+            this.lblStreamLossLeft.Text = "Stream Connection Lost: Attempting to reconnect in 5 seconds...";
+            this.lblStreamLossLeft.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblStreamLossLeft.Visible = false;
+            this.lblStreamLossLeft.Click += new System.EventHandler(this.PanelVideoStreamLeft_MouseClick);
             // 
             // btnPause
             // 
@@ -416,7 +444,9 @@
             // 
             this.streamsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.streamProtocolToolStripMenuItem,
-            this.playbackToolStripMenuItem});
+            this.playbackToolStripMenuItem,
+            this.aspectRatioToolStripMenuItem,
+            this.stretchToFitToolStripMenuItem});
             this.streamsToolStripMenuItem.Name = "streamsToolStripMenuItem";
             this.streamsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.streamsToolStripMenuItem.Text = "Streams";
@@ -478,6 +508,68 @@
             this.skipGapsToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
             this.skipGapsToolStripMenuItem.Text = "Skip Gaps";
             this.skipGapsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemPlaybackOptions_Click);
+            // 
+            // aspectRatioToolStripMenuItem
+            // 
+            this.aspectRatioToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ratio16x9ToolStripMenuItem,
+            this.ratio4x3ToolStripMenuItem,
+            this.ratio1x1ToolStripMenuItem,
+            this.ratio3x2ToolStripMenuItem,
+            this.ratio5x4ToolStripMenuItem});
+            this.aspectRatioToolStripMenuItem.Name = "aspectRatioToolStripMenuItem";
+            this.aspectRatioToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.aspectRatioToolStripMenuItem.Text = "Aspect Ratio";
+            // 
+            // ratio16x9ToolStripMenuItem
+            // 
+            this.ratio16x9ToolStripMenuItem.Checked = true;
+            this.ratio16x9ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ratio16x9ToolStripMenuItem.Name = "ratio16x9ToolStripMenuItem";
+            this.ratio16x9ToolStripMenuItem.Size = new System.Drawing.Size(95, 22);
+            this.ratio16x9ToolStripMenuItem.Tag = 0;
+            this.ratio16x9ToolStripMenuItem.Text = "16:9";
+            this.ratio16x9ToolStripMenuItem.Click += new System.EventHandler(this.MenuItemAspectRatio_Click);
+            // 
+            // ratio4x3ToolStripMenuItem
+            // 
+            this.ratio4x3ToolStripMenuItem.Name = "ratio4x3ToolStripMenuItem";
+            this.ratio4x3ToolStripMenuItem.Size = new System.Drawing.Size(95, 22);
+            this.ratio4x3ToolStripMenuItem.Tag = 1;
+            this.ratio4x3ToolStripMenuItem.Text = "4:3";
+            this.ratio4x3ToolStripMenuItem.Click += new System.EventHandler(this.MenuItemAspectRatio_Click);
+            // 
+            // ratio1x1ToolStripMenuItem
+            // 
+            this.ratio1x1ToolStripMenuItem.Name = "ratio1x1ToolStripMenuItem";
+            this.ratio1x1ToolStripMenuItem.Size = new System.Drawing.Size(95, 22);
+            this.ratio1x1ToolStripMenuItem.Tag = 2;
+            this.ratio1x1ToolStripMenuItem.Text = "1:1";
+            this.ratio1x1ToolStripMenuItem.Click += new System.EventHandler(this.MenuItemAspectRatio_Click);
+            // 
+            // ratio3x2ToolStripMenuItem
+            // 
+            this.ratio3x2ToolStripMenuItem.Name = "ratio3x2ToolStripMenuItem";
+            this.ratio3x2ToolStripMenuItem.Size = new System.Drawing.Size(95, 22);
+            this.ratio3x2ToolStripMenuItem.Tag = 3;
+            this.ratio3x2ToolStripMenuItem.Text = "3:2";
+            this.ratio3x2ToolStripMenuItem.Click += new System.EventHandler(this.MenuItemAspectRatio_Click);
+            // 
+            // ratio5x4ToolStripMenuItem
+            // 
+            this.ratio5x4ToolStripMenuItem.Name = "ratio5x4ToolStripMenuItem";
+            this.ratio5x4ToolStripMenuItem.Size = new System.Drawing.Size(95, 22);
+            this.ratio5x4ToolStripMenuItem.Tag = 4;
+            this.ratio5x4ToolStripMenuItem.Text = "5:4";
+            this.ratio5x4ToolStripMenuItem.Click += new System.EventHandler(this.MenuItemAspectRatio_Click);
+            // 
+            // stretchToFitToolStripMenuItem
+            // 
+            this.stretchToFitToolStripMenuItem.CheckOnClick = true;
+            this.stretchToFitToolStripMenuItem.Name = "stretchToFitToolStripMenuItem";
+            this.stretchToFitToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.stretchToFitToolStripMenuItem.Text = "Stretch To Fit";
+            this.stretchToFitToolStripMenuItem.Click += new System.EventHandler(this.MenuItemStretchToFit_Click);
             // 
             // manageToolStripMenuItem
             // 
@@ -668,9 +760,9 @@
             this.btnSeek.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnSeek.Enabled = false;
             this.btnSeek.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.btnSeek.Location = new System.Drawing.Point(304, 366);
+            this.btnSeek.Location = new System.Drawing.Point(305, 366);
             this.btnSeek.Name = "btnSeek";
-            this.btnSeek.Size = new System.Drawing.Size(54, 23);
+            this.btnSeek.Size = new System.Drawing.Size(53, 23);
             this.btnSeek.TabIndex = 36;
             this.btnSeek.Text = "Seek ...";
             this.btnSeek.Click += new System.EventHandler(this.ButtonSeek_Click);
@@ -907,38 +999,60 @@
             // 
             // scVideoPanels.Panel1
             // 
-            this.scVideoPanels.Panel1.Controls.Add(this.progressBar_left);
-            this.scVideoPanels.Panel1.Controls.Add(this.panelVideoStreamLeft);
+            this.scVideoPanels.Panel1.Controls.Add(this.tlpLeftStreamAndTimeline);
             // 
             // scVideoPanels.Panel2
             // 
-            this.scVideoPanels.Panel2.Controls.Add(this.progressBar_right);
-            this.scVideoPanels.Panel2.Controls.Add(this.panelVideoStreamRight);
+            this.scVideoPanels.Panel2.Controls.Add(this.tlpRightStreamAndTimeline);
             this.scVideoPanels.Size = new System.Drawing.Size(1183, 359);
             this.scVideoPanels.SplitterDistance = 590;
             this.scVideoPanels.TabIndex = 41;
             // 
+            // tlpLeftStreamAndTimeline
+            // 
+            this.tlpLeftStreamAndTimeline.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tlpLeftStreamAndTimeline.ColumnCount = 1;
+            this.tlpLeftStreamAndTimeline.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpLeftStreamAndTimeline.Controls.Add(this.panelVideoStreamLeft, 0, 0);
+            this.tlpLeftStreamAndTimeline.Controls.Add(this.progressBar_left, 0, 1);
+            this.tlpLeftStreamAndTimeline.Location = new System.Drawing.Point(0, 0);
+            this.tlpLeftStreamAndTimeline.Name = "tlpLeftStreamAndTimeline";
+            this.tlpLeftStreamAndTimeline.RowCount = 1;
+            this.tlpLeftStreamAndTimeline.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 98F));
+            this.tlpLeftStreamAndTimeline.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 2F));
+            this.tlpLeftStreamAndTimeline.Size = new System.Drawing.Size(590, 359);
+            this.tlpLeftStreamAndTimeline.TabIndex = 0;
+            // 
             // progressBar_left
             // 
-            this.progressBar_left.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.progressBar_left.Dock = System.Windows.Forms.DockStyle.Fill;
             this.progressBar_left.Enabled = false;
-            this.progressBar_left.Location = new System.Drawing.Point(0, 349);
+            this.progressBar_left.Location = new System.Drawing.Point(0, 351);
+            this.progressBar_left.Margin = new System.Windows.Forms.Padding(0);
             this.progressBar_left.Maximum = 1000;
             this.progressBar_left.Name = "progressBar_left";
-            this.progressBar_left.Size = new System.Drawing.Size(590, 10);
+            this.progressBar_left.Size = new System.Drawing.Size(590, 8);
             this.progressBar_left.TabIndex = 3;
             this.progressBar_left.Visible = false;
             // 
-            // progressBar_right
+            // tlpRightStreamAndTimeline
             // 
-            this.progressBar_right.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.progressBar_right.Enabled = false;
-            this.progressBar_right.Location = new System.Drawing.Point(0, 349);
-            this.progressBar_right.Maximum = 1000;
-            this.progressBar_right.Name = "progressBar_right";
-            this.progressBar_right.Size = new System.Drawing.Size(589, 10);
-            this.progressBar_right.TabIndex = 3;
-            this.progressBar_right.Visible = false;
+            this.tlpRightStreamAndTimeline.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tlpRightStreamAndTimeline.ColumnCount = 1;
+            this.tlpRightStreamAndTimeline.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpRightStreamAndTimeline.Controls.Add(this.panelVideoStreamRight, 0, 0);
+            this.tlpRightStreamAndTimeline.Controls.Add(this.progressBar_right, 0, 1);
+            this.tlpRightStreamAndTimeline.Location = new System.Drawing.Point(0, 0);
+            this.tlpRightStreamAndTimeline.Name = "tlpRightStreamAndTimeline";
+            this.tlpRightStreamAndTimeline.RowCount = 1;
+            this.tlpRightStreamAndTimeline.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 98F));
+            this.tlpRightStreamAndTimeline.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 2F));
+            this.tlpRightStreamAndTimeline.Size = new System.Drawing.Size(590, 359);
+            this.tlpRightStreamAndTimeline.TabIndex = 0;
             // 
             // panelVideoStreamRight
             // 
@@ -948,15 +1062,41 @@
             this.panelVideoStreamRight.BackColor = System.Drawing.SystemColors.WindowText;
             this.panelVideoStreamRight.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panelVideoStreamRight.BackgroundImage")));
             this.panelVideoStreamRight.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.panelVideoStreamRight.Controls.Add(this.lblStreamLossRight);
             this.panelVideoStreamRight.Location = new System.Drawing.Point(3, 3);
             this.panelVideoStreamRight.Name = "panelVideoStreamRight";
-            this.panelVideoStreamRight.Size = new System.Drawing.Size(578, 340);
+            this.panelVideoStreamRight.Size = new System.Drawing.Size(584, 345);
             this.panelVideoStreamRight.TabIndex = 3;
             this.panelVideoStreamRight.Click += new System.EventHandler(this.PanelVideoStream_Click);
             this.panelVideoStreamRight.MouseClick += new System.Windows.Forms.MouseEventHandler(this.PanelVideoStreamRight_MouseClick);
             this.panelVideoStreamRight.MouseEnter += new System.EventHandler(this.PanelVideoStream_MouseEnter);
             this.panelVideoStreamRight.MouseLeave += new System.EventHandler(this.PanelVideoStream_MouseLeave);
             this.panelVideoStreamRight.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.PanelVideoStream_MouseWheel);
+            // 
+            // lblStreamLossRight
+            // 
+            this.lblStreamLossRight.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblStreamLossRight.ForeColor = System.Drawing.Color.White;
+            this.lblStreamLossRight.Location = new System.Drawing.Point(0, 0);
+            this.lblStreamLossRight.Name = "lblStreamLossRight";
+            this.lblStreamLossRight.Size = new System.Drawing.Size(584, 345);
+            this.lblStreamLossRight.TabIndex = 1;
+            this.lblStreamLossRight.Text = "Stream Connection Lost: Attempting to reconnect in 5 seconds...";
+            this.lblStreamLossRight.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblStreamLossRight.Visible = false;
+            this.lblStreamLossRight.Click += new System.EventHandler(this.PanelVideoStreamRight_MouseClick);
+            // 
+            // progressBar_right
+            // 
+            this.progressBar_right.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.progressBar_right.Enabled = false;
+            this.progressBar_right.Location = new System.Drawing.Point(0, 351);
+            this.progressBar_right.Margin = new System.Windows.Forms.Padding(0);
+            this.progressBar_right.Maximum = 1000;
+            this.progressBar_right.Name = "progressBar_right";
+            this.progressBar_right.Size = new System.Drawing.Size(590, 8);
+            this.progressBar_right.TabIndex = 3;
+            this.progressBar_right.Visible = false;
             // 
             // btnManualRecord
             // 
@@ -1064,6 +1204,7 @@
             this.Name = "MainForm";
             this.Text = "VxSdk.NET Test Client";
             this.Shown += new System.EventHandler(this.MainForm_Shown);
+            this.panelVideoStreamLeft.ResumeLayout(false);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpeed)).EndInit();
@@ -1078,6 +1219,9 @@
             this.scVideoPanels.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.scVideoPanels)).EndInit();
             this.scVideoPanels.ResumeLayout(false);
+            this.tlpLeftStreamAndTimeline.ResumeLayout(false);
+            this.tlpRightStreamAndTimeline.ResumeLayout(false);
+            this.panelVideoStreamRight.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.nudPostRecord)).EndInit();
             this.scOuter.Panel1.ResumeLayout(false);
             this.scOuter.Panel2.ResumeLayout(false);
@@ -1181,9 +1325,20 @@
         private System.Windows.Forms.ToolStripMenuItem jpegPullToolStripMenuItem;
         public System.Windows.Forms.NumericUpDown nudSpeed;
         public System.Windows.Forms.ToolStripMenuItem rtspTcpToolStripMenuItem;
-        public System.Windows.Forms.ProgressBar progressBar_left;
         public System.Windows.Forms.ProgressBar progressBar_right;
         private System.Windows.Forms.ToolStripMenuItem exportsLocalToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aspectRatioToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ratio16x9ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ratio4x3ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ratio1x1ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ratio3x2ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ratio5x4ToolStripMenuItem;
+        private System.Windows.Forms.TableLayoutPanel tlpLeftStreamAndTimeline;
+        public System.Windows.Forms.ProgressBar progressBar_left;
+        private System.Windows.Forms.TableLayoutPanel tlpRightStreamAndTimeline;
+        private System.Windows.Forms.ToolStripMenuItem stretchToFitToolStripMenuItem;
+        public System.Windows.Forms.Label lblStreamLossLeft;
+        public System.Windows.Forms.Label lblStreamLossRight;
     }
 }
 
