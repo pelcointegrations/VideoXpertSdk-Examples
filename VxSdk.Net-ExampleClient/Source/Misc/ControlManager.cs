@@ -165,14 +165,15 @@ namespace ExampleClient.Source
             {
                 var selControl = SelectedControl;
                 SelectControl(control);
-                MainForm.Instance.BeginInvoke((MethodInvoker)delegate { MainForm.Instance.StopStream(); });
+                MainForm.Instance.MainBeginInvoke(() => MainForm.Instance.StopStream());
                 SelectControl(selControl);
                 return;
             }
 
             state.IsReconnecting = true;
-            MainForm.Instance.BeginInvoke((MethodInvoker)delegate { state.StreamPanel.Refresh(); });
-            MainForm.Instance.BeginInvoke((MethodInvoker)delegate { state.VideoLossLabel.Visible = true; });
+            state.MediaController.Stop();
+            MainForm.Instance.MainBeginInvoke(() => state.StreamPanel.Refresh());
+            MainForm.Instance.MainBeginInvoke(() => state.VideoLossLabel.Visible = true);
 
             var retryCount = 0;
             while (state.IsReconnecting)
@@ -180,8 +181,7 @@ namespace ExampleClient.Source
                 try
                 {
                     retryCount += 1;
-                    MainForm.Instance.BeginInvoke((MethodInvoker)delegate { state.VideoLossLabel.Text = $"Stream Connection Lost: Attempting to reconnect... (attempt #{retryCount})"; });
-                    state.MediaController.Stop();
+                    MainForm.Instance.MainBeginInvoke(() => state.VideoLossLabel.Text = $"Stream Connection Lost: Attempting to reconnect... (attempt #{retryCount})");
                     state.MediaController.SetDataSource(state.VideoDataSource, state.VideoDataInterface, state.AudioDataSource, state.AudioDataInterface);
                     state.IsReconnecting = !state.MediaController.Play(1.0f, state.Transport);
                     if (!state.IsReconnecting)
@@ -197,11 +197,11 @@ namespace ExampleClient.Source
                 }
                 catch (Exception ex)
                 {
-                    MainForm.Instance.BeginInvoke((MethodInvoker)delegate { MainForm.Instance.WriteToLog($@"Error: {ex.Message}\n"); });
+                    MainForm.Instance.MainBeginInvoke(() => MainForm.Instance.WriteToLog($@"Error: {ex.Message}\n"));
                 }
             }
 
-            MainForm.Instance.BeginInvoke((MethodInvoker)delegate { state.VideoLossLabel.Visible = false; });
+            MainForm.Instance.MainBeginInvoke(() => state.VideoLossLabel.Visible = false);
         }
 
         /// <summary>
@@ -284,7 +284,7 @@ namespace ExampleClient.Source
         /// <param name="streamEvent">The <paramref name="streamEvent"/> parameter.</param>
         private static void OnStreamEventLeft(StreamingEvent streamEvent)
         {
-            MainForm.Instance.BeginInvoke((MethodInvoker)delegate
+            MainForm.Instance.MainBeginInvoke(() =>
             {
                 MainForm.Instance.WriteToLog("Stream Connection Lost.");
                 Task.Run(() => Instance.RestartStream(Controls.Left));
@@ -297,7 +297,7 @@ namespace ExampleClient.Source
         /// <param name="streamEvent">The <paramref name="streamEvent"/> parameter.</param>
         private static void OnStreamEventRight(StreamingEvent streamEvent)
         {
-            MainForm.Instance.BeginInvoke((MethodInvoker)delegate
+            MainForm.Instance.MainBeginInvoke(() =>
             {
                 MainForm.Instance.WriteToLog("Stream Connection Lost.");
                 Task.Run(() => Instance.RestartStream(Controls.Right));
@@ -309,10 +309,7 @@ namespace ExampleClient.Source
             // Note that the timestamp is in UTC by default, so you must convert it to local time
             // if that is the format required.
             var timestamp = timeEvent.Timestamp.ToLocalTime().ToString("s");
-            MainForm.Instance.lblTimestampLeft.BeginInvoke((MethodInvoker)delegate
-            {
-                MainForm.Instance.lblTimestampLeft.Text = timestamp;
-            });
+            MainForm.Instance.MainBeginInvoke(() => MainForm.Instance.lblTimestampLeft.Text = timestamp);
 
             var ticksIn = timeEvent.Timestamp.Ticks;
             if (Instance._statesLeft.MediaController.Mode == MediaControl.Modes.Playback)
@@ -320,14 +317,11 @@ namespace ExampleClient.Source
                 if (timeEvent.Timestamp.Ticks >= Instance._statesLeft.EndTime.Ticks)
                 {
                     // We are done - so Pause and show progress at 100%
-                    MainForm.Instance.progressBar_left.BeginInvoke((MethodInvoker)delegate
-                    {
-                        MainForm.Instance.progressBar_left.Value = 1000;
-                    });
+                    MainForm.Instance.MainBeginInvoke(() => MainForm.Instance.progressBar_left.Value = 1000);
                     Instance._statesLeft.MediaController.Pause();
                     return;
                 }
-                MainForm.Instance.progressBar_left.BeginInvoke((MethodInvoker)delegate
+                MainForm.Instance.MainBeginInvoke(() =>
                 {
                     if (ticksIn < Instance._statesLeft.StartTime.Ticks)
                     {
@@ -350,7 +344,7 @@ namespace ExampleClient.Source
                     var clip = clips[i];
                     // Which direction?
                     decimal currentSpeed = 1;
-                    MainForm.Instance.nudSpeed.BeginInvoke((MethodInvoker)delegate { currentSpeed = MainForm.Instance.nudSpeed.Value; });
+                    MainForm.Instance.MainInvoke(() => currentSpeed = MainForm.Instance.nudSpeed.Value);
                     if (currentSpeed > 0)
                     {
                         if (timeEvent.Timestamp.AddSeconds(2) >= clip.EndTime)
@@ -363,13 +357,8 @@ namespace ExampleClient.Source
                                 var transport = (MainForm.Instance.rtspTcpToolStripMenuItem.Checked == true) ? MediaControl.RTSPNetworkTransports.RTPOverRTSP : MediaControl.RTSPNetworkTransports.UDP;
                                 System.DateTime startTime = clips[i + 1].StartTime;
                                 float speed = (float)MainForm.Instance.nudSpeed.Value;
-                                object[] invokeArray = new object[4];
-                                invokeArray[0] = Instance._statesLeft.MediaController;
-                                invokeArray[1] = startTime;
-                                invokeArray[2] = speed;
-                                invokeArray[3] = transport;
                                 Instance._statesLeft.JustJumpedTime = timeEvent.Timestamp;
-                                MainForm.Instance.BeginInvoke(new SeekSkipGapDelegate(SeekSkipGapMethod), invokeArray);
+                                MainForm.Instance.MainBeginInvoke(() => SeekSkipGapMethod(Instance._statesLeft.MediaController, startTime, speed, transport));
                                 break;
                             }
                         }
@@ -387,10 +376,7 @@ namespace ExampleClient.Source
             // Note that the timestamp is in UTC by default, so you must convert it to local time
             // if that is the format required.
             var timestamp = timeEvent.Timestamp.ToLocalTime().ToString("s");
-            MainForm.Instance.lblTimestampRight.BeginInvoke((MethodInvoker)delegate
-            {
-                MainForm.Instance.lblTimestampRight.Text = timestamp;
-            });
+            MainForm.Instance.MainBeginInvoke(() => MainForm.Instance.lblTimestampRight.Text = timestamp);
 
             var ticksIn = timeEvent.Timestamp.Ticks;
             if (Instance._statesRight.MediaController.Mode == MediaControl.Modes.Playback)
@@ -398,14 +384,11 @@ namespace ExampleClient.Source
                 if (timeEvent.Timestamp.Ticks >= Instance._statesRight.EndTime.Ticks)
                 {
                     // We are done - so Pause and show progress at 100%
-                    MainForm.Instance.progressBar_right.BeginInvoke((MethodInvoker)delegate
-                    {
-                        MainForm.Instance.progressBar_right.Value = 1000;
-                    });
+                    MainForm.Instance.MainBeginInvoke(() => MainForm.Instance.progressBar_right.Value = 1000);
                     Instance._statesRight.MediaController.Pause();
                     return;
                 }
-                MainForm.Instance.progressBar_right.BeginInvoke((MethodInvoker)delegate
+                MainForm.Instance.MainBeginInvoke(() =>
                 {
                     if (ticksIn < Instance._statesRight.StartTime.Ticks)
                     {
@@ -440,13 +423,8 @@ namespace ExampleClient.Source
                                 var transport = (MainForm.Instance.rtspTcpToolStripMenuItem.Checked == true) ? MediaControl.RTSPNetworkTransports.RTPOverRTSP : MediaControl.RTSPNetworkTransports.UDP;
                                 System.DateTime startTime = clips[i + 1].StartTime;
                                 float speed = (float)MainForm.Instance.nudSpeed.Value;
-                                object[] invokeArray = new object[4];
-                                invokeArray[0] = Instance._statesRight.MediaController;
-                                invokeArray[1] = startTime;
-                                invokeArray[2] = speed;
-                                invokeArray[3] = transport;
                                 Instance._statesRight.JustJumpedTime = timeEvent.Timestamp;
-                                MainForm.Instance.BeginInvoke(new SeekSkipGapDelegate(SeekSkipGapMethod), invokeArray);
+                                MainForm.Instance.MainBeginInvoke(() => SeekSkipGapMethod(Instance._statesRight.MediaController, startTime, speed, transport));
                                 break;
                             }
                         }

@@ -129,6 +129,21 @@ namespace ExampleClient.Source
 
         #region Public Methods
 
+        public void MainInvoke(Action action)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action<Action>(MainInvoke), action);
+                return;
+            }
+            action();
+        }
+
+        public void MainBeginInvoke(Action action)
+        {
+            BeginInvoke(action);
+        }
+
         public void EnableModeByState()
         {
             switch (Control.States.VcrState)
@@ -160,7 +175,7 @@ namespace ExampleClient.Source
             WriteToLog(internalEvent.Type.ToString());
             if (internalEvent.Type == InternalEvent.EventType.GraceLicenseExpired || internalEvent.Type == InternalEvent.EventType.SystemLicenseExpired)
             {
-                BeginInvoke(new Action(Logout));
+                MainBeginInvoke(Logout);
             }
         }
 
@@ -181,11 +196,11 @@ namespace ExampleClient.Source
 
             if (displayEventDialogsToolStripMenuItem.Checked)
             {
-                Instance.Invoke(new MethodInvoker(delegate
+                MainInvoke(() =>
                 {
                     var eventForm = new EventDisplayForm(systemEvent);
                     eventForm.Show(Instance);
-                }));
+                });
             }
         }
 
@@ -275,16 +290,12 @@ namespace ExampleClient.Source
                 }
 
                 Control.RemovePlaybackProgress();
-
                 Control.States.MediaController.Stop();
 
                 Control.UnsubscribeToTimestamps();
                 Control.UnsubscribeToStreamEvents();
-                Control.States.TimestampLabel.BeginInvoke((MethodInvoker)delegate
-                {
-                    Control.States.TimestampLabel.Text = string.Empty;
-                });
 
+                Control.States.TimestampLabel.Text = string.Empty;
                 Control.States.StreamPanel.Refresh();
 
                 Control.States.PtzControl = null;
@@ -323,11 +334,7 @@ namespace ExampleClient.Source
         public void WriteToLog(string message)
         {
             var time = DateTime.Now;
-            txbxLog.BeginInvoke((MethodInvoker)delegate
-            {
-                txbxLog.AppendText(time.ToLongTimeString() + ": " + message);
-                txbxLog.AppendText(Environment.NewLine);
-            });
+            MainBeginInvoke(() => txbxLog.AppendText(time.ToLongTimeString() + ": " + message + "\n"));
         }
 
         #endregion Public Methods
@@ -695,6 +702,8 @@ namespace ExampleClient.Source
             btnSeek.Enabled = true;
             btnStop.Enabled = true;
 
+            ptzToolStripMenuItem.Enabled = true;
+            streamsToolStripMenuItem.Enabled = true;
             btnSnapshot.Enabled = true;
             btnSnapshotFromVideo.Enabled = true;
             btnRefreshDataSources.Enabled = true;
@@ -714,6 +723,8 @@ namespace ExampleClient.Source
             btnSeek.Enabled = false;
             btnStop.Enabled = false;
 
+            ptzToolStripMenuItem.Enabled = false;
+            streamsToolStripMenuItem.Enabled = false;
             btnSnapshot.Enabled = false;
             btnSnapshotFromVideo.Enabled = false;
             btnRefreshDataSources.Enabled = false;
@@ -737,6 +748,8 @@ namespace ExampleClient.Source
             nudPostRecord.Enabled = false;
             nudPreRecord.Enabled = false;
 
+            ptzToolStripMenuItem.Enabled = true;
+            streamsToolStripMenuItem.Enabled = true;
             btnSnapshot.Enabled = true;
             btnSnapshotFromVideo.Enabled = true;
             btnRefreshDataSources.Enabled = true;
@@ -756,6 +769,8 @@ namespace ExampleClient.Source
             btnSeek.Enabled = true;
             btnStop.Enabled = true;
 
+            ptzToolStripMenuItem.Enabled = true;
+            streamsToolStripMenuItem.Enabled = true;
             btnSnapshot.Enabled = true;
             btnSnapshotFromVideo.Enabled = true;
             btnRefreshDataSources.Enabled = true;
@@ -773,9 +788,11 @@ namespace ExampleClient.Source
             btnSeek.Enabled = true;
             btnStop.Enabled = false;
 
+            ptzToolStripMenuItem.Enabled = true;
+            streamsToolStripMenuItem.Enabled = true;
             btnSnapshot.Enabled = false;
             btnSnapshotFromVideo.Enabled = false;
-            btnRefreshDataSources.Enabled = false;
+            btnRefreshDataSources.Enabled = true;
             btnLocalRecord.Enabled = false;
             nudSpeed.Enabled = true;
             btnPause.Text = "Pause";
@@ -1187,6 +1204,8 @@ namespace ExampleClient.Source
             }
 
             StopAllStreams();
+            Control.SetVcrStates(ControlManager.VcrMode.Stopped);
+            EnableModeByState();
         }
 
         /// <summary>
@@ -1218,7 +1237,10 @@ namespace ExampleClient.Source
                     jpegPullToolStripMenuItem.Checked = false;
                 }
             }
+
             StopAllStreams();
+            Control.SetVcrStates(ControlManager.VcrMode.Stopped);
+            EnableModeByState();
         }
 
         /// <summary>
@@ -1586,7 +1608,7 @@ namespace ExampleClient.Source
         {
             Control.SelectControl(ControlManager.Controls.Left);
             UpdateSelectedAspectRatio();
-            Instance.BeginInvoke((MethodInvoker)delegate { stretchToFitToolStripMenuItem.Checked = Control.States.StretchToFit; });
+            stretchToFitToolStripMenuItem.Checked = Control.States.StretchToFit;
 
             if (Control.States.VcrState != ControlManager.VcrMode.Unknown)
                 EnableModeByState();
@@ -1606,7 +1628,7 @@ namespace ExampleClient.Source
         {
             Control.SelectControl(ControlManager.Controls.Right);
             UpdateSelectedAspectRatio();
-            Instance.BeginInvoke((MethodInvoker)delegate { stretchToFitToolStripMenuItem.Checked = Control.States.StretchToFit; });
+            stretchToFitToolStripMenuItem.Checked = Control.States.StretchToFit;
 
             if (Control.States.VcrState != ControlManager.VcrMode.Unknown)
                 EnableModeByState();
@@ -1960,10 +1982,7 @@ namespace ExampleClient.Source
                             return;
                         }
 
-                        Control.States.TimestampLabel.BeginInvoke((MethodInvoker)delegate
-                        {
-                            Control.States.TimestampLabel.Text = string.Empty;
-                        });
+                        Control.States.TimestampLabel.Text = string.Empty;
                         Control.States.MediaController.Dispose();
                         Control.States.MediaController = null;
                         Control.States.StreamPanel.Refresh();
@@ -2007,16 +2026,15 @@ namespace ExampleClient.Source
         }
 
         private void txbxLog_TextChanged(object sender, EventArgs e)
-        {
-        }
+        { }
 
         private void UpdateSelectedAspectRatio()
         {
-            Instance.BeginInvoke((MethodInvoker)delegate { ratio16x9ToolStripMenuItem.Checked = Control.States.AspectRatio == MediaControl.AspectRatios.k16x9; });
-            Instance.BeginInvoke((MethodInvoker)delegate { ratio4x3ToolStripMenuItem.Checked = Control.States.AspectRatio == MediaControl.AspectRatios.k4x3; });
-            Instance.BeginInvoke((MethodInvoker)delegate { ratio1x1ToolStripMenuItem.Checked = Control.States.AspectRatio == MediaControl.AspectRatios.k1x1; });
-            Instance.BeginInvoke((MethodInvoker)delegate { ratio3x2ToolStripMenuItem.Checked = Control.States.AspectRatio == MediaControl.AspectRatios.k3x2; });
-            Instance.BeginInvoke((MethodInvoker)delegate { ratio5x4ToolStripMenuItem.Checked = Control.States.AspectRatio == MediaControl.AspectRatios.k5x4; });
+            ratio16x9ToolStripMenuItem.Checked = Control.States.AspectRatio == MediaControl.AspectRatios.k16x9;
+            ratio4x3ToolStripMenuItem.Checked = Control.States.AspectRatio == MediaControl.AspectRatios.k4x3;
+            ratio1x1ToolStripMenuItem.Checked = Control.States.AspectRatio == MediaControl.AspectRatios.k1x1;
+            ratio3x2ToolStripMenuItem.Checked = Control.States.AspectRatio == MediaControl.AspectRatios.k3x2;
+            ratio5x4ToolStripMenuItem.Checked = Control.States.AspectRatio == MediaControl.AspectRatios.k5x4;
         }
 
         #endregion Private Methods

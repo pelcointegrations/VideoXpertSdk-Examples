@@ -8,7 +8,6 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using VxSdkNet;
 
 namespace ExampleClient.Source
@@ -24,7 +23,7 @@ namespace ExampleClient.Source
         /// <param name="args">The <paramref name="args"/> parameter.</param>
         public static void BackgroundWorker_DoWork(object sender, DoWorkEventArgs args)
         {
-            MainForm.Instance.dgvDataSources.Invoke(new MethodInvoker(delegate { MainForm.Instance.dgvDataSources.Rows.Clear(); }));
+            MainForm.Instance.MainBeginInvoke(() => MainForm.Instance.dgvDataSources.Rows.Clear());
 
             if (MainForm.CurrentDevices != null)
                 MainForm.CurrentDevices.Clear();
@@ -65,14 +64,18 @@ namespace ExampleClient.Source
                 newRow.Tag = dataSource;
             }
 
-            MainForm.Instance.BeginInvoke((MethodInvoker)delegate
+            MainForm.Instance.MainBeginInvoke(() =>
             {
                 // If data source collection was successful enable the UI elements.
                 MainForm.Instance.eventsToolStripMenuItem.Enabled = true;
                 MainForm.Instance.manageToolStripMenuItem.Enabled = true;
 
-                MainForm.Instance.Control.SetVcrStates(ControlManager.VcrMode.Stopped);
-                MainForm.Instance.EnableModeByState();
+                // If unknown we are logging in.
+                if (MainForm.Instance.Control.States.VcrState == ControlManager.VcrMode.Unknown)
+                {
+                    MainForm.Instance.Control.SetVcrStates(ControlManager.VcrMode.Stopped);
+                    MainForm.Instance.EnableModeByState();
+                }
             });
         }
 
@@ -83,8 +86,7 @@ namespace ExampleClient.Source
         /// <param name="args">The <paramref name="args"/> parameter.</param>
         public static void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs args)
         {
-            MainForm.Instance.pbLoadCameras.Invoke(
-                new MethodInvoker(delegate { MainForm.Instance.pbLoadCameras.Value = args.ProgressPercentage; }));
+            MainForm.Instance.MainBeginInvoke(() => MainForm.Instance.pbLoadCameras.Value = args.ProgressPercentage);
         }
 
         /// <summary>
@@ -183,8 +185,7 @@ namespace ExampleClient.Source
             var rowIndex = 0;
             if (MainForm.Instance.dgvDataSources.InvokeRequired)
             {
-                MainForm.Instance.dgvDataSources.Invoke(
-                    new MethodInvoker(delegate { rowIndex = MainForm.Instance.dgvDataSources.Rows.Add(item); }));
+                MainForm.Instance.MainInvoke(() => rowIndex = MainForm.Instance.dgvDataSources.Rows.Add(item));
             }
             else
                 rowIndex = MainForm.Instance.dgvDataSources.Rows.Add(item);
@@ -198,29 +199,12 @@ namespace ExampleClient.Source
         /// <param name="isVisible">The value to set the visible property to.</param>
         private static void ChangeProgressViewState(bool isVisible)
         {
-            if (MainForm.Instance.pbLoadCameras.InvokeRequired)
+            MainForm.Instance.MainBeginInvoke(() =>
             {
-                MainForm.Instance.pbLoadCameras.Invoke(
-                    new MethodInvoker(delegate { MainForm.Instance.pbLoadCameras.Visible = isVisible; }));
-            }
-            else
                 MainForm.Instance.pbLoadCameras.Visible = isVisible;
-
-            if (MainForm.Instance.lblAddingCameras.InvokeRequired)
-            {
-                MainForm.Instance.lblAddingCameras.Invoke(
-                    new MethodInvoker(delegate { MainForm.Instance.lblAddingCameras.Visible = isVisible; }));
-            }
-            else
                 MainForm.Instance.lblAddingCameras.Visible = isVisible;
-
-            if (MainForm.Instance.btnRefreshDataSources.InvokeRequired)
-            {
-                MainForm.Instance.btnRefreshDataSources.Invoke(
-                    new MethodInvoker(delegate { MainForm.Instance.btnRefreshDataSources.Visible = !isVisible; }));
-            }
-            else
                 MainForm.Instance.btnRefreshDataSources.Visible = !isVisible;
+            });
         }
 
         #endregion Private Methods

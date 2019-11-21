@@ -429,6 +429,7 @@
             // 
             this.ptzToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showPTZControlsToolStripMenuItem});
+            this.ptzToolStripMenuItem.Enabled = false;
             this.ptzToolStripMenuItem.Name = "ptzToolStripMenuItem";
             this.ptzToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.ptzToolStripMenuItem.Text = "PTZ";
@@ -436,7 +437,7 @@
             // showPTZControlsToolStripMenuItem
             // 
             this.showPTZControlsToolStripMenuItem.Name = "showPTZControlsToolStripMenuItem";
-            this.showPTZControlsToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.showPTZControlsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.showPTZControlsToolStripMenuItem.Text = "Show PTZ Controls";
             this.showPTZControlsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemShowPtzControls_Click);
             // 
@@ -447,6 +448,7 @@
             this.playbackToolStripMenuItem,
             this.aspectRatioToolStripMenuItem,
             this.stretchToFitToolStripMenuItem});
+            this.streamsToolStripMenuItem.Enabled = false;
             this.streamsToolStripMenuItem.Name = "streamsToolStripMenuItem";
             this.streamsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.streamsToolStripMenuItem.Text = "Streams";
@@ -458,7 +460,7 @@
             this.rtspTcpToolStripMenuItem,
             this.jpegPullToolStripMenuItem});
             this.streamProtocolToolStripMenuItem.Name = "streamProtocolToolStripMenuItem";
-            this.streamProtocolToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.streamProtocolToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.streamProtocolToolStripMenuItem.Text = "Stream Protocol";
             // 
             // rtspUdpToolStripMenuItem
@@ -490,13 +492,13 @@
             this.normalToolStripMenuItem,
             this.skipGapsToolStripMenuItem});
             this.playbackToolStripMenuItem.Name = "playbackToolStripMenuItem";
-            this.playbackToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.playbackToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.playbackToolStripMenuItem.Text = "Playback";
             // 
             // normalToolStripMenuItem
             // 
             this.normalToolStripMenuItem.Name = "normalToolStripMenuItem";
-            this.normalToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
+            this.normalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.normalToolStripMenuItem.Text = "Normal";
             this.normalToolStripMenuItem.Click += new System.EventHandler(this.MenuItemPlaybackOptions_Click);
             // 
@@ -505,7 +507,7 @@
             this.skipGapsToolStripMenuItem.Checked = true;
             this.skipGapsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.skipGapsToolStripMenuItem.Name = "skipGapsToolStripMenuItem";
-            this.skipGapsToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
+            this.skipGapsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.skipGapsToolStripMenuItem.Text = "Skip Gaps";
             this.skipGapsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemPlaybackOptions_Click);
             // 
@@ -518,7 +520,7 @@
             this.ratio3x2ToolStripMenuItem,
             this.ratio5x4ToolStripMenuItem});
             this.aspectRatioToolStripMenuItem.Name = "aspectRatioToolStripMenuItem";
-            this.aspectRatioToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.aspectRatioToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.aspectRatioToolStripMenuItem.Text = "Aspect Ratio";
             // 
             // ratio16x9ToolStripMenuItem
@@ -567,7 +569,7 @@
             // 
             this.stretchToFitToolStripMenuItem.CheckOnClick = true;
             this.stretchToFitToolStripMenuItem.Name = "stretchToFitToolStripMenuItem";
-            this.stretchToFitToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.stretchToFitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.stretchToFitToolStripMenuItem.Text = "Stretch To Fit";
             this.stretchToFitToolStripMenuItem.Click += new System.EventHandler(this.MenuItemStretchToFit_Click);
             // 

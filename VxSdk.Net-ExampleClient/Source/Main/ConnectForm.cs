@@ -48,10 +48,7 @@ namespace ExampleClient.Source
                         $" expire on {expirationTime.ToLocalTime().ToShortDateString()} at {expirationTime.ToLocalTime().ToShortTimeString()}.  This integration will cease to function if the system remains unlicensed when the grace period expires.";
 
                     MainForm.Instance.WriteToLog("Warning: " + message);
-                    MainForm.Instance.BeginInvoke((MethodInvoker)delegate
-                   {
-                       MainForm.Instance.ShowLicenseWarning(expirationTime);
-                   });
+                    MainForm.Instance.MainBeginInvoke(() => MainForm.Instance.ShowLicenseWarning(expirationTime));
                 }
                 else if (result != Results.Value.OK)
                 {
