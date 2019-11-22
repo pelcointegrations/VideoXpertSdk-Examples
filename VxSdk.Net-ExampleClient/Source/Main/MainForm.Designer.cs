@@ -110,6 +110,7 @@
             this.btnRefreshDataSources = new System.Windows.Forms.Button();
             this.pbLoadCameras = new System.Windows.Forms.ProgressBar();
             this.lblAddingCameras = new System.Windows.Forms.Label();
+            this.btnSetSpeed = new System.Windows.Forms.Button();
             this.btnLocalRecord = new System.Windows.Forms.Button();
             this.lblTimestampRight = new System.Windows.Forms.Label();
             this.nudPreRecord = new System.Windows.Forms.NumericUpDown();
@@ -189,7 +190,7 @@
             this.btnPause.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnPause.Enabled = false;
             this.btnPause.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.btnPause.Location = new System.Drawing.Point(364, 366);
+            this.btnPause.Location = new System.Drawing.Point(293, 365);
             this.btnPause.Name = "btnPause";
             this.btnPause.Size = new System.Drawing.Size(45, 23);
             this.btnPause.TabIndex = 2;
@@ -201,7 +202,7 @@
             this.btnStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnStop.Enabled = false;
             this.btnStop.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.btnStop.Location = new System.Drawing.Point(415, 366);
+            this.btnStop.Location = new System.Drawing.Point(344, 365);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(45, 23);
             this.btnStop.TabIndex = 4;
@@ -216,7 +217,6 @@
             this.lblTimestampLeft.Name = "lblTimestampLeft";
             this.lblTimestampLeft.Size = new System.Drawing.Size(120, 25);
             this.lblTimestampLeft.TabIndex = 11;
-            this.lblTimestampLeft.Text = "Time Left";
             // 
             // menuStrip
             // 
@@ -437,7 +437,7 @@
             // showPTZControlsToolStripMenuItem
             // 
             this.showPTZControlsToolStripMenuItem.Name = "showPTZControlsToolStripMenuItem";
-            this.showPTZControlsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.showPTZControlsToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             this.showPTZControlsToolStripMenuItem.Text = "Show PTZ Controls";
             this.showPTZControlsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemShowPtzControls_Click);
             // 
@@ -460,7 +460,7 @@
             this.rtspTcpToolStripMenuItem,
             this.jpegPullToolStripMenuItem});
             this.streamProtocolToolStripMenuItem.Name = "streamProtocolToolStripMenuItem";
-            this.streamProtocolToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.streamProtocolToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.streamProtocolToolStripMenuItem.Text = "Stream Protocol";
             // 
             // rtspUdpToolStripMenuItem
@@ -492,13 +492,13 @@
             this.normalToolStripMenuItem,
             this.skipGapsToolStripMenuItem});
             this.playbackToolStripMenuItem.Name = "playbackToolStripMenuItem";
-            this.playbackToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.playbackToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.playbackToolStripMenuItem.Text = "Playback";
             // 
             // normalToolStripMenuItem
             // 
             this.normalToolStripMenuItem.Name = "normalToolStripMenuItem";
-            this.normalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.normalToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
             this.normalToolStripMenuItem.Text = "Normal";
             this.normalToolStripMenuItem.Click += new System.EventHandler(this.MenuItemPlaybackOptions_Click);
             // 
@@ -507,7 +507,7 @@
             this.skipGapsToolStripMenuItem.Checked = true;
             this.skipGapsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.skipGapsToolStripMenuItem.Name = "skipGapsToolStripMenuItem";
-            this.skipGapsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.skipGapsToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
             this.skipGapsToolStripMenuItem.Text = "Skip Gaps";
             this.skipGapsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemPlaybackOptions_Click);
             // 
@@ -520,7 +520,7 @@
             this.ratio3x2ToolStripMenuItem,
             this.ratio5x4ToolStripMenuItem});
             this.aspectRatioToolStripMenuItem.Name = "aspectRatioToolStripMenuItem";
-            this.aspectRatioToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aspectRatioToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.aspectRatioToolStripMenuItem.Text = "Aspect Ratio";
             // 
             // ratio16x9ToolStripMenuItem
@@ -569,7 +569,7 @@
             // 
             this.stretchToFitToolStripMenuItem.CheckOnClick = true;
             this.stretchToFitToolStripMenuItem.Name = "stretchToFitToolStripMenuItem";
-            this.stretchToFitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.stretchToFitToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.stretchToFitToolStripMenuItem.Text = "Stretch To Fit";
             this.stretchToFitToolStripMenuItem.Click += new System.EventHandler(this.MenuItemStretchToFit_Click);
             // 
@@ -762,11 +762,11 @@
             this.btnSeek.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnSeek.Enabled = false;
             this.btnSeek.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.btnSeek.Location = new System.Drawing.Point(305, 366);
+            this.btnSeek.Location = new System.Drawing.Point(234, 365);
             this.btnSeek.Name = "btnSeek";
             this.btnSeek.Size = new System.Drawing.Size(53, 23);
             this.btnSeek.TabIndex = 36;
-            this.btnSeek.Text = "Seek ...";
+            this.btnSeek.Text = "Seek";
             this.btnSeek.Click += new System.EventHandler(this.ButtonSeek_Click);
             // 
             // btnLive
@@ -774,7 +774,7 @@
             this.btnLive.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnLive.Enabled = false;
             this.btnLive.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.btnLive.Location = new System.Drawing.Point(465, 366);
+            this.btnLive.Location = new System.Drawing.Point(394, 365);
             this.btnLive.Name = "btnLive";
             this.btnLive.Size = new System.Drawing.Size(45, 23);
             this.btnLive.TabIndex = 37;
@@ -785,7 +785,7 @@
             // 
             this.lblSpeed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblSpeed.AutoSize = true;
-            this.lblSpeed.Location = new System.Drawing.Point(513, 371);
+            this.lblSpeed.Location = new System.Drawing.Point(459, 370);
             this.lblSpeed.Name = "lblSpeed";
             this.lblSpeed.Size = new System.Drawing.Size(38, 13);
             this.lblSpeed.TabIndex = 38;
@@ -794,9 +794,9 @@
             // nudSpeed
             // 
             this.nudSpeed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.nudSpeed.DecimalPlaces = 1;
+            this.nudSpeed.DecimalPlaces = 2;
             this.nudSpeed.Enabled = false;
-            this.nudSpeed.Location = new System.Drawing.Point(552, 369);
+            this.nudSpeed.Location = new System.Drawing.Point(498, 366);
             this.nudSpeed.Maximum = new decimal(new int[] {
             300,
             0,
@@ -834,6 +834,7 @@
             // scInner.Panel2
             // 
             this.scInner.Panel2.BackColor = System.Drawing.SystemColors.Control;
+            this.scInner.Panel2.Controls.Add(this.btnSetSpeed);
             this.scInner.Panel2.Controls.Add(this.btnLocalRecord);
             this.scInner.Panel2.Controls.Add(this.lblTimestampRight);
             this.scInner.Panel2.Controls.Add(this.nudPreRecord);
@@ -936,11 +937,23 @@
             this.lblAddingCameras.Text = "Loading Cameras";
             this.lblAddingCameras.Visible = false;
             // 
+            // btnSetSpeed
+            // 
+            this.btnSetSpeed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnSetSpeed.Enabled = false;
+            this.btnSetSpeed.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.btnSetSpeed.Location = new System.Drawing.Point(548, 365);
+            this.btnSetSpeed.Name = "btnSetSpeed";
+            this.btnSetSpeed.Size = new System.Drawing.Size(45, 23);
+            this.btnSetSpeed.TabIndex = 53;
+            this.btnSetSpeed.Text = "Set";
+            this.btnSetSpeed.Click += new System.EventHandler(this.ButtonSetSpeed_Click);
+            // 
             // btnLocalRecord
             // 
             this.btnLocalRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnLocalRecord.Enabled = false;
-            this.btnLocalRecord.Location = new System.Drawing.Point(970, 365);
+            this.btnLocalRecord.Location = new System.Drawing.Point(962, 365);
             this.btnLocalRecord.Name = "btnLocalRecord";
             this.btnLocalRecord.Size = new System.Drawing.Size(104, 23);
             this.btnLocalRecord.TabIndex = 52;
@@ -956,14 +969,13 @@
             this.lblTimestampRight.Name = "lblTimestampRight";
             this.lblTimestampRight.Size = new System.Drawing.Size(120, 25);
             this.lblTimestampRight.TabIndex = 44;
-            this.lblTimestampRight.Text = "Time Right";
             this.lblTimestampRight.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // nudPreRecord
             // 
             this.nudPreRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.nudPreRecord.Enabled = false;
-            this.nudPreRecord.Location = new System.Drawing.Point(760, 366);
+            this.nudPreRecord.Location = new System.Drawing.Point(752, 366);
             this.nudPreRecord.Maximum = new decimal(new int[] {
             30,
             0,
@@ -984,7 +996,7 @@
             this.btnSnapshot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnSnapshot.Enabled = false;
             this.btnSnapshot.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnSnapshot.Location = new System.Drawing.Point(606, 365);
+            this.btnSnapshot.Location = new System.Drawing.Point(598, 365);
             this.btnSnapshot.Name = "btnSnapshot";
             this.btnSnapshot.Size = new System.Drawing.Size(61, 23);
             this.btnSnapshot.TabIndex = 45;
@@ -1104,7 +1116,7 @@
             // 
             this.btnManualRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnManualRecord.Enabled = false;
-            this.btnManualRecord.Location = new System.Drawing.Point(882, 365);
+            this.btnManualRecord.Location = new System.Drawing.Point(874, 365);
             this.btnManualRecord.Name = "btnManualRecord";
             this.btnManualRecord.Size = new System.Drawing.Size(87, 23);
             this.btnManualRecord.TabIndex = 47;
@@ -1116,7 +1128,7 @@
             // 
             this.nudPostRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.nudPostRecord.Enabled = false;
-            this.nudPostRecord.Location = new System.Drawing.Point(834, 366);
+            this.nudPostRecord.Location = new System.Drawing.Point(826, 366);
             this.nudPostRecord.Maximum = new decimal(new int[] {
             30,
             0,
@@ -1131,7 +1143,7 @@
             // 
             this.lblPostRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblPostRecord.AutoSize = true;
-            this.lblPostRecord.Location = new System.Drawing.Point(807, 369);
+            this.lblPostRecord.Location = new System.Drawing.Point(799, 370);
             this.lblPostRecord.Name = "lblPostRecord";
             this.lblPostRecord.Size = new System.Drawing.Size(28, 13);
             this.lblPostRecord.TabIndex = 50;
@@ -1141,7 +1153,7 @@
             // 
             this.lblPreRecord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblPreRecord.AutoSize = true;
-            this.lblPreRecord.Location = new System.Drawing.Point(737, 370);
+            this.lblPreRecord.Location = new System.Drawing.Point(729, 370);
             this.lblPreRecord.Name = "lblPreRecord";
             this.lblPreRecord.Size = new System.Drawing.Size(23, 13);
             this.lblPreRecord.TabIndex = 48;
@@ -1152,7 +1164,7 @@
             this.btnSnapshotFromVideo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnSnapshotFromVideo.Enabled = false;
             this.btnSnapshotFromVideo.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnSnapshotFromVideo.Location = new System.Drawing.Point(668, 365);
+            this.btnSnapshotFromVideo.Location = new System.Drawing.Point(660, 365);
             this.btnSnapshotFromVideo.Name = "btnSnapshotFromVideo";
             this.btnSnapshotFromVideo.Size = new System.Drawing.Size(61, 23);
             this.btnSnapshotFromVideo.TabIndex = 45;
@@ -1193,7 +1205,6 @@
             this.txbxLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.txbxLog.Size = new System.Drawing.Size(1554, 78);
             this.txbxLog.TabIndex = 0;
-            this.txbxLog.TextChanged += new System.EventHandler(this.txbxLog_TextChanged);
             // 
             // MainForm
             // 
@@ -1341,6 +1352,7 @@
         private System.Windows.Forms.ToolStripMenuItem stretchToFitToolStripMenuItem;
         public System.Windows.Forms.Label lblStreamLossLeft;
         public System.Windows.Forms.Label lblStreamLossRight;
+        public System.Windows.Forms.Button btnSetSpeed;
     }
 }
 

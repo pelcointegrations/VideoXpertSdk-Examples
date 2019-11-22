@@ -334,7 +334,8 @@ namespace ExampleClient.Source
         public void WriteToLog(string message)
         {
             var time = DateTime.Now;
-            MainBeginInvoke(() => txbxLog.AppendText(time.ToLongTimeString() + ": " + message + "\n"));
+            MainBeginInvoke(() => txbxLog.AppendText(time.ToLongTimeString() + ": " + message));
+            MainBeginInvoke(() => txbxLog.AppendText(Environment.NewLine));
         }
 
         #endregion Public Methods
@@ -643,6 +644,22 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The ButtonSetSpeed_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonSetSpeed_Click(object sender, EventArgs args)
+        {
+            if (SelectedDataSource == null || Control.States.MediaController == null) return;
+
+            if (Control.States.MediaController.Mode == MediaControl.Modes.Playback)
+            {
+                Control.States.MediaController.Play((float)nudSpeed.Value);
+                Control.States.PlaySpeed = nudSpeed.Value;
+            }
+        }
+
+        /// <summary>
         /// The ButtonSnapshot_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -701,6 +718,7 @@ namespace ExampleClient.Source
             btnPause.Enabled = true;
             btnSeek.Enabled = true;
             btnStop.Enabled = true;
+            btnSetSpeed.Enabled = false;
 
             ptzToolStripMenuItem.Enabled = true;
             streamsToolStripMenuItem.Enabled = true;
@@ -710,7 +728,7 @@ namespace ExampleClient.Source
             btnLocalRecord.Enabled = true;
             nudSpeed.Enabled = false;
             btnPause.Text = "Pause";
-            nudSpeed.Value = 1.0m;
+            nudSpeed.Value = Control.States.PlaySpeed = 1.0m;
             SetManualRecordingStatus();
             Control.ChangePtzFormState(Control.States.PtzControl != null);
         }
@@ -722,6 +740,7 @@ namespace ExampleClient.Source
             btnPause.Enabled = false;
             btnSeek.Enabled = false;
             btnStop.Enabled = false;
+            btnSetSpeed.Enabled = false;
 
             ptzToolStripMenuItem.Enabled = false;
             streamsToolStripMenuItem.Enabled = false;
@@ -731,7 +750,7 @@ namespace ExampleClient.Source
             btnLocalRecord.Enabled = false;
             nudSpeed.Enabled = false;
             btnPause.Text = "Pause";
-            nudSpeed.Value = 1.0m;
+            nudSpeed.Value = Control.States.PlaySpeed = 1.0m;
             SetManualRecordingStatus();
         }
 
@@ -747,6 +766,7 @@ namespace ExampleClient.Source
             btnManualRecord.Enabled = false;
             nudPostRecord.Enabled = false;
             nudPreRecord.Enabled = false;
+            btnSetSpeed.Enabled = false;
 
             ptzToolStripMenuItem.Enabled = true;
             streamsToolStripMenuItem.Enabled = true;
@@ -764,10 +784,12 @@ namespace ExampleClient.Source
             if (Control.States.MediaController == null) return;
 
             Control.States.VcrState = ControlManager.VcrMode.Playback;
+            Control.States.PlaySpeed = nudSpeed.Value;
             btnLive.Enabled = true;
             btnPause.Enabled = true;
             btnSeek.Enabled = true;
             btnStop.Enabled = true;
+            btnSetSpeed.Enabled = true;
 
             ptzToolStripMenuItem.Enabled = true;
             streamsToolStripMenuItem.Enabled = true;
@@ -775,7 +797,7 @@ namespace ExampleClient.Source
             btnSnapshotFromVideo.Enabled = true;
             btnRefreshDataSources.Enabled = true;
             btnLocalRecord.Enabled = true;
-            nudSpeed.Enabled = false;
+            nudSpeed.Enabled = true;
             btnPause.Text = "Pause";
             SetManualRecordingStatus();
         }
@@ -783,10 +805,12 @@ namespace ExampleClient.Source
         private void EnableStopMode()
         {
             Control.States.VcrState = ControlManager.VcrMode.Stopped;
+            Control.States.PlaySpeed = nudSpeed.Value;
             btnLive.Enabled = true;
             btnPause.Enabled = false;
             btnSeek.Enabled = true;
             btnStop.Enabled = false;
+            btnSetSpeed.Enabled = false;
 
             ptzToolStripMenuItem.Enabled = true;
             streamsToolStripMenuItem.Enabled = true;
@@ -2028,9 +2052,6 @@ namespace ExampleClient.Source
                 WriteToLog($@"Error: {ex.Message}\n");
             }
         }
-
-        private void txbxLog_TextChanged(object sender, EventArgs e)
-        { }
 
         private void UpdateSelectedAspectRatio()
         {

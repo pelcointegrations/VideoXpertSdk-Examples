@@ -343,9 +343,7 @@ namespace ExampleClient.Source
                 {
                     var clip = clips[i];
                     // Which direction?
-                    decimal currentSpeed = 1;
-                    MainForm.Instance.MainInvoke(() => currentSpeed = MainForm.Instance.nudSpeed.Value);
-                    if (currentSpeed > 0)
+                    if (Instance._statesLeft.PlaySpeed > 0)
                     {
                         if (timeEvent.Timestamp.AddSeconds(2) >= clip.EndTime)
                         {
@@ -356,9 +354,8 @@ namespace ExampleClient.Source
                                 // In a gap - seek to the start time of the next clip
                                 var transport = (MainForm.Instance.rtspTcpToolStripMenuItem.Checked == true) ? MediaControl.RTSPNetworkTransports.RTPOverRTSP : MediaControl.RTSPNetworkTransports.UDP;
                                 System.DateTime startTime = clips[i + 1].StartTime;
-                                float speed = (float)MainForm.Instance.nudSpeed.Value;
                                 Instance._statesLeft.JustJumpedTime = timeEvent.Timestamp;
-                                MainForm.Instance.MainBeginInvoke(() => SeekSkipGapMethod(Instance._statesLeft.MediaController, startTime, speed, transport));
+                                MainForm.Instance.MainBeginInvoke(() => SeekSkipGapMethod(Instance._statesLeft.MediaController, startTime, (float)Instance._statesLeft.PlaySpeed, transport));
                                 break;
                             }
                         }
@@ -411,7 +408,7 @@ namespace ExampleClient.Source
                 {
                     var clip = clips[i];
                     // Which direction?
-                    if (MainForm.Instance.nudSpeed.Value > 0)
+                    if (Instance._statesRight.PlaySpeed > 0)
                     {
                         if (timeEvent.Timestamp.AddSeconds(1) >= clip.EndTime)
                         {
@@ -422,9 +419,8 @@ namespace ExampleClient.Source
                                 // In a gap - seek to the start time of the next clip
                                 var transport = (MainForm.Instance.rtspTcpToolStripMenuItem.Checked == true) ? MediaControl.RTSPNetworkTransports.RTPOverRTSP : MediaControl.RTSPNetworkTransports.UDP;
                                 System.DateTime startTime = clips[i + 1].StartTime;
-                                float speed = (float)MainForm.Instance.nudSpeed.Value;
                                 Instance._statesRight.JustJumpedTime = timeEvent.Timestamp;
-                                MainForm.Instance.MainBeginInvoke(() => SeekSkipGapMethod(Instance._statesRight.MediaController, startTime, speed, transport));
+                                MainForm.Instance.MainBeginInvoke(() => SeekSkipGapMethod(Instance._statesRight.MediaController, startTime, (float)Instance._statesRight.PlaySpeed, transport));
                                 break;
                             }
                         }
@@ -485,6 +481,7 @@ namespace ExampleClient.Source
         public ManualRecording ManualRecording { get; set; }
         public MediaControl MediaController { get; set; }
         public int PlayingIndex { get; set; }
+        public decimal PlaySpeed { get; set; }
         public ProgressBar ProgressBar => IsLeft ? MainForm.Instance.progressBar_left : MainForm.Instance.progressBar_right;
         public PtzController PtzControl { get; set; }
         public bool SkipPlayback { get; set; }
