@@ -19,7 +19,6 @@ namespace ExampleClient.Source
         public AddScheduleForm()
         {
             InitializeComponent();
-            cbxAction.SelectedIndex = 1;
         }
 
         #endregion Public Constructors
@@ -38,7 +37,7 @@ namespace ExampleClient.Source
                 Id = tbxId.Text,
                 Name = tbxName.Text,
                 UseAllDataSources = ckbxUseAllDataSources.Checked,
-                Action = (Schedule.Actions)cbxAction.SelectedIndex + 1
+                Action = Schedule.Actions.Record
             };
 
             foreach (ListViewItem triggerItem in lvScheduleTriggers.Items)

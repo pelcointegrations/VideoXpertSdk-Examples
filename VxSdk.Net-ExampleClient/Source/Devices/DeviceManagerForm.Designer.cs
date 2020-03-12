@@ -36,22 +36,27 @@
             this.chType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chIp = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chPort = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chModel = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chState = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chDriver = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chVersion = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chCommissioned = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnCommission = new System.Windows.Forms.Button();
             this.btnDecommission = new System.Windows.Forms.Button();
             this.btnManageLogs = new System.Windows.Forms.Button();
             this.btnSilence = new System.Windows.Forms.Button();
-            this.chPort = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chDriver = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.btnDiagnostics = new System.Windows.Forms.Button();
+            this.btnLicenseInfo = new System.Windows.Forms.Button();
+            this.btnUpdate = new System.Windows.Forms.Button();
+            this.btnDbBackups = new System.Windows.Forms.Button();
+            this.btnLimits = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnRefresh
             // 
-            this.btnRefresh.Location = new System.Drawing.Point(1213, 215);
+            this.btnRefresh.Location = new System.Drawing.Point(1213, 360);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(83, 23);
             this.btnRefresh.TabIndex = 12;
@@ -103,6 +108,7 @@
             this.chVersion,
             this.chCommissioned});
             this.lvDevices.FullRowSelect = true;
+            this.lvDevices.HideSelection = false;
             this.lvDevices.Location = new System.Drawing.Point(12, 12);
             this.lvDevices.MultiSelect = false;
             this.lvDevices.Name = "lvDevices";
@@ -127,6 +133,11 @@
             this.chIp.Text = "IP";
             this.chIp.Width = 120;
             // 
+            // chPort
+            // 
+            this.chPort.Text = "Port";
+            this.chPort.Width = 50;
+            // 
             // chId
             // 
             this.chId.Text = "ID";
@@ -140,6 +151,11 @@
             // chState
             // 
             this.chState.Text = "State";
+            // 
+            // chDriver
+            // 
+            this.chDriver.Text = "Driver";
+            this.chDriver.Width = 90;
             // 
             // chVersion
             // 
@@ -173,6 +189,7 @@
             // 
             // btnManageLogs
             // 
+            this.btnManageLogs.Enabled = false;
             this.btnManageLogs.Location = new System.Drawing.Point(1213, 157);
             this.btnManageLogs.Name = "btnManageLogs";
             this.btnManageLogs.Size = new System.Drawing.Size(83, 23);
@@ -191,21 +208,69 @@
             this.btnSilence.UseVisualStyleBackColor = true;
             this.btnSilence.Click += new System.EventHandler(this.ButtonSilence_Click);
             // 
-            // chPort
+            // btnDiagnostics
             // 
-            this.chPort.Text = "Port";
-            this.chPort.Width = 50;
+            this.btnDiagnostics.Enabled = false;
+            this.btnDiagnostics.Location = new System.Drawing.Point(1213, 215);
+            this.btnDiagnostics.Name = "btnDiagnostics";
+            this.btnDiagnostics.Size = new System.Drawing.Size(83, 23);
+            this.btnDiagnostics.TabIndex = 20;
+            this.btnDiagnostics.Text = "Diagnostics";
+            this.btnDiagnostics.UseVisualStyleBackColor = true;
+            this.btnDiagnostics.Click += new System.EventHandler(this.ButtonDiagnostics_Click);
             // 
-            // chDriver
+            // btnLicenseInfo
             // 
-            this.chDriver.Text = "Driver";
-            this.chDriver.Width = 90;
+            this.btnLicenseInfo.Enabled = false;
+            this.btnLicenseInfo.Location = new System.Drawing.Point(1213, 273);
+            this.btnLicenseInfo.Name = "btnLicenseInfo";
+            this.btnLicenseInfo.Size = new System.Drawing.Size(83, 23);
+            this.btnLicenseInfo.TabIndex = 21;
+            this.btnLicenseInfo.Text = "License Info";
+            this.btnLicenseInfo.UseVisualStyleBackColor = true;
+            this.btnLicenseInfo.Click += new System.EventHandler(this.ButtonLicenseInfo_Click);
+            // 
+            // btnUpdate
+            // 
+            this.btnUpdate.Location = new System.Drawing.Point(1213, 331);
+            this.btnUpdate.Name = "btnUpdate";
+            this.btnUpdate.Size = new System.Drawing.Size(83, 23);
+            this.btnUpdate.TabIndex = 22;
+            this.btnUpdate.Text = "Update";
+            this.btnUpdate.UseVisualStyleBackColor = true;
+            this.btnUpdate.Click += new System.EventHandler(this.ButtonUpdate_Click);
+            // 
+            // btnDbBackups
+            // 
+            this.btnDbBackups.Enabled = false;
+            this.btnDbBackups.Location = new System.Drawing.Point(1213, 302);
+            this.btnDbBackups.Name = "btnDbBackups";
+            this.btnDbBackups.Size = new System.Drawing.Size(83, 23);
+            this.btnDbBackups.TabIndex = 23;
+            this.btnDbBackups.Text = "DB Backups";
+            this.btnDbBackups.UseVisualStyleBackColor = true;
+            this.btnDbBackups.Click += new System.EventHandler(this.ButtonDbBackups_Click);
+            // 
+            // btnLimits
+            // 
+            this.btnLimits.Location = new System.Drawing.Point(1213, 244);
+            this.btnLimits.Name = "btnLimits";
+            this.btnLimits.Size = new System.Drawing.Size(83, 23);
+            this.btnLimits.TabIndex = 24;
+            this.btnLimits.Text = "Limits";
+            this.btnLimits.UseVisualStyleBackColor = true;
+            this.btnLimits.Click += new System.EventHandler(this.ButtonLimits_Click);
             // 
             // DeviceManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1303, 432);
+            this.Controls.Add(this.btnLimits);
+            this.Controls.Add(this.btnDbBackups);
+            this.Controls.Add(this.btnUpdate);
+            this.Controls.Add(this.btnLicenseInfo);
+            this.Controls.Add(this.btnDiagnostics);
             this.Controls.Add(this.btnSilence);
             this.Controls.Add(this.btnManageLogs);
             this.Controls.Add(this.btnDecommission);
@@ -247,5 +312,10 @@
         private System.Windows.Forms.Button btnSilence;
         private System.Windows.Forms.ColumnHeader chPort;
         private System.Windows.Forms.ColumnHeader chDriver;
+        private System.Windows.Forms.Button btnDiagnostics;
+        private System.Windows.Forms.Button btnLicenseInfo;
+        private System.Windows.Forms.Button btnUpdate;
+        private System.Windows.Forms.Button btnDbBackups;
+        private System.Windows.Forms.Button btnLimits;
     }
 }

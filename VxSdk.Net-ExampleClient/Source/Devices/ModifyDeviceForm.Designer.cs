@@ -44,6 +44,8 @@
             this.tbxVersion = new System.Windows.Forms.TextBox();
             this.lblVersion = new System.Windows.Forms.Label();
             this.lblDriver = new System.Windows.Forms.Label();
+            this.tbxHostname = new System.Windows.Forms.TextBox();
+            this.lblHostname = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.nudPort)).BeginInit();
             this.SuspendLayout();
             // 
@@ -66,7 +68,7 @@
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(91, 213);
+            this.btnCancel.Location = new System.Drawing.Point(91, 238);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 32;
@@ -76,7 +78,7 @@
             // btnSave
             // 
             this.btnSave.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnSave.Location = new System.Drawing.Point(172, 213);
+            this.btnSave.Location = new System.Drawing.Point(172, 238);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 31;
@@ -118,7 +120,7 @@
             // 
             // nudPort
             // 
-            this.nudPort.Location = new System.Drawing.Point(72, 120);
+            this.nudPort.Location = new System.Drawing.Point(72, 145);
             this.nudPort.Name = "nudPort";
             this.nudPort.Size = new System.Drawing.Size(120, 20);
             this.nudPort.TabIndex = 37;
@@ -126,7 +128,7 @@
             // lblPort
             // 
             this.lblPort.AutoSize = true;
-            this.lblPort.Location = new System.Drawing.Point(37, 123);
+            this.lblPort.Location = new System.Drawing.Point(37, 148);
             this.lblPort.Name = "lblPort";
             this.lblPort.Size = new System.Drawing.Size(29, 13);
             this.lblPort.TabIndex = 38;
@@ -136,7 +138,7 @@
             // cbxDriver
             // 
             this.cbxDriver.FormattingEnabled = true;
-            this.cbxDriver.Location = new System.Drawing.Point(72, 174);
+            this.cbxDriver.Location = new System.Drawing.Point(72, 199);
             this.cbxDriver.Name = "cbxDriver";
             this.cbxDriver.Size = new System.Drawing.Size(175, 21);
             this.cbxDriver.TabIndex = 39;
@@ -159,14 +161,14 @@
             // 
             // tbxVersion
             // 
-            this.tbxVersion.Location = new System.Drawing.Point(72, 147);
+            this.tbxVersion.Location = new System.Drawing.Point(72, 172);
             this.tbxVersion.Name = "tbxVersion";
             this.tbxVersion.Size = new System.Drawing.Size(175, 20);
             this.tbxVersion.TabIndex = 41;
             // 
             // lblVersion
             // 
-            this.lblVersion.Location = new System.Drawing.Point(5, 150);
+            this.lblVersion.Location = new System.Drawing.Point(5, 175);
             this.lblVersion.Name = "lblVersion";
             this.lblVersion.Size = new System.Drawing.Size(61, 13);
             this.lblVersion.TabIndex = 40;
@@ -175,18 +177,36 @@
             // 
             // lblDriver
             // 
-            this.lblDriver.Location = new System.Drawing.Point(5, 177);
+            this.lblDriver.Location = new System.Drawing.Point(5, 202);
             this.lblDriver.Name = "lblDriver";
             this.lblDriver.Size = new System.Drawing.Size(61, 13);
             this.lblDriver.TabIndex = 44;
             this.lblDriver.Text = "Driver: ";
             this.lblDriver.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // tbxHostname
+            // 
+            this.tbxHostname.Location = new System.Drawing.Point(72, 119);
+            this.tbxHostname.Name = "tbxHostname";
+            this.tbxHostname.Size = new System.Drawing.Size(175, 20);
+            this.tbxHostname.TabIndex = 46;
+            // 
+            // lblHostname
+            // 
+            this.lblHostname.Location = new System.Drawing.Point(5, 122);
+            this.lblHostname.Name = "lblHostname";
+            this.lblHostname.Size = new System.Drawing.Size(61, 13);
+            this.lblHostname.TabIndex = 45;
+            this.lblHostname.Text = "Hostname: ";
+            this.lblHostname.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // ModifyDeviceForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(259, 247);
+            this.ClientSize = new System.Drawing.Size(259, 269);
+            this.Controls.Add(this.tbxHostname);
+            this.Controls.Add(this.lblHostname);
             this.Controls.Add(this.lblDriver);
             this.Controls.Add(this.tbxIp);
             this.Controls.Add(this.lblIp);
@@ -233,5 +253,7 @@
         private System.Windows.Forms.TextBox tbxVersion;
         private System.Windows.Forms.Label lblVersion;
         private System.Windows.Forms.Label lblDriver;
+        private System.Windows.Forms.TextBox tbxHostname;
+        private System.Windows.Forms.Label lblHostname;
     }
 }

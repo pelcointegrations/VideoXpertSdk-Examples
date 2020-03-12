@@ -75,6 +75,25 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The ButtonLimits_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonLimits_Click(object sender, EventArgs args)
+        {
+            if (lvDataSources.SelectedItems.Count == 0)
+                return;
+
+            var dataSource = (DataSource)lvDataSources.SelectedItems[0].Tag;
+
+            // Show the LimitDetailsForm dialog.
+            using (var limitDetailsForm = new LimitDetailsForm(dataSource.Limits, dataSource.Name))
+            {
+                limitDetailsForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
         /// The ButtonManageLinks_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -169,6 +188,24 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The ButtonViewPtzLinkInfo_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonViewPtzLinkInfo_Click(object sender, EventArgs args)
+        {
+            if (lvDataSources.SelectedItems.Count == 0)
+                return;
+
+            var dataSource = (DataSource)lvDataSources.SelectedItems[0].Tag;
+
+            using (var ptzLinkDetailsForm = new PtzLinkDetailsForm(dataSource))
+            {
+                ptzLinkDetailsForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
         /// The ButtonRefresh_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -254,6 +291,7 @@ namespace ExampleClient.Source
                 lvItem.SubItems.Add(dataSource.MotionConfiguration == null ? "N/A" : dataSource.MotionConfiguration.Mode.ToString());
                 lvItem.SubItems.Add(dataSource.IsManuallyRecording.ToString());
                 lvItem.SubItems.Add(dataSource.IsEnabled.ToString());
+                lvItem.SubItems.Add(string.Join(", ", dataSource.Capabilities));
                 lvItem.Tag = dataSource;
                 lvDataSources.Items.Add(lvItem);
             }

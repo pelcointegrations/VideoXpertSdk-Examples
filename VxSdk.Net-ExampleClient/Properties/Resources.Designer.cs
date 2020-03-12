@@ -131,6 +131,16 @@ namespace ExampleClient.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap CellLogo {
+            get {
+                object obj = ResourceManager.GetObject("CellLogo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}: {1} {2} {3} {4} {5} {6}.
         /// </summary>
         public static string EventDetailsFormatString {

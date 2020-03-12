@@ -54,6 +54,10 @@
             this.cbxEvent = new System.Windows.Forms.ComboBox();
             this.gbxGeneralSettings = new System.Windows.Forms.GroupBox();
             this.btnGenerate = new System.Windows.Forms.Button();
+            this.lblInactiveEvent = new System.Windows.Forms.Label();
+            this.cbxEventInactive = new System.Windows.Forms.ComboBox();
+            this.lblAction = new System.Windows.Forms.Label();
+            this.cbxAction = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.nudPreRecord)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudPostRecord)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDuration)).BeginInit();
@@ -66,7 +70,7 @@
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(207, 469);
+            this.btnCancel.Location = new System.Drawing.Point(207, 509);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 28;
@@ -76,7 +80,7 @@
             // btnAdd
             // 
             this.btnAdd.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnAdd.Location = new System.Drawing.Point(288, 469);
+            this.btnAdd.Location = new System.Drawing.Point(288, 509);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 23);
             this.btnAdd.TabIndex = 27;
@@ -150,6 +154,8 @@
             // 
             // gbxRecordingSettings
             // 
+            this.gbxRecordingSettings.Controls.Add(this.lblAction);
+            this.gbxRecordingSettings.Controls.Add(this.cbxAction);
             this.gbxRecordingSettings.Controls.Add(this.cbxTimeTables);
             this.gbxRecordingSettings.Controls.Add(this.lblTimeTable);
             this.gbxRecordingSettings.Controls.Add(this.lblFramerate);
@@ -162,7 +168,7 @@
             this.gbxRecordingSettings.Controls.Add(this.nudDuration);
             this.gbxRecordingSettings.Location = new System.Drawing.Point(12, 83);
             this.gbxRecordingSettings.Name = "gbxRecordingSettings";
-            this.gbxRecordingSettings.Size = new System.Drawing.Size(351, 125);
+            this.gbxRecordingSettings.Size = new System.Drawing.Size(351, 137);
             this.gbxRecordingSettings.TabIndex = 39;
             this.gbxRecordingSettings.TabStop = false;
             this.gbxRecordingSettings.Text = "Recording Settings";
@@ -173,7 +179,7 @@
             this.cbxTimeTables.FormattingEnabled = true;
             this.cbxTimeTables.Items.AddRange(new object[] {
             "None"});
-            this.cbxTimeTables.Location = new System.Drawing.Point(122, 83);
+            this.cbxTimeTables.Location = new System.Drawing.Point(122, 106);
             this.cbxTimeTables.Name = "cbxTimeTables";
             this.cbxTimeTables.Size = new System.Drawing.Size(203, 21);
             this.cbxTimeTables.TabIndex = 37;
@@ -181,7 +187,7 @@
             // lblTimeTable
             // 
             this.lblTimeTable.AutoSize = true;
-            this.lblTimeTable.Location = new System.Drawing.Point(10, 86);
+            this.lblTimeTable.Location = new System.Drawing.Point(10, 109);
             this.lblTimeTable.Name = "lblTimeTable";
             this.lblTimeTable.Size = new System.Drawing.Size(106, 13);
             this.lblTimeTable.TabIndex = 42;
@@ -225,12 +231,14 @@
             // 
             // gbxEventSettings
             // 
+            this.gbxEventSettings.Controls.Add(this.lblInactiveEvent);
+            this.gbxEventSettings.Controls.Add(this.cbxEventInactive);
             this.gbxEventSettings.Controls.Add(this.gbxEventProperties);
             this.gbxEventSettings.Controls.Add(this.lblEvent);
             this.gbxEventSettings.Controls.Add(this.cbxEvent);
-            this.gbxEventSettings.Location = new System.Drawing.Point(12, 214);
+            this.gbxEventSettings.Location = new System.Drawing.Point(13, 226);
             this.gbxEventSettings.Name = "gbxEventSettings";
-            this.gbxEventSettings.Size = new System.Drawing.Size(351, 249);
+            this.gbxEventSettings.Size = new System.Drawing.Size(351, 277);
             this.gbxEventSettings.TabIndex = 41;
             this.gbxEventSettings.TabStop = false;
             this.gbxEventSettings.Text = "Event Settings";
@@ -241,9 +249,9 @@
             this.gbxEventProperties.Controls.Add(this.btnAddEventProperty);
             this.gbxEventProperties.Controls.Add(this.btnRemoveEventProperty);
             this.gbxEventProperties.Enabled = false;
-            this.gbxEventProperties.Location = new System.Drawing.Point(15, 57);
+            this.gbxEventProperties.Location = new System.Drawing.Point(9, 92);
             this.gbxEventProperties.Name = "gbxEventProperties";
-            this.gbxEventProperties.Size = new System.Drawing.Size(320, 178);
+            this.gbxEventProperties.Size = new System.Drawing.Size(336, 178);
             this.gbxEventProperties.TabIndex = 45;
             this.gbxEventProperties.TabStop = false;
             this.gbxEventProperties.Text = "Event Properties";
@@ -254,10 +262,11 @@
             this.chKey,
             this.chValue});
             this.lvEventProperties.FullRowSelect = true;
+            this.lvEventProperties.HideSelection = false;
             this.lvEventProperties.Location = new System.Drawing.Point(6, 19);
             this.lvEventProperties.MultiSelect = false;
             this.lvEventProperties.Name = "lvEventProperties";
-            this.lvEventProperties.Size = new System.Drawing.Size(308, 121);
+            this.lvEventProperties.Size = new System.Drawing.Size(320, 121);
             this.lvEventProperties.TabIndex = 2;
             this.lvEventProperties.UseCompatibleStateImageBehavior = false;
             this.lvEventProperties.View = System.Windows.Forms.View.Details;
@@ -284,7 +293,7 @@
             // 
             // btnRemoveEventProperty
             // 
-            this.btnRemoveEventProperty.Location = new System.Drawing.Point(239, 147);
+            this.btnRemoveEventProperty.Location = new System.Drawing.Point(251, 146);
             this.btnRemoveEventProperty.Name = "btnRemoveEventProperty";
             this.btnRemoveEventProperty.Size = new System.Drawing.Size(75, 23);
             this.btnRemoveEventProperty.TabIndex = 4;
@@ -295,11 +304,11 @@
             // lblEvent
             // 
             this.lblEvent.AutoSize = true;
-            this.lblEvent.Location = new System.Drawing.Point(20, 27);
+            this.lblEvent.Location = new System.Drawing.Point(16, 26);
             this.lblEvent.Name = "lblEvent";
-            this.lblEvent.Size = new System.Drawing.Size(35, 13);
+            this.lblEvent.Size = new System.Drawing.Size(71, 13);
             this.lblEvent.TabIndex = 43;
-            this.lblEvent.Text = "Event";
+            this.lblEvent.Text = "Trigger Event";
             // 
             // cbxEvent
             // 
@@ -307,9 +316,9 @@
             this.cbxEvent.FormattingEnabled = true;
             this.cbxEvent.Items.AddRange(new object[] {
             "None"});
-            this.cbxEvent.Location = new System.Drawing.Point(59, 23);
+            this.cbxEvent.Location = new System.Drawing.Point(93, 23);
             this.cbxEvent.Name = "cbxEvent";
-            this.cbxEvent.Size = new System.Drawing.Size(276, 21);
+            this.cbxEvent.Size = new System.Drawing.Size(242, 21);
             this.cbxEvent.TabIndex = 0;
             this.cbxEvent.SelectedIndexChanged += new System.EventHandler(this.ComboBoxEvent_SelectedIndexChanged);
             // 
@@ -335,11 +344,52 @@
             this.btnGenerate.UseVisualStyleBackColor = true;
             this.btnGenerate.Click += new System.EventHandler(this.ButtonGenerate_Click);
             // 
+            // lblInactiveEvent
+            // 
+            this.lblInactiveEvent.AutoSize = true;
+            this.lblInactiveEvent.Location = new System.Drawing.Point(6, 62);
+            this.lblInactiveEvent.Name = "lblInactiveEvent";
+            this.lblInactiveEvent.Size = new System.Drawing.Size(85, 13);
+            this.lblInactiveEvent.TabIndex = 47;
+            this.lblInactiveEvent.Text = "Inactivate Event";
+            // 
+            // cbxEventInactive
+            // 
+            this.cbxEventInactive.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxEventInactive.FormattingEnabled = true;
+            this.cbxEventInactive.Items.AddRange(new object[] {
+            "None"});
+            this.cbxEventInactive.Location = new System.Drawing.Point(93, 59);
+            this.cbxEventInactive.Name = "cbxEventInactive";
+            this.cbxEventInactive.Size = new System.Drawing.Size(242, 21);
+            this.cbxEventInactive.TabIndex = 46;
+            // 
+            // lblAction
+            // 
+            this.lblAction.AutoSize = true;
+            this.lblAction.Location = new System.Drawing.Point(186, 82);
+            this.lblAction.Name = "lblAction";
+            this.lblAction.Size = new System.Drawing.Size(37, 13);
+            this.lblAction.TabIndex = 44;
+            this.lblAction.Text = "Action";
+            // 
+            // cbxAction
+            // 
+            this.cbxAction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxAction.FormattingEnabled = true;
+            this.cbxAction.Items.AddRange(new object[] {
+            "Record Event Source",
+            "Record All"});
+            this.cbxAction.Location = new System.Drawing.Point(230, 77);
+            this.cbxAction.Name = "cbxAction";
+            this.cbxAction.Size = new System.Drawing.Size(95, 21);
+            this.cbxAction.TabIndex = 43;
+            // 
             // AddScheduleTriggerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(378, 502);
+            this.ClientSize = new System.Drawing.Size(378, 540);
             this.Controls.Add(this.gbxGeneralSettings);
             this.Controls.Add(this.gbxEventSettings);
             this.Controls.Add(this.gbxRecordingSettings);
@@ -396,5 +446,9 @@
         public System.Windows.Forms.ListView lvEventProperties;
         private System.Windows.Forms.Label lblTimeTable;
         private System.Windows.Forms.ComboBox cbxTimeTables;
+        private System.Windows.Forms.Label lblInactiveEvent;
+        private System.Windows.Forms.ComboBox cbxEventInactive;
+        private System.Windows.Forms.Label lblAction;
+        private System.Windows.Forms.ComboBox cbxAction;
     }
 }

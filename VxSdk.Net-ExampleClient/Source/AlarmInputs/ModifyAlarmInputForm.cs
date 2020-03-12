@@ -22,6 +22,7 @@ namespace ExampleClient.Source
             SelectedAlarmInput = alarmInput;
             tbxName.Text = alarmInput.Name;
             tbxDescription.Text = alarmInput.Description;
+            cbxType.SelectedIndex = (int)alarmInput.Type;
         }
 
         #endregion Public Constructors
@@ -50,6 +51,9 @@ namespace ExampleClient.Source
 
             if (!string.IsNullOrEmpty(tbxDescription.Text) && SelectedAlarmInput.Description != tbxDescription.Text)
                 SelectedAlarmInput.Description = tbxDescription.Text;
+
+            if ((int)SelectedAlarmInput.Type != cbxType.SelectedIndex)
+                SelectedAlarmInput.Type = (AlarmInput.AlarmInputTypes)cbxType.SelectedIndex;
         }
 
         #endregion Private Methods

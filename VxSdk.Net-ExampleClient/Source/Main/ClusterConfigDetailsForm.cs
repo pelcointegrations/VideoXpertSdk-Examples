@@ -70,6 +70,10 @@ namespace ExampleClient.Source
             {
                 string valItem;
 
+                // Skip unreadable properties.
+                if (!prop.CanRead)
+                    continue;
+
                 // Get the value from the property.
                 var val = prop.GetValue(configObject, null);
 

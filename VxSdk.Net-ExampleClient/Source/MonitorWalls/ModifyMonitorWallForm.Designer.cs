@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.lvMonitors = new System.Windows.Forms.ListView();
-            this.colHeadName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colHeadNumber = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colHeadName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnRename = new System.Windows.Forms.Button();
@@ -45,29 +45,29 @@
             this.colHeadName});
             this.lvMonitors.FullRowSelect = true;
             this.lvMonitors.HideSelection = false;
-            this.lvMonitors.Location = new System.Drawing.Point(748, 27);
+            this.lvMonitors.Location = new System.Drawing.Point(1018, 27);
             this.lvMonitors.MultiSelect = false;
             this.lvMonitors.Name = "lvMonitors";
-            this.lvMonitors.Size = new System.Drawing.Size(230, 609);
+            this.lvMonitors.Size = new System.Drawing.Size(230, 753);
             this.lvMonitors.TabIndex = 2;
             this.lvMonitors.UseCompatibleStateImageBehavior = false;
             this.lvMonitors.View = System.Windows.Forms.View.Details;
             this.lvMonitors.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.ListViewDataSources_OnItemDrag);
-            // 
-            // colHeadName
-            // 
-            this.colHeadName.Text = "Name";
-            this.colHeadName.Width = 176;
             // 
             // colHeadNumber
             // 
             this.colHeadNumber.Text = "#";
             this.colHeadNumber.Width = 50;
             // 
+            // colHeadName
+            // 
+            this.colHeadName.Text = "Name";
+            this.colHeadName.Width = 176;
+            // 
             // btnSave
             // 
             this.btnSave.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnSave.Location = new System.Drawing.Point(925, 642);
+            this.btnSave.Location = new System.Drawing.Point(1195, 786);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(50, 23);
             this.btnSave.TabIndex = 3;
@@ -78,7 +78,7 @@
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(870, 642);
+            this.btnCancel.Location = new System.Drawing.Point(1140, 786);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(50, 23);
             this.btnCancel.TabIndex = 4;
@@ -87,7 +87,7 @@
             // 
             // btnRename
             // 
-            this.btnRename.Location = new System.Drawing.Point(748, 642);
+            this.btnRename.Location = new System.Drawing.Point(1018, 786);
             this.btnRename.Name = "btnRename";
             this.btnRename.Size = new System.Drawing.Size(117, 23);
             this.btnRename.TabIndex = 7;
@@ -99,7 +99,7 @@
             // 
             this.lblMonitorList.AutoSize = true;
             this.lblMonitorList.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMonitorList.Location = new System.Drawing.Point(808, 9);
+            this.lblMonitorList.Location = new System.Drawing.Point(1078, 9);
             this.lblMonitorList.Name = "lblMonitorList";
             this.lblMonitorList.Size = new System.Drawing.Size(93, 13);
             this.lblMonitorList.TabIndex = 8;
@@ -111,7 +111,7 @@
             this.pnlMain.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pnlMain.Location = new System.Drawing.Point(12, 9);
             this.pnlMain.Name = "pnlMain";
-            this.pnlMain.Size = new System.Drawing.Size(730, 656);
+            this.pnlMain.Size = new System.Drawing.Size(1000, 800);
             this.pnlMain.TabIndex = 9;
             this.pnlMain.DragDrop += new System.Windows.Forms.DragEventHandler(this.PanelMain_OnDragDrop);
             this.pnlMain.DragEnter += new System.Windows.Forms.DragEventHandler(this.PanelMain_OnDragEnter);
@@ -120,7 +120,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(982, 669);
+            this.ClientSize = new System.Drawing.Size(1258, 820);
             this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.lblMonitorList);
             this.Controls.Add(this.btnRename);

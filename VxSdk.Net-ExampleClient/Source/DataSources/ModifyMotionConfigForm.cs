@@ -21,6 +21,7 @@ namespace ExampleClient.Source
             InitializeComponent();
             SelectedMotionConfig = motionConfig;
             nudSensitivity.Value = motionConfig.Sensitivity;
+            nudThreshold.Value = motionConfig.Threshold;
             switch (motionConfig.Mode)
             {
                 case Configuration.MotionMode.Camera:
@@ -72,6 +73,9 @@ namespace ExampleClient.Source
 
             if (SelectedMotionConfig.Sensitivity != (int)nudSensitivity.Value)
                 SelectedMotionConfig.Sensitivity = (int)nudSensitivity.Value;
+
+            if (SelectedMotionConfig.Threshold != (int)nudThreshold.Value)
+                SelectedMotionConfig.Threshold = (int)nudThreshold.Value;
         }
 
         /// <summary>
@@ -83,6 +87,7 @@ namespace ExampleClient.Source
         {
             lblSensitivity.Enabled = !rbDisabled.Checked;
             nudSensitivity.Enabled = !rbDisabled.Checked;
+            nudThreshold.Enabled = !rbDisabled.Checked;
         }
 
         #endregion Private Methods

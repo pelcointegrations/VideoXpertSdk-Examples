@@ -78,6 +78,30 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The ButtonFileRecovery_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonFileRecovery_Click(object sender, EventArgs args)
+        {
+            if (lvDataStorageManager.SelectedItems.Count < 1)
+                return;
+
+            var dataStorage = (DataStorage)lvDataStorageManager.SelectedItems[0].Tag;
+            if (dataStorage.Type != DataStorage.DataStorageTypes.VideoXpertStorage)
+                return;
+
+            if (dataStorage.Configuration?.FileRecoveryResource == null)
+                return;
+
+            // Show the FileRecoveryManagerForm dialog.
+            using (var fileRecoveryManagerForm = new FileRecoveryManagerForm(dataStorage.Configuration))
+            {
+                fileRecoveryManagerForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
         /// The ButtonUnassignDevice_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -126,6 +150,42 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The ButtonVolumes_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonVolumes_Click(object sender, EventArgs args)
+        {
+            if (lvDataStorageManager.SelectedItems.Count < 1)
+                return;
+
+            var dataStorage = (DataStorage)lvDataStorageManager.SelectedItems[0].Tag;
+
+            using (var volumeManagerForm = new VolumeManagerForm(dataStorage))
+            {
+                volumeManagerForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// The ButtonVolumeGroups_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonVolumeGroups_Click(object sender, EventArgs args)
+        {
+            if (lvDataStorageManager.SelectedItems.Count < 1)
+                return;
+
+            var dataStorage = (DataStorage)lvDataStorageManager.SelectedItems[0].Tag;
+
+            using (var volumeGroupManagerForm = new VolumeGroupManagerForm(dataStorage))
+            {
+                volumeGroupManagerForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
         /// The ListViewDataStorageManager_SelectedIndexChanged method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -137,6 +197,7 @@ namespace ExampleClient.Source
 
             var dataStorage = (DataStorage)lvDataStorageManager.SelectedItems[0].Tag;
             btnAddClip.Enabled = dataStorage.Type == DataStorage.DataStorageTypes.VideoXpertStorage;
+            btnFileRecovery.Enabled = dataStorage.Configuration?.FileRecoveryResource != null;
         }
 
         /// <summary>

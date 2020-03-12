@@ -24,9 +24,14 @@ namespace ExampleClient.Source
             ScheduleTriggerListView = listView;
             cbxFramerate.SelectedIndex = 1;
             cbxEvent.SelectedIndex = 0;
+            cbxEventInactive.SelectedIndex = 0;
             cbxTimeTables.SelectedIndex = 0;
+            cbxAction.SelectedIndex = 1;
             foreach (var situation in MainForm.CurrentSystem.Situations)
+            {
                 cbxEvent.Items.Add(situation.Type);
+                cbxEventInactive.Items.Add(situation.Type);
+            }
 
             foreach (var timeTable in MainForm.CurrentSystem.TimeTables)
                 cbxTimeTables.Items.Add(new ComboboxItem { Text = timeTable.Name, Value = timeTable });
@@ -54,6 +59,7 @@ namespace ExampleClient.Source
         {
             // Set the situation type based on the selection.
             scheduleTrigger.EventSituationType = cbxEvent.SelectedItem.ToString();
+            scheduleTrigger.InactiveEventSituationType = cbxEventInactive.SelectedItem.ToString();
 
             // Set the event properties if they have been added.
             var eventProperties = new List<KeyValuePair<string, string>>();
@@ -77,7 +83,8 @@ namespace ExampleClient.Source
                 Framerate = (Clip.RecordingFramerates)cbxFramerate.SelectedIndex + 1,
                 PreTrigger = (int)nudPreRecord.Value,
                 PostTrigger = (int)nudPostRecord.Value,
-                Timeout = (int)nudDuration.Value
+                Timeout = (int)nudDuration.Value,
+                Action = (ScheduleTrigger.Actions)cbxAction.SelectedIndex + 1
             };
 
             var timeTableName = string.Empty;
@@ -99,12 +106,14 @@ namespace ExampleClient.Source
             var lvItem = new ListViewItem(string.Empty);
             lvItem.SubItems.Add(scheduleTrigger.Id);
             lvItem.SubItems.Add(scheduleTrigger.EventSituationType);
+            lvItem.SubItems.Add(scheduleTrigger.InactiveEventSituationType);
             lvItem.SubItems.Add(scheduleTrigger.EventProperties.Count.ToString());
             lvItem.SubItems.Add(scheduleTrigger.Framerate.ToString());
             lvItem.SubItems.Add(scheduleTrigger.PreTrigger.ToString());
             lvItem.SubItems.Add(scheduleTrigger.PostTrigger.ToString());
             lvItem.SubItems.Add(scheduleTrigger.Timeout.ToString());
             lvItem.SubItems.Add(timeTableName);
+            lvItem.SubItems.Add(scheduleTrigger.Action.ToString());
             lvItem.Tag = scheduleTrigger;
             ScheduleTriggerListView.Items.Add(lvItem);
         }

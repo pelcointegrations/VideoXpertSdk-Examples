@@ -36,13 +36,16 @@
             this.lvDataSources = new System.Windows.Forms.ListView();
             this.chCheckBox = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chDataSource = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.gbxVolumeGroups = new System.Windows.Forms.GroupBox();
+            this.cbxVolumeGroups = new System.Windows.Forms.ComboBox();
             this.gbxDevice.SuspendLayout();
+            this.gbxVolumeGroups.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(71, 210);
+            this.btnCancel.Location = new System.Drawing.Point(71, 267);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 25;
@@ -52,7 +55,7 @@
             // btnAdd
             // 
             this.btnAdd.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnAdd.Location = new System.Drawing.Point(152, 210);
+            this.btnAdd.Location = new System.Drawing.Point(152, 267);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 23);
             this.btnAdd.TabIndex = 24;
@@ -116,11 +119,31 @@
             this.chDataSource.Text = "Data Source";
             this.chDataSource.Width = 180;
             // 
+            // gbxVolumeGroups
+            // 
+            this.gbxVolumeGroups.Controls.Add(this.cbxVolumeGroups);
+            this.gbxVolumeGroups.Location = new System.Drawing.Point(12, 210);
+            this.gbxVolumeGroups.Name = "gbxVolumeGroups";
+            this.gbxVolumeGroups.Size = new System.Drawing.Size(215, 51);
+            this.gbxVolumeGroups.TabIndex = 22;
+            this.gbxVolumeGroups.TabStop = false;
+            this.gbxVolumeGroups.Text = "Volume Group";
+            // 
+            // cbxVolumeGroups
+            // 
+            this.cbxVolumeGroups.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxVolumeGroups.FormattingEnabled = true;
+            this.cbxVolumeGroups.Location = new System.Drawing.Point(12, 19);
+            this.cbxVolumeGroups.Name = "cbxVolumeGroups";
+            this.cbxVolumeGroups.Size = new System.Drawing.Size(197, 21);
+            this.cbxVolumeGroups.TabIndex = 0;
+            // 
             // AddDeviceAssignmentForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(241, 240);
+            this.ClientSize = new System.Drawing.Size(241, 299);
+            this.Controls.Add(this.gbxVolumeGroups);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.gbxDevice);
@@ -133,6 +156,7 @@
             this.Text = "Add Device Assignment";
             this.gbxDevice.ResumeLayout(false);
             this.gbxDevice.PerformLayout();
+            this.gbxVolumeGroups.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -147,5 +171,7 @@
         private System.Windows.Forms.ColumnHeader chDataSource;
         private System.Windows.Forms.ComboBox cbxDevices;
         private System.Windows.Forms.Label lblNoUnassignedDevices;
+        private System.Windows.Forms.GroupBox gbxVolumeGroups;
+        private System.Windows.Forms.ComboBox cbxVolumeGroups;
     }
 }

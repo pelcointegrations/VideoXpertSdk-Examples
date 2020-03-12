@@ -76,7 +76,9 @@
             this.ratio5x4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stretchToFitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.accessPointsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.alarmInputsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.analyticSessionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bookmarkManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clusterConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataObjectsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -86,7 +88,9 @@
             this.drawingManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportsLocalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.LdapConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.licenseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.membersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.monitorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.monitorWallsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pixelSearchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -94,7 +98,10 @@
             this.rolesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rulesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scheduleManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.serverConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.situationManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.smtpConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.snmpConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tagManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timeTablesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.usersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -130,6 +137,7 @@
             this.scOuter = new System.Windows.Forms.SplitContainer();
             this.txbxLog = new System.Windows.Forms.TextBox();
             this.bgWorker = new System.ComponentModel.BackgroundWorker();
+            this.twillioSMSConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelVideoStreamLeft.SuspendLayout();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpeed)).BeginInit();
@@ -576,7 +584,9 @@
             // manageToolStripMenuItem
             // 
             this.manageToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.accessPointsToolStripMenuItem,
             this.alarmInputsToolStripMenuItem,
+            this.analyticSessionsToolStripMenuItem,
             this.bookmarkManagerToolStripMenuItem,
             this.clusterConfigToolStripMenuItem,
             this.dataObjectsToolStripMenuItem,
@@ -586,7 +596,9 @@
             this.drawingManagerToolStripMenuItem,
             this.exportsLocalToolStripMenuItem,
             this.exportManagerToolStripMenuItem,
+            this.LdapConfigurationToolStripMenuItem,
             this.licenseToolStripMenuItem,
+            this.membersToolStripMenuItem,
             this.monitorsToolStripMenuItem,
             this.monitorWallsToolStripMenuItem,
             this.pixelSearchToolStripMenuItem,
@@ -594,166 +606,219 @@
             this.rolesToolStripMenuItem,
             this.rulesToolStripMenuItem,
             this.scheduleManagerToolStripMenuItem,
+            this.serverConfigurationToolStripMenuItem,
             this.situationManagerToolStripMenuItem,
+            this.smtpConfigurationToolStripMenuItem,
+            this.snmpConfigurationToolStripMenuItem,
             this.tagManagerToolStripMenuItem,
             this.timeTablesToolStripMenuItem,
+            this.twillioSMSConfigurationToolStripMenuItem,
             this.usersToolStripMenuItem});
             this.manageToolStripMenuItem.Enabled = false;
             this.manageToolStripMenuItem.Name = "manageToolStripMenuItem";
             this.manageToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
             this.manageToolStripMenuItem.Text = "Manage";
             // 
+            // accessPointsToolStripMenuItem
+            // 
+            this.accessPointsToolStripMenuItem.Name = "accessPointsToolStripMenuItem";
+            this.accessPointsToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.accessPointsToolStripMenuItem.Text = "Access Points";
+            this.accessPointsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemAccessPointManager_Click);
+            // 
             // alarmInputsToolStripMenuItem
             // 
             this.alarmInputsToolStripMenuItem.Name = "alarmInputsToolStripMenuItem";
-            this.alarmInputsToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.alarmInputsToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.alarmInputsToolStripMenuItem.Text = "Alarm Inputs";
             this.alarmInputsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemAlarmInputManager_Click);
+            // 
+            // analyticSessionsToolStripMenuItem
+            // 
+            this.analyticSessionsToolStripMenuItem.Name = "analyticSessionsToolStripMenuItem";
+            this.analyticSessionsToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.analyticSessionsToolStripMenuItem.Text = "Analytic Sessions";
+            this.analyticSessionsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemAnalyticSessionManager_Click);
             // 
             // bookmarkManagerToolStripMenuItem
             // 
             this.bookmarkManagerToolStripMenuItem.Name = "bookmarkManagerToolStripMenuItem";
-            this.bookmarkManagerToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.bookmarkManagerToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.bookmarkManagerToolStripMenuItem.Text = "Bookmarks";
             this.bookmarkManagerToolStripMenuItem.Click += new System.EventHandler(this.MenuItemBookmarkManager_Click);
             // 
             // clusterConfigToolStripMenuItem
             // 
             this.clusterConfigToolStripMenuItem.Name = "clusterConfigToolStripMenuItem";
-            this.clusterConfigToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.clusterConfigToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.clusterConfigToolStripMenuItem.Text = "Cluster Configuration";
             this.clusterConfigToolStripMenuItem.Click += new System.EventHandler(this.MenuItemClusterConfig_Click);
             // 
             // dataObjectsToolStripMenuItem
             // 
             this.dataObjectsToolStripMenuItem.Name = "dataObjectsToolStripMenuItem";
-            this.dataObjectsToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.dataObjectsToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.dataObjectsToolStripMenuItem.Text = "Data Objects";
             this.dataObjectsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemDataObjectManager_Click);
             // 
             // dataSourcesToolStripMenuItem
             // 
             this.dataSourcesToolStripMenuItem.Name = "dataSourcesToolStripMenuItem";
-            this.dataSourcesToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.dataSourcesToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.dataSourcesToolStripMenuItem.Text = "Data Sources";
             this.dataSourcesToolStripMenuItem.Click += new System.EventHandler(this.MenuItemDataSourceManager_Click);
             // 
             // dataStorageManagerToolStripMenuItem
             // 
             this.dataStorageManagerToolStripMenuItem.Name = "dataStorageManagerToolStripMenuItem";
-            this.dataStorageManagerToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.dataStorageManagerToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.dataStorageManagerToolStripMenuItem.Text = "Data Storage";
             this.dataStorageManagerToolStripMenuItem.Click += new System.EventHandler(this.MenuItemDataStorageManager_Click);
             // 
             // devicesToolStripMenuItem
             // 
             this.devicesToolStripMenuItem.Name = "devicesToolStripMenuItem";
-            this.devicesToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.devicesToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.devicesToolStripMenuItem.Text = "Devices";
             this.devicesToolStripMenuItem.Click += new System.EventHandler(this.MenuItemDeviceManager_Click);
             // 
             // drawingManagerToolStripMenuItem
             // 
             this.drawingManagerToolStripMenuItem.Name = "drawingManagerToolStripMenuItem";
-            this.drawingManagerToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.drawingManagerToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.drawingManagerToolStripMenuItem.Text = "Drawings";
             this.drawingManagerToolStripMenuItem.Click += new System.EventHandler(this.MenuItemDrawingManager_Click);
             // 
             // exportsLocalToolStripMenuItem
             // 
             this.exportsLocalToolStripMenuItem.Name = "exportsLocalToolStripMenuItem";
-            this.exportsLocalToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.exportsLocalToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.exportsLocalToolStripMenuItem.Text = "Exports Local";
             this.exportsLocalToolStripMenuItem.Click += new System.EventHandler(this.MenuItemExportLocal_Click);
             // 
             // exportManagerToolStripMenuItem
             // 
             this.exportManagerToolStripMenuItem.Name = "exportManagerToolStripMenuItem";
-            this.exportManagerToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.exportManagerToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.exportManagerToolStripMenuItem.Text = "Exports Server";
             this.exportManagerToolStripMenuItem.Click += new System.EventHandler(this.MenuItemExportManager_Click);
+            // 
+            // LdapConfigurationToolStripMenuItem
+            // 
+            this.LdapConfigurationToolStripMenuItem.Name = "LdapConfigurationToolStripMenuItem";
+            this.LdapConfigurationToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.LdapConfigurationToolStripMenuItem.Text = "LDAP Configuration";
+            this.LdapConfigurationToolStripMenuItem.Click += new System.EventHandler(this.MenuItemLdapConfigurationToolStrip_Click);
             // 
             // licenseToolStripMenuItem
             // 
             this.licenseToolStripMenuItem.Name = "licenseToolStripMenuItem";
-            this.licenseToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.licenseToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.licenseToolStripMenuItem.Text = "License";
             this.licenseToolStripMenuItem.Click += new System.EventHandler(this.MenuItemLicenseDetails_Click);
+            // 
+            // membersToolStripMenuItem
+            // 
+            this.membersToolStripMenuItem.Name = "membersToolStripMenuItem";
+            this.membersToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.membersToolStripMenuItem.Text = "Members";
+            this.membersToolStripMenuItem.Click += new System.EventHandler(this.MenuItemMembers_Click);
             // 
             // monitorsToolStripMenuItem
             // 
             this.monitorsToolStripMenuItem.Name = "monitorsToolStripMenuItem";
-            this.monitorsToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.monitorsToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.monitorsToolStripMenuItem.Text = "Monitors";
             this.monitorsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemMonitors_Click);
             // 
             // monitorWallsToolStripMenuItem
             // 
             this.monitorWallsToolStripMenuItem.Name = "monitorWallsToolStripMenuItem";
-            this.monitorWallsToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.monitorWallsToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.monitorWallsToolStripMenuItem.Text = "Monitor Walls";
             this.monitorWallsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemMonitorWalls_Click);
             // 
             // pixelSearchToolStripMenuItem
             // 
             this.pixelSearchToolStripMenuItem.Name = "pixelSearchToolStripMenuItem";
-            this.pixelSearchToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.pixelSearchToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.pixelSearchToolStripMenuItem.Text = "Pixel Search";
             this.pixelSearchToolStripMenuItem.Click += new System.EventHandler(this.MenuItemPixelSearch_Click);
             // 
             // relayOutputsToolStripMenuItem
             // 
             this.relayOutputsToolStripMenuItem.Name = "relayOutputsToolStripMenuItem";
-            this.relayOutputsToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.relayOutputsToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.relayOutputsToolStripMenuItem.Text = "Relay Outputs";
             this.relayOutputsToolStripMenuItem.Click += new System.EventHandler(this.MenuItemRelayOutputManager_Click);
             // 
             // rolesToolStripMenuItem
             // 
             this.rolesToolStripMenuItem.Name = "rolesToolStripMenuItem";
-            this.rolesToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.rolesToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.rolesToolStripMenuItem.Text = "Roles";
             this.rolesToolStripMenuItem.Click += new System.EventHandler(this.MenuItemRoleManager_Click);
             // 
             // rulesToolStripMenuItem
             // 
             this.rulesToolStripMenuItem.Name = "rulesToolStripMenuItem";
-            this.rulesToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.rulesToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.rulesToolStripMenuItem.Text = "Rules";
             this.rulesToolStripMenuItem.Click += new System.EventHandler(this.MenuItemRuleManager_Click);
             // 
             // scheduleManagerToolStripMenuItem
             // 
             this.scheduleManagerToolStripMenuItem.Name = "scheduleManagerToolStripMenuItem";
-            this.scheduleManagerToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.scheduleManagerToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.scheduleManagerToolStripMenuItem.Text = "Schedules";
             this.scheduleManagerToolStripMenuItem.Click += new System.EventHandler(this.MenuItemScheduleManager_Click);
+            // 
+            // serverConfigurationToolStripMenuItem
+            // 
+            this.serverConfigurationToolStripMenuItem.Name = "serverConfigurationToolStripMenuItem";
+            this.serverConfigurationToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.serverConfigurationToolStripMenuItem.Text = "Server Configuration";
+            this.serverConfigurationToolStripMenuItem.Click += new System.EventHandler(this.MenuItemServerConfiguration_Click);
             // 
             // situationManagerToolStripMenuItem
             // 
             this.situationManagerToolStripMenuItem.Name = "situationManagerToolStripMenuItem";
-            this.situationManagerToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.situationManagerToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.situationManagerToolStripMenuItem.Text = "Situations";
             this.situationManagerToolStripMenuItem.Click += new System.EventHandler(this.MenuItemSituationManager_Click);
+            // 
+            // smtpConfigurationToolStripMenuItem
+            // 
+            this.smtpConfigurationToolStripMenuItem.Name = "smtpConfigurationToolStripMenuItem";
+            this.smtpConfigurationToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.smtpConfigurationToolStripMenuItem.Text = "SMTP Configuration";
+            this.smtpConfigurationToolStripMenuItem.Click += new System.EventHandler(this.MenuItemSmtpConfiguration_Click);
+            // 
+            // snmpConfigurationToolStripMenuItem
+            // 
+            this.snmpConfigurationToolStripMenuItem.Name = "snmpConfigurationToolStripMenuItem";
+            this.snmpConfigurationToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.snmpConfigurationToolStripMenuItem.Text = "SNMP Configuration";
+            this.snmpConfigurationToolStripMenuItem.Click += new System.EventHandler(this.MenuItemSnmpConfiguration_Click);
             // 
             // tagManagerToolStripMenuItem
             // 
             this.tagManagerToolStripMenuItem.Name = "tagManagerToolStripMenuItem";
-            this.tagManagerToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.tagManagerToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.tagManagerToolStripMenuItem.Text = "Tags";
             this.tagManagerToolStripMenuItem.Click += new System.EventHandler(this.MenuItemTagManager_Click);
             // 
             // timeTablesToolStripMenuItem
             // 
             this.timeTablesToolStripMenuItem.Name = "timeTablesToolStripMenuItem";
-            this.timeTablesToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.timeTablesToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.timeTablesToolStripMenuItem.Text = "Time Tables";
             this.timeTablesToolStripMenuItem.Click += new System.EventHandler(this.MenuItemTimeTables_Click);
             // 
             // usersToolStripMenuItem
             // 
             this.usersToolStripMenuItem.Name = "usersToolStripMenuItem";
-            this.usersToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.usersToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.usersToolStripMenuItem.Text = "Users";
             this.usersToolStripMenuItem.Click += new System.EventHandler(this.MenuItemUserManager_Click);
             // 
@@ -1206,6 +1271,13 @@
             this.txbxLog.Size = new System.Drawing.Size(1554, 78);
             this.txbxLog.TabIndex = 0;
             // 
+            // twillioSMSConfigurationToolStripMenuItem
+            // 
+            this.twillioSMSConfigurationToolStripMenuItem.Name = "twillioSMSConfigurationToolStripMenuItem";
+            this.twillioSMSConfigurationToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.twillioSMSConfigurationToolStripMenuItem.Text = "Twillio SMS Configuration";
+            this.twillioSMSConfigurationToolStripMenuItem.Click += new System.EventHandler(this.MenuItemTwilioConfiguration_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1353,6 +1425,14 @@
         public System.Windows.Forms.Label lblStreamLossLeft;
         public System.Windows.Forms.Label lblStreamLossRight;
         public System.Windows.Forms.Button btnSetSpeed;
+        private System.Windows.Forms.ToolStripMenuItem accessPointsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem membersToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem analyticSessionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem LdapConfigurationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem serverConfigurationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem smtpConfigurationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem snmpConfigurationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem twillioSMSConfigurationToolStripMenuItem;
     }
 }
 

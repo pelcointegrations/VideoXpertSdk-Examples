@@ -100,6 +100,16 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The ColorToUInt method.
+        /// </summary>
+        /// <param name="color">The color to convert.</param>
+        /// <returns>The <c>Color</c> value as a <c>uint</c>.</returns>
+        public static uint ColorToUInt(Color color)
+        {
+            return (uint)((color.A << 24) | (color.R << 16) | (color.G << 8) | (color.B << 0));
+        }
+
+        /// <summary>
         /// The EncodeToBase64 method.
         /// </summary>
         /// <param name="toEncode">The string to encode to Base64.</param>
@@ -170,6 +180,20 @@ namespace ExampleClient.Source
 
             var response = await client.SendAsync(request);
             return response;
+        }
+
+        /// <summary>
+        /// The UIntToColor method.
+        /// </summary>
+        /// <param name="color">The ARGB color as an <c>uint</c>.</param>
+        /// <returns>The <c>uint</c> value as a <c>Color</c>.</returns>
+        public static Color UIntToColor(uint color)
+        {
+            byte a = (byte)(color >> 24);
+            byte r = (byte)(color >> 16);
+            byte g = (byte)(color >> 8);
+            byte b = (byte)(color >> 0);
+            return Color.FromArgb(a, r, g, b);
         }
 
         #endregion Public Methods

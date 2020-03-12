@@ -123,6 +123,30 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The ButtonStream_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonStream_Click(object sender, EventArgs args)
+        {
+            if (lvExportManager.CheckedItems.Count == 0)
+                return;
+
+            // Get the associated Export object from the selected item.
+            var export = (Export)lvExportManager.CheckedItems[0].Tag;
+
+            var exportStream = export?.Stream;
+            if (exportStream == null)
+                return;
+
+            // Show the ExportStreamForm dialog.
+            using (var exportStreamForm = new ExportStreamForm(exportStream))
+            {
+                exportStreamForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
         /// The ButtonTrashRestore_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -211,5 +235,6 @@ namespace ExampleClient.Source
         }
 
         #endregion Private Methods
+
     }
 }

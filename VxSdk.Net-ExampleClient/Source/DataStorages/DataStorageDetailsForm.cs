@@ -1,4 +1,8 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Globalization;
+using System.Linq;
 using System.Windows.Forms;
 using VxSdkNet;
 
@@ -34,6 +38,7 @@ namespace ExampleClient.Source
                 return;
 
             AddDataStorageInfo(dataStorage);
+            AddRetentionInfo(dataStorage);
             AddStorageConfigInfo(dataStorage);
 
             if (dataStorage.DataSources.Count > 0)
@@ -58,6 +63,26 @@ namespace ExampleClient.Source
                 var lvSubItem = new ListViewItem(string.Empty);
                 lvSubItem.SubItems.Add("Camera");
                 lvSubItem.SubItems.Add(dataSource.Name);
+                lvDataStorageDetails.Items.Add(lvSubItem);
+            }
+        }
+
+        /// <summary>
+        /// The AddRetentionInfo method.
+        /// </summary>
+        /// <param name="dataStorage">The <paramref name="dataStorage"/> to add the info for.</param>
+        private void AddRetentionInfo(DataStorage dataStorage)
+        {
+            var lvItem = new ListViewItem(string.Empty) { BackColor = Color.LightGray };
+            lvItem.SubItems.Add("Retentions");
+            lvDataStorageDetails.Items.Add(lvItem);
+            var dataSources = dataStorage.DataSources;
+            foreach (var retention in dataStorage.Retentions)
+            {
+                var dataSource = dataSources.FirstOrDefault(ds => ds.Id == retention.Resource.Id);
+                var lvSubItem = new ListViewItem(string.Empty);
+                lvSubItem.SubItems.Add(dataSource?.Name);
+                lvSubItem.SubItems.Add(retention.OldestRecording.ToString("u"));
                 lvDataStorageDetails.Items.Add(lvSubItem);
             }
         }
@@ -108,15 +133,42 @@ namespace ExampleClient.Source
             lvItem.SubItems.Add("Config");
             lvDataStorageDetails.Items.Add(lvItem);
 
-            var lvSubItem = new ListViewItem(string.Empty);
-            lvSubItem.SubItems.Add("Transmission Type");
-            lvSubItem.SubItems.Add(config.TransmissionType);
-            lvDataStorageDetails.Items.Add(lvSubItem);
+            // Use reflection to get each available property from the configuration object.
+            foreach (var prop in config.GetType().GetProperties())
+            {
+                string valItem;
 
-            var lvSubItem2 = new ListViewItem(string.Empty);
-            lvSubItem2.SubItems.Add("Retention Limit");
-            lvSubItem2.SubItems.Add(config.RetentionLimit.ToString());
-            lvDataStorageDetails.Items.Add(lvSubItem2);
+                // Skip unreadable properties.
+                if (!prop.CanRead)
+                    continue;
+
+                // Get the value from the property.
+                var val = prop.GetValue(config, null);
+
+                // Skip the property if the value is a volume or volume group list.
+                if (val.GetType() == typeof(List<VolumeGroup>) || val.GetType() == typeof(List<Volume>))
+                    continue;
+
+                // Convert the property to a local time string if it's a DateTime type.
+                if (val is DateTime)
+                {
+                    var time = (DateTime)val;
+                    valItem = time.ToLocalTime().ToString(CultureInfo.InvariantCulture);
+                }
+                else if (val.GetType() == typeof(List<string>))
+                {
+                    var valList = val as List<string>;
+                    valItem = string.Join(", ", valList);
+                }
+                else
+                    valItem = val.ToString();
+
+                // Add the property name and value to the list view.
+                var lvItem2 = new ListViewItem(string.Empty);
+                lvItem2.SubItems.Add(prop.Name);
+                lvItem2.SubItems.Add(valItem);
+                lvDataStorageDetails.Items.Add(lvItem2);
+            }
         }
 
         #endregion Private Methods

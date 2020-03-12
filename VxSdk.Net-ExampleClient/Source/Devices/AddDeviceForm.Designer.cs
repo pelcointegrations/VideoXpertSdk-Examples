@@ -43,25 +43,27 @@
             this.lblDriverType = new System.Windows.Forms.Label();
             this.lblIp = new System.Windows.Forms.Label();
             this.tbxIp = new System.Windows.Forms.TextBox();
+            this.lblHostname = new System.Windows.Forms.Label();
+            this.tbxHostname = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // tbxName
             // 
-            this.tbxName.Location = new System.Drawing.Point(96, 63);
+            this.tbxName.Location = new System.Drawing.Point(97, 89);
             this.tbxName.Name = "tbxName";
             this.tbxName.Size = new System.Drawing.Size(156, 20);
             this.tbxName.TabIndex = 0;
             // 
             // tbxPassword
             // 
-            this.tbxPassword.Location = new System.Drawing.Point(96, 115);
+            this.tbxPassword.Location = new System.Drawing.Point(97, 141);
             this.tbxPassword.Name = "tbxPassword";
             this.tbxPassword.Size = new System.Drawing.Size(156, 20);
             this.tbxPassword.TabIndex = 1;
             // 
             // tbxUsername
             // 
-            this.tbxUsername.Location = new System.Drawing.Point(96, 89);
+            this.tbxUsername.Location = new System.Drawing.Point(97, 115);
             this.tbxUsername.Name = "tbxUsername";
             this.tbxUsername.Size = new System.Drawing.Size(156, 20);
             this.tbxUsername.TabIndex = 2;
@@ -70,7 +72,7 @@
             // 
             this.ckbxAutoCommission.AutoSize = true;
             this.ckbxAutoCommission.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ckbxAutoCommission.Location = new System.Drawing.Point(143, 168);
+            this.ckbxAutoCommission.Location = new System.Drawing.Point(144, 194);
             this.ckbxAutoCommission.Name = "ckbxAutoCommission";
             this.ckbxAutoCommission.Size = new System.Drawing.Size(109, 17);
             this.ckbxAutoCommission.TabIndex = 3;
@@ -79,7 +81,7 @@
             // 
             // lblName
             // 
-            this.lblName.Location = new System.Drawing.Point(12, 61);
+            this.lblName.Location = new System.Drawing.Point(13, 87);
             this.lblName.Name = "lblName";
             this.lblName.Size = new System.Drawing.Size(79, 20);
             this.lblName.TabIndex = 4;
@@ -88,7 +90,7 @@
             // 
             // lblPassword
             // 
-            this.lblPassword.Location = new System.Drawing.Point(12, 113);
+            this.lblPassword.Location = new System.Drawing.Point(13, 139);
             this.lblPassword.Name = "lblPassword";
             this.lblPassword.Size = new System.Drawing.Size(79, 20);
             this.lblPassword.TabIndex = 5;
@@ -97,7 +99,7 @@
             // 
             // lblUsername
             // 
-            this.lblUsername.Location = new System.Drawing.Point(12, 87);
+            this.lblUsername.Location = new System.Drawing.Point(13, 113);
             this.lblUsername.Name = "lblUsername";
             this.lblUsername.Size = new System.Drawing.Size(79, 20);
             this.lblUsername.TabIndex = 6;
@@ -107,7 +109,7 @@
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(128, 191);
+            this.btnCancel.Location = new System.Drawing.Point(129, 217);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(59, 23);
             this.btnCancel.TabIndex = 8;
@@ -117,7 +119,7 @@
             // btnOk
             // 
             this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOk.Location = new System.Drawing.Point(193, 191);
+            this.btnOk.Location = new System.Drawing.Point(194, 217);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(59, 23);
             this.btnOk.TabIndex = 7;
@@ -161,14 +163,14 @@
             // 
             this.cbxDriverType.Enabled = false;
             this.cbxDriverType.FormattingEnabled = true;
-            this.cbxDriverType.Location = new System.Drawing.Point(97, 141);
+            this.cbxDriverType.Location = new System.Drawing.Point(98, 167);
             this.cbxDriverType.Name = "cbxDriverType";
             this.cbxDriverType.Size = new System.Drawing.Size(155, 21);
             this.cbxDriverType.TabIndex = 14;
             // 
             // lblDriverType
             // 
-            this.lblDriverType.Location = new System.Drawing.Point(12, 139);
+            this.lblDriverType.Location = new System.Drawing.Point(13, 165);
             this.lblDriverType.Name = "lblDriverType";
             this.lblDriverType.Size = new System.Drawing.Size(79, 20);
             this.lblDriverType.TabIndex = 13;
@@ -191,11 +193,29 @@
             this.tbxIp.Size = new System.Drawing.Size(156, 20);
             this.tbxIp.TabIndex = 15;
             // 
+            // lblHostname
+            // 
+            this.lblHostname.Location = new System.Drawing.Point(12, 61);
+            this.lblHostname.Name = "lblHostname";
+            this.lblHostname.Size = new System.Drawing.Size(79, 20);
+            this.lblHostname.TabIndex = 18;
+            this.lblHostname.Text = "Hostname: ";
+            this.lblHostname.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // tbxHostname
+            // 
+            this.tbxHostname.Location = new System.Drawing.Point(96, 63);
+            this.tbxHostname.Name = "tbxHostname";
+            this.tbxHostname.Size = new System.Drawing.Size(156, 20);
+            this.tbxHostname.TabIndex = 17;
+            // 
             // AddDeviceForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(267, 222);
+            this.ClientSize = new System.Drawing.Size(267, 249);
+            this.Controls.Add(this.lblHostname);
+            this.Controls.Add(this.tbxHostname);
             this.Controls.Add(this.lblIp);
             this.Controls.Add(this.tbxIp);
             this.Controls.Add(this.cbxDriverType);
@@ -239,5 +259,7 @@
         private System.Windows.Forms.Label lblDriverType;
         private System.Windows.Forms.Label lblIp;
         private System.Windows.Forms.TextBox tbxIp;
+        private System.Windows.Forms.Label lblHostname;
+        private System.Windows.Forms.TextBox tbxHostname;
     }
 }

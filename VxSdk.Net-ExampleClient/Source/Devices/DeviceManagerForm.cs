@@ -66,6 +66,25 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The ButtonDbBackups_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonDbBackups_Click(object sender, EventArgs args)
+        {
+            if (lvDevices.SelectedItems.Count == 0)
+                return;
+
+            var device = (Device)lvDevices.SelectedItems[0].Tag;
+
+            // Show the DatabaseBackupManagerForm dialog.
+            using (var databaseBackupManagerForm = new DatabaseBackupManagerForm(device))
+            {
+                databaseBackupManagerForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
         /// The ButtonDecommission_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -95,6 +114,63 @@ namespace ExampleClient.Source
             var device = (Device)lvDevices.SelectedItems[0].Tag;
             MainForm.CurrentSystem.DeleteDevice(device);
             PopulateDevices();
+        }
+
+        /// <summary>
+        /// The ButtonDiagnostics_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonDiagnostics_Click(object sender, EventArgs args)
+        {
+            if (lvDevices.SelectedItems.Count == 0)
+                return;
+
+            var device = (Device)lvDevices.SelectedItems[0].Tag;
+
+            // Show the DiagnosticDetailsForm dialog.
+            using (var diagnosticDetailsForm = new DiagnosticDetailsForm(device))
+            {
+                diagnosticDetailsForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// The ButtonLicenseInfo_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonLicenseInfo_Click(object sender, EventArgs args)
+        {
+            if (lvDevices.SelectedItems.Count == 0)
+                return;
+
+            var device = (Device)lvDevices.SelectedItems[0].Tag;
+
+            // Show the LicenseFeatureDetailsForm dialog.
+            using (var licenseFeatureDetailsForm = new LicenseFeatureDetailsForm(device))
+            {
+                licenseFeatureDetailsForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// The ButtonLimits_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonLimits_Click(object sender, EventArgs args)
+        {
+            if (lvDevices.SelectedItems.Count == 0)
+                return;
+
+            var device = (Device)lvDevices.SelectedItems[0].Tag;
+
+            // Show the LimitDetailsForm dialog.
+            using (var limitDetailsForm = new LimitDetailsForm(device.Limits, device.Name))
+            {
+                limitDetailsForm.ShowDialog();
+            }
         }
 
         /// <summary>
@@ -168,6 +244,20 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The ButtonUpdate_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonUpdate_Click(object sender, EventArgs args)
+        {
+            if (lvDevices.SelectedItems.Count == 0)
+                return;
+
+            var device = (Device)lvDevices.SelectedItems[0].Tag;
+            device.TriggerRefresh();
+        }
+
+        /// <summary>
         /// The ListViewDevices_SelectedIndexChanged method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -179,6 +269,9 @@ namespace ExampleClient.Source
 
             var device = (Device)lvDevices.SelectedItems[0].Tag;
             btnManageLogs.Enabled = device.CanCreateLogs;
+            btnDiagnostics.Enabled = device.HasDeviceDiagnostics;
+            btnLicenseInfo.Enabled = device.LicensableFeatures.Count > 0 || device.LicensedFeatures.Count > 0;
+            btnDbBackups.Enabled = device.DatabaseBackups != null;
         }
 
         /// <summary>
@@ -235,6 +328,7 @@ namespace ExampleClient.Source
                 lvDevices.Items.Add(lvItem);
             }
         }
+
 
         #endregion Private Methods
     }

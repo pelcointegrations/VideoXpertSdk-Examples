@@ -28,6 +28,23 @@ namespace ExampleClient.Source
         #region Private Methods
 
         /// <summary>
+        /// The ButtonConfiguration_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonConfiguration_Click(object sender, EventArgs args)
+        {
+            if (MainForm.CurrentSystem.AuthConfig == null)
+                return;
+
+            // Show the AuthConfigForm dialog.
+            using (var authConfigForm = new AuthConfigForm())
+            {
+                authConfigForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
         /// The ButtonDelete_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -101,6 +118,31 @@ namespace ExampleClient.Source
         private void ButtonRefresh_Click(object sender, EventArgs args)
         {
             PopulateUsers();
+        }
+
+        /// <summary>
+        /// The ButtonUserAccount_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonUserAccount_Click(object sender, EventArgs args)
+        {
+            if (lvUsers.SelectedItems.Count == 0)
+                return;
+
+            var user = (User)lvUsers.SelectedItems[0].Tag;
+
+            if (user.Account == null)
+            {
+                MessageBox.Show($@"Unable to retrieve the user account.", @"Error");
+                return;
+            }
+
+            // Show the UserAccountForm dialog.
+            using (var userAccountForm = new UserAccountForm(user.Account))
+            {
+                userAccountForm.ShowDialog();
+            }
         }
 
         /// <summary>

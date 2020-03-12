@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ExampleClient.Source.Misc;
 using VxSdkNet;
 
 namespace ExampleClient.Source
@@ -868,6 +869,19 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The MenuItemAccessPointManager_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void MenuItemAccessPointManager_Click(object sender, EventArgs args)
+        {
+            using (var accessPointManagerForm = new AccessPointManagerForm())
+            {
+                accessPointManagerForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
         /// The MenuItemAcknowledgeAllEvents_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -899,6 +913,19 @@ namespace ExampleClient.Source
             using (var alarmInputManagerForm = new AlarmInputManagerForm())
             {
                 alarmInputManagerForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// The MenuItemAnalyticSessionManager_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void MenuItemAnalyticSessionManager_Click(object sender, EventArgs args)
+        {
+            using (var analyticSessionManagerForm = new AnalyticSessionManagerForm())
+            {
+                analyticSessionManagerForm.ShowDialog();
             }
         }
 
@@ -1080,6 +1107,22 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The MenuItemLdapConfigurationToolStrip_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void MenuItemLdapConfigurationToolStrip_Click(object sender, EventArgs args)
+        {
+            if (CurrentSystem.LdapConfig == null)
+                return;
+
+            using (var ldapConfigurationForm = new LdapConfigurationForm())
+            {
+                ldapConfigurationForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
         /// The MenuItemLicenseDetails_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -1145,6 +1188,19 @@ namespace ExampleClient.Source
             var name = CurrentSystem.Name;
             Logout();
             WriteToLog("Info: Logged out from " + name + ".");
+        }
+
+        /// <summary>
+        /// The MenuItemMembers_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void MenuItemMembers_Click(object sender, EventArgs args)
+        {
+            using (var memberManagerForm = new MemberManagerForm())
+            {
+                memberManagerForm.ShowDialog();
+            }
         }
 
         /// <summary>
@@ -1355,6 +1411,19 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The MenuItemServerConfiguration_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void MenuItemServerConfiguration_Click(object sender, EventArgs args)
+        {
+            using (var aerverConfigurationForm = new ServerConfigurationForm())
+            {
+                aerverConfigurationForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
         /// The MenuItemShowPtzControls_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -1374,6 +1443,19 @@ namespace ExampleClient.Source
             using (var situationForm = new SituationManagerForm())
             {
                 situationForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// The MenuItemSmtpConfiguration_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void MenuItemSmtpConfiguration_Click(object sender, EventArgs args)
+        {
+            using (var smtpConfigurationForm = new SmtpConfigurationForm())
+            {
+                smtpConfigurationForm.ShowDialog();
             }
         }
 
@@ -1399,7 +1481,25 @@ namespace ExampleClient.Source
             }
         }
 
-        private void MenuItemStretchToFit_Click(object sender, EventArgs e)
+        /// <summary>
+        /// The MenuItemSnmpConfiguration_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void MenuItemSnmpConfiguration_Click(object sender, EventArgs args)
+        {
+            using (var snmpConfigurationForm = new SnmpConfigurationForm())
+            {
+                snmpConfigurationForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// The MenuItemStretchToFit_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void MenuItemStretchToFit_Click(object sender, EventArgs args)
         {
             var item = sender as ToolStripMenuItem;
             if (item == null)
@@ -1508,6 +1608,19 @@ namespace ExampleClient.Source
             using (var userForm = new UserManagerForm())
             {
                 userForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// The MenuItemTwilioConfiguration_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void MenuItemTwilioConfiguration_Click(object sender, EventArgs args)
+        {
+            using (var twilioConfigurationForm = new TwilioConfigurationForm())
+            {
+                twilioConfigurationForm.ShowDialog();
             }
         }
 

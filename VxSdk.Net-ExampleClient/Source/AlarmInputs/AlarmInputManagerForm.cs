@@ -80,6 +80,7 @@ namespace ExampleClient.Source
                 lvItem.SubItems.Add(alarmInput.Description);
                 lvItem.SubItems.Add(alarmInput.Id);
                 lvItem.SubItems.Add(alarmInput.State.ToString());
+                lvItem.SubItems.Add(alarmInput.Type.ToString());
                 lvItem.Tag = alarmInput;
                 lvAlarmInputManager.Items.Add(lvItem);
             }

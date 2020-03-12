@@ -35,6 +35,7 @@
             this.btnNewMonitorWall = new System.Windows.Forms.Button();
             this.btnRefresh = new System.Windows.Forms.Button();
             this.btnModify = new System.Windows.Forms.Button();
+            this.btnManageSelections = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lvMonitorWallManager
@@ -44,6 +45,7 @@
             this.chMonitorCount});
             this.lvMonitorWallManager.FullRowSelect = true;
             this.lvMonitorWallManager.GridLines = true;
+            this.lvMonitorWallManager.HideSelection = false;
             this.lvMonitorWallManager.Location = new System.Drawing.Point(9, 10);
             this.lvMonitorWallManager.MultiSelect = false;
             this.lvMonitorWallManager.Name = "lvMonitorWallManager";
@@ -64,9 +66,9 @@
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(403, 68);
+            this.btnDelete.Location = new System.Drawing.Point(403, 97);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(104, 23);
+            this.btnDelete.Size = new System.Drawing.Size(112, 23);
             this.btnDelete.TabIndex = 2;
             this.btnDelete.Text = "Delete";
             this.btnDelete.UseVisualStyleBackColor = true;
@@ -76,7 +78,7 @@
             // 
             this.btnNewMonitorWall.Location = new System.Drawing.Point(402, 10);
             this.btnNewMonitorWall.Name = "btnNewMonitorWall";
-            this.btnNewMonitorWall.Size = new System.Drawing.Size(105, 23);
+            this.btnNewMonitorWall.Size = new System.Drawing.Size(113, 23);
             this.btnNewMonitorWall.TabIndex = 3;
             this.btnNewMonitorWall.Text = "New Monitor Wall";
             this.btnNewMonitorWall.UseVisualStyleBackColor = true;
@@ -84,9 +86,9 @@
             // 
             // btnRefresh
             // 
-            this.btnRefresh.Location = new System.Drawing.Point(403, 97);
+            this.btnRefresh.Location = new System.Drawing.Point(403, 126);
             this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(104, 23);
+            this.btnRefresh.Size = new System.Drawing.Size(112, 23);
             this.btnRefresh.TabIndex = 4;
             this.btnRefresh.Text = "Refresh";
             this.btnRefresh.UseVisualStyleBackColor = true;
@@ -94,19 +96,30 @@
             // 
             // btnModify
             // 
-            this.btnModify.Location = new System.Drawing.Point(403, 39);
+            this.btnModify.Location = new System.Drawing.Point(402, 39);
             this.btnModify.Name = "btnModify";
-            this.btnModify.Size = new System.Drawing.Size(104, 23);
+            this.btnModify.Size = new System.Drawing.Size(113, 23);
             this.btnModify.TabIndex = 6;
             this.btnModify.Text = "Modify";
             this.btnModify.UseVisualStyleBackColor = true;
             this.btnModify.Click += new System.EventHandler(this.ButtonModify_Click);
             // 
+            // btnManageSelections
+            // 
+            this.btnManageSelections.Location = new System.Drawing.Point(403, 68);
+            this.btnManageSelections.Name = "btnManageSelections";
+            this.btnManageSelections.Size = new System.Drawing.Size(112, 23);
+            this.btnManageSelections.TabIndex = 7;
+            this.btnManageSelections.Text = "Manage Selections";
+            this.btnManageSelections.UseVisualStyleBackColor = true;
+            this.btnManageSelections.Click += new System.EventHandler(this.ButtonManageSelections_Click);
+            // 
             // MonitorWallManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(517, 217);
+            this.ClientSize = new System.Drawing.Size(521, 217);
+            this.Controls.Add(this.btnManageSelections);
             this.Controls.Add(this.btnModify);
             this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.btnNewMonitorWall);
@@ -131,5 +144,6 @@
         private System.Windows.Forms.Button btnNewMonitorWall;
         private System.Windows.Forms.Button btnRefresh;
         private System.Windows.Forms.Button btnModify;
+        private System.Windows.Forms.Button btnManageSelections;
     }
 }

@@ -34,12 +34,14 @@
             this.tbxName = new System.Windows.Forms.TextBox();
             this.lblName = new System.Windows.Forms.Label();
             this.tbxDescription = new System.Windows.Forms.TextBox();
+            this.cbxType = new System.Windows.Forms.ComboBox();
+            this.lblType = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(92, 80);
+            this.btnCancel.Location = new System.Drawing.Point(93, 121);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 32;
@@ -49,7 +51,7 @@
             // btnSave
             // 
             this.btnSave.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnSave.Location = new System.Drawing.Point(173, 80);
+            this.btnSave.Location = new System.Drawing.Point(174, 121);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 31;
@@ -89,11 +91,35 @@
             this.tbxDescription.Size = new System.Drawing.Size(175, 20);
             this.tbxDescription.TabIndex = 37;
             // 
+            // cbxType
+            // 
+            this.cbxType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxType.FormattingEnabled = true;
+            this.cbxType.Items.AddRange(new object[] {
+            "Unknown",
+            "Alarm",
+            "Fire"});
+            this.cbxType.Location = new System.Drawing.Point(74, 78);
+            this.cbxType.Name = "cbxType";
+            this.cbxType.Size = new System.Drawing.Size(175, 21);
+            this.cbxType.TabIndex = 38;
+            // 
+            // lblType
+            // 
+            this.lblType.Location = new System.Drawing.Point(7, 81);
+            this.lblType.Name = "lblType";
+            this.lblType.Size = new System.Drawing.Size(61, 13);
+            this.lblType.TabIndex = 39;
+            this.lblType.Text = "Type: ";
+            this.lblType.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // ModifyAlarmInputForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(260, 112);
+            this.ClientSize = new System.Drawing.Size(260, 156);
+            this.Controls.Add(this.lblType);
+            this.Controls.Add(this.cbxType);
             this.Controls.Add(this.tbxDescription);
             this.Controls.Add(this.tbxName);
             this.Controls.Add(this.lblName);
@@ -118,5 +144,7 @@
         private System.Windows.Forms.TextBox tbxName;
         private System.Windows.Forms.Label lblName;
         private System.Windows.Forms.TextBox tbxDescription;
+        private System.Windows.Forms.ComboBox cbxType;
+        private System.Windows.Forms.Label lblType;
     }
 }

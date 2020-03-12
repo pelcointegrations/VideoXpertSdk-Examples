@@ -38,17 +38,20 @@ namespace ExampleClient.Source
         #region Private Methods
 
         /// <summary>
-        /// The ButtonConfigureAutoUnlock_Click method.
+        /// The ButtonConfigureBookmarks_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
         /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void ButtonConfigureAutoUnlock_Click(object sender, EventArgs args)
+        private void ButtonConfigureBookmarks_Click(object sender, EventArgs args)
         {
-            decimal value = MainForm.CurrentSystem.BookmarkAutoUnlockTime;
-            if (InputBox.Show("Configure Bookmark Auto-Unlock", "Automatically unlock any locked bookmark that has a lock end time older than this number of days. If 0 or omitted, no automatic unlock will be performed.\n\nAuto-Unlock Days:", ref value, 0, 999999) != DialogResult.OK)
+            if (MainForm.CurrentSystem.BookmarkConfig == null)
                 return;
 
-            MainForm.CurrentSystem.BookmarkAutoUnlockTime = (int)value;
+            // Show the BookmarkConfigForm dialog.
+            using (var bookmarkConfigForm = new BookmarkConfigForm())
+            {
+                bookmarkConfigForm.ShowDialog();
+            }
         }
 
         /// <summary>

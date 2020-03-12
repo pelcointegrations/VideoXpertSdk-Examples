@@ -59,6 +59,7 @@ namespace ExampleClient.Source
                 var lvItem = new ListViewItem(gap.Reason.ToString());
                 lvItem.SubItems.Add(gap.StartTime.ToString("s"));
                 lvItem.SubItems.Add(gap.EndTime.ToString("s"));
+                lvItem.SubItems.Add(gap.GapFillingStatus.ToString());
                 lvItem.SubItems.Add(gap.DataStorageId);
                 if (gap.ReasonData.Count > 0)
                 {

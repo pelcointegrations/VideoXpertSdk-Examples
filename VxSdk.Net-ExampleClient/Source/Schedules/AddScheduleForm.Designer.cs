@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.cbxAction = new System.Windows.Forms.ComboBox();
             this.tbxId = new System.Windows.Forms.TextBox();
             this.tbxName = new System.Windows.Forms.TextBox();
             this.ckbxUseAllDataSources = new System.Windows.Forms.CheckBox();
@@ -36,48 +35,37 @@
             this.chCheckBox = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chEventType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chInactiveEventType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chEventProperties = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chFrameRate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chPreTrigger = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chPostTrigger = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chTimeout = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chTimeTable = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnGenerate = new System.Windows.Forms.Button();
             this.lblId = new System.Windows.Forms.Label();
             this.lblName = new System.Windows.Forms.Label();
-            this.lblAction = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
             this.gbxScheduleTriggers = new System.Windows.Forms.GroupBox();
             this.btnRemoveScheduleTrigger = new System.Windows.Forms.Button();
             this.btnAddScheduleTrigger = new System.Windows.Forms.Button();
             this.gbxGeneralSettings = new System.Windows.Forms.GroupBox();
-            this.chFrameRate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chTimeTable = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chEventProperties = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chAction = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.gbxScheduleTriggers.SuspendLayout();
             this.gbxGeneralSettings.SuspendLayout();
             this.SuspendLayout();
             // 
-            // cbxAction
-            // 
-            this.cbxAction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxAction.FormattingEnabled = true;
-            this.cbxAction.Items.AddRange(new object[] {
-            "Event Source Record",
-            "Record"});
-            this.cbxAction.Location = new System.Drawing.Point(255, 21);
-            this.cbxAction.Name = "cbxAction";
-            this.cbxAction.Size = new System.Drawing.Size(122, 21);
-            this.cbxAction.TabIndex = 0;
-            // 
             // tbxId
             // 
-            this.tbxId.Location = new System.Drawing.Point(407, 21);
+            this.tbxId.Location = new System.Drawing.Point(391, 22);
             this.tbxId.Name = "tbxId";
             this.tbxId.Size = new System.Drawing.Size(293, 20);
             this.tbxId.TabIndex = 1;
             // 
             // tbxName
             // 
-            this.tbxName.Location = new System.Drawing.Point(47, 21);
+            this.tbxName.Location = new System.Drawing.Point(47, 22);
             this.tbxName.Name = "tbxName";
             this.tbxName.Size = new System.Drawing.Size(159, 20);
             this.tbxName.TabIndex = 2;
@@ -85,7 +73,7 @@
             // ckbxUseAllDataSources
             // 
             this.ckbxUseAllDataSources.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ckbxUseAllDataSources.Location = new System.Drawing.Point(802, 23);
+            this.ckbxUseAllDataSources.Location = new System.Drawing.Point(992, 22);
             this.ckbxUseAllDataSources.Name = "ckbxUseAllDataSources";
             this.ckbxUseAllDataSources.Size = new System.Drawing.Size(127, 20);
             this.ckbxUseAllDataSources.TabIndex = 3;
@@ -99,18 +87,21 @@
             this.chCheckBox,
             this.chId,
             this.chEventType,
+            this.chInactiveEventType,
             this.chEventProperties,
             this.chFrameRate,
             this.chPreTrigger,
             this.chPostTrigger,
             this.chTimeout,
-            this.chTimeTable});
+            this.chTimeTable,
+            this.chAction});
             this.lvScheduleTriggers.FullRowSelect = true;
             this.lvScheduleTriggers.GridLines = true;
+            this.lvScheduleTriggers.HideSelection = false;
             this.lvScheduleTriggers.Location = new System.Drawing.Point(9, 19);
             this.lvScheduleTriggers.MultiSelect = false;
             this.lvScheduleTriggers.Name = "lvScheduleTriggers";
-            this.lvScheduleTriggers.Size = new System.Drawing.Size(920, 172);
+            this.lvScheduleTriggers.Size = new System.Drawing.Size(1110, 172);
             this.lvScheduleTriggers.TabIndex = 6;
             this.lvScheduleTriggers.UseCompatibleStateImageBehavior = false;
             this.lvScheduleTriggers.View = System.Windows.Forms.View.Details;
@@ -124,12 +115,26 @@
             // chId
             // 
             this.chId.Text = "ID";
-            this.chId.Width = 204;
+            this.chId.Width = 190;
             // 
             // chEventType
             // 
             this.chEventType.Text = "Event Type";
             this.chEventType.Width = 200;
+            // 
+            // chInactiveEventType
+            // 
+            this.chInactiveEventType.Text = "Inactive Event Type";
+            this.chInactiveEventType.Width = 200;
+            // 
+            // chEventProperties
+            // 
+            this.chEventProperties.Text = "Event Properties";
+            this.chEventProperties.Width = 100;
+            // 
+            // chFrameRate
+            // 
+            this.chFrameRate.Text = "Framerate";
             // 
             // chPreTrigger
             // 
@@ -146,9 +151,14 @@
             this.chTimeout.Text = "Duration";
             this.chTimeout.Width = 53;
             // 
+            // chTimeTable
+            // 
+            this.chTimeTable.Text = "Time Table";
+            this.chTimeTable.Width = 150;
+            // 
             // btnGenerate
             // 
-            this.btnGenerate.Location = new System.Drawing.Point(706, 20);
+            this.btnGenerate.Location = new System.Drawing.Point(690, 21);
             this.btnGenerate.Name = "btnGenerate";
             this.btnGenerate.Size = new System.Drawing.Size(68, 23);
             this.btnGenerate.TabIndex = 7;
@@ -159,7 +169,7 @@
             // lblId
             // 
             this.lblId.AutoSize = true;
-            this.lblId.Location = new System.Drawing.Point(383, 25);
+            this.lblId.Location = new System.Drawing.Point(367, 26);
             this.lblId.Name = "lblId";
             this.lblId.Size = new System.Drawing.Size(18, 13);
             this.lblId.TabIndex = 8;
@@ -168,25 +178,16 @@
             // lblName
             // 
             this.lblName.AutoSize = true;
-            this.lblName.Location = new System.Drawing.Point(6, 25);
+            this.lblName.Location = new System.Drawing.Point(6, 26);
             this.lblName.Name = "lblName";
             this.lblName.Size = new System.Drawing.Size(35, 13);
             this.lblName.TabIndex = 9;
             this.lblName.Text = "Name";
             // 
-            // lblAction
-            // 
-            this.lblAction.AutoSize = true;
-            this.lblAction.Location = new System.Drawing.Point(212, 25);
-            this.lblAction.Name = "lblAction";
-            this.lblAction.Size = new System.Drawing.Size(37, 13);
-            this.lblAction.TabIndex = 10;
-            this.lblAction.Text = "Action";
-            // 
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(791, 307);
+            this.btnCancel.Location = new System.Drawing.Point(981, 307);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 26;
@@ -196,7 +197,7 @@
             // btnAdd
             // 
             this.btnAdd.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnAdd.Location = new System.Drawing.Point(872, 307);
+            this.btnAdd.Location = new System.Drawing.Point(1062, 307);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 23);
             this.btnAdd.TabIndex = 25;
@@ -211,7 +212,7 @@
             this.gbxScheduleTriggers.Controls.Add(this.lvScheduleTriggers);
             this.gbxScheduleTriggers.Location = new System.Drawing.Point(12, 73);
             this.gbxScheduleTriggers.Name = "gbxScheduleTriggers";
-            this.gbxScheduleTriggers.Size = new System.Drawing.Size(935, 228);
+            this.gbxScheduleTriggers.Size = new System.Drawing.Size(1125, 228);
             this.gbxScheduleTriggers.TabIndex = 27;
             this.gbxScheduleTriggers.TabStop = false;
             this.gbxScheduleTriggers.Text = "Schedule Triggers";
@@ -240,39 +241,27 @@
             // gbxGeneralSettings
             // 
             this.gbxGeneralSettings.Controls.Add(this.lblName);
-            this.gbxGeneralSettings.Controls.Add(this.cbxAction);
             this.gbxGeneralSettings.Controls.Add(this.tbxId);
             this.gbxGeneralSettings.Controls.Add(this.tbxName);
-            this.gbxGeneralSettings.Controls.Add(this.lblAction);
             this.gbxGeneralSettings.Controls.Add(this.ckbxUseAllDataSources);
             this.gbxGeneralSettings.Controls.Add(this.btnGenerate);
             this.gbxGeneralSettings.Controls.Add(this.lblId);
             this.gbxGeneralSettings.Location = new System.Drawing.Point(12, 12);
             this.gbxGeneralSettings.Name = "gbxGeneralSettings";
-            this.gbxGeneralSettings.Size = new System.Drawing.Size(935, 55);
+            this.gbxGeneralSettings.Size = new System.Drawing.Size(1125, 55);
             this.gbxGeneralSettings.TabIndex = 28;
             this.gbxGeneralSettings.TabStop = false;
             this.gbxGeneralSettings.Text = "General Settings";
             // 
-            // chFrameRate
+            // chAction
             // 
-            this.chFrameRate.Text = "Framerate";
-            // 
-            // chTimeTable
-            // 
-            this.chTimeTable.Text = "Time Table";
-            this.chTimeTable.Width = 200;
-            // 
-            // chEventProperties
-            // 
-            this.chEventProperties.Text = "Event Properties";
-            this.chEventProperties.Width = 100;
+            this.chAction.Text = "Action";
             // 
             // AddScheduleForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(959, 340);
+            this.ClientSize = new System.Drawing.Size(1149, 340);
             this.Controls.Add(this.gbxGeneralSettings);
             this.Controls.Add(this.gbxScheduleTriggers);
             this.Controls.Add(this.btnCancel);
@@ -294,8 +283,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.ComboBox cbxAction;
         private System.Windows.Forms.TextBox tbxId;
         private System.Windows.Forms.TextBox tbxName;
         private System.Windows.Forms.CheckBox ckbxUseAllDataSources;
@@ -305,7 +292,6 @@
         private System.Windows.Forms.Button btnGenerate;
         private System.Windows.Forms.Label lblId;
         private System.Windows.Forms.Label lblName;
-        private System.Windows.Forms.Label lblAction;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.GroupBox gbxScheduleTriggers;
@@ -319,5 +305,7 @@
         private System.Windows.Forms.ColumnHeader chEventProperties;
         private System.Windows.Forms.ColumnHeader chFrameRate;
         private System.Windows.Forms.ColumnHeader chTimeTable;
+        private System.Windows.Forms.ColumnHeader chInactiveEventType;
+        private System.Windows.Forms.ColumnHeader chAction;
     }
 }

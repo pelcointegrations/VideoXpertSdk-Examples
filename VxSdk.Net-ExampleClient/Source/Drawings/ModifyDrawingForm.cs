@@ -28,6 +28,9 @@ namespace ExampleClient.Source
             MarkersToDelete = new List<Marker>();
 
             InitializeComponent();
+            nudMapBgAlpha.Controls.RemoveAt(0);
+            nudMarkerSize.Controls.RemoveAt(0);
+            nudNumberAlpha.Controls.RemoveAt(0);
             Text = $@"Edit {CurrentDrawing.Name}";
             pbxMain.AllowDrop = true;
 
@@ -40,6 +43,17 @@ namespace ExampleClient.Source
                 lvItem.Tag = ds;
                 lvDataSources.Items.Add(lvItem);
             }
+
+            Color bgColor = Utilities.UIntToColor(CurrentDrawing.BackgroundColor);
+            clrdlgMapBgColor.Color = pnlMapBgColor.BackColor = pbxMain.BackColor = bgColor;
+            tbrMapBgAlpha.Value = bgColor.A;
+
+            Color numberColor = Utilities.UIntToColor(CurrentDrawing.CameraNumberColor);
+            clrdlgNumberColor.Color = pnlNumberColor.BackColor = numberColor;
+            tbrNumberAlpha.Value = numberColor.A;
+
+            tbrMarkerSize.Value = CurrentDrawing.MarkerSize;
+            cbxShowCameraNumbers.Checked = CurrentDrawing.ShowCameraNumbers;
 
             GetImage();
             Refresh();
@@ -115,8 +129,7 @@ namespace ExampleClient.Source
         public void AddPictureBox(PictureBox pictureBox, string markerName)
         {
             pictureBox.BackColor = Color.Transparent;
-            pictureBox.Size = new Size(32, 32);
-            pictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
+            pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox.MouseClick += PictureBoxCamera_Click;
             pictureBox.MouseDown += PictureBoxCamera_MouseDown;
             pictureBox.MouseMove += PictureBoxCamera_MouseMove;
@@ -160,8 +173,12 @@ namespace ExampleClient.Source
             {
                 Tag = new KeyValuePair<Marker, float>(marker, marker.Direction),
                 Location = new Point((int)adjustedX, (int)adjustedY),
-                Image = Utilities.RotateImage(Resources.camera_online, marker.Direction)
-            };
+                Image = Utilities.RotateImage(Resources.camera_online, marker.Direction),
+                ForeColor = pnlNumberColor.BackColor,
+                Size = new Size(tbrMarkerSize.Value, tbrMarkerSize.Value)
+        };
+
+            pbx.Paint += PictureBox_Paint;
 
             AddPictureBox(pbx, marker.Name);
         }
@@ -222,6 +239,63 @@ namespace ExampleClient.Source
         #endregion Public Methods
 
         #region Private Methods
+
+        /// <summary>
+        /// The PanelMapBgColor_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void PanelMapBgColor_Click(object sender, EventArgs args)
+        {
+            clrdlgMapBgColor.ShowDialog();
+            pnlMapBgColor.BackColor = Color.FromArgb((int)nudMapBgAlpha.Value, clrdlgMapBgColor.Color);
+            pbxMain.BackColor = pnlMapBgColor.BackColor;
+            Refresh();
+        }
+
+        /// <summary>
+        /// The PanelNumberColor_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void PanelNumberColor_Click(object sender, EventArgs args)
+        {
+            clrdlgNumberColor.ShowDialog();
+            pnlNumberColor.BackColor = Color.FromArgb((int)nudNumberAlpha.Value, clrdlgNumberColor.Color);
+            Refresh();
+        }
+
+        /// <summary>
+        /// The PictureBox_Paint method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void PictureBox_Paint(object sender, PaintEventArgs args)
+        {
+            if (!cbxShowCameraNumbers.Checked)
+                return;
+
+            var pbx = sender as PictureBox;
+            if (pbx == null)
+                return;
+
+            var tag = (KeyValuePair<Marker, float>)pbx.Tag;
+            if (tag.Key == null)
+                return;
+
+            args.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+
+            string text = tag.Key.AssociatedDataSource.Number.ToString();
+
+            SizeF textSize = args.Graphics.MeasureString(text, Font);
+
+            PointF locationToDraw = new PointF();
+            locationToDraw.X = (pbx.Width / 2) - (textSize.Width / 2);
+            locationToDraw.Y = (pbx.Height) - (textSize.Height);
+
+            Brush textColor = new SolidBrush(pnlNumberColor.BackColor);
+            args.Graphics.DrawString(text, Font, textColor, locationToDraw);
+        }
 
         /// <summary>
         /// The PictureBoxCamera_Click method.
@@ -321,6 +395,18 @@ namespace ExampleClient.Source
             foreach (var marker in MarkersToDelete)
                 CurrentDrawing.DeleteMarker(marker);
 
+            if (CurrentDrawing.BackgroundColor != Utilities.ColorToUInt(pnlMapBgColor.BackColor))
+                CurrentDrawing.BackgroundColor = Utilities.ColorToUInt(pnlMapBgColor.BackColor);
+
+            if (CurrentDrawing.MarkerSize != (int)nudMarkerSize.Value)
+                CurrentDrawing.MarkerSize = (int)nudMarkerSize.Value;
+
+            if (CurrentDrawing.CameraNumberColor != Utilities.ColorToUInt(pnlNumberColor.BackColor))
+                CurrentDrawing.CameraNumberColor = Utilities.ColorToUInt(pnlNumberColor.BackColor);
+
+            if (CurrentDrawing.ShowCameraNumbers != cbxShowCameraNumbers.Checked)
+                CurrentDrawing.ShowCameraNumbers = cbxShowCameraNumbers.Checked;
+
             foreach (var pictureBoxCamera in pbxMain.Controls.OfType<PictureBox>())
             {
                 if (pictureBoxCamera.Tag.GetType() == typeof(NewMarker))
@@ -365,6 +451,18 @@ namespace ExampleClient.Source
             ShouldSetImage = true;
             ShouldDeleteImage = false;
             pbxMain.Image = Image.FromFile(ofdSelectImage.FileName);
+            Refresh();
+        }
+
+        /// <summary>
+        /// The CheckBoxShowCameraNumbers_CheckedChanged method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void CheckBoxShowCameraNumbers_CheckedChanged(object sender, EventArgs args)
+        {
+            lblNumberAlpha.Enabled = lblNumberColor.Enabled = cbxShowCameraNumbers.Checked;
+            pnlNumberColor.Enabled = tbrNumberAlpha.Enabled = nudNumberAlpha.Enabled = cbxShowCameraNumbers.Checked;
             Refresh();
         }
 
@@ -548,6 +646,63 @@ namespace ExampleClient.Source
             {
                 args.Effect = DragDropEffects.Move;
             }
+        }
+
+        /// <summary>
+        /// The TrackBarBgColorAlpha_ValueChanged method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void TrackBarBgColorAlpha_ValueChanged(object sender, EventArgs args)
+        {
+            var trackBar = sender as TrackBar;
+            if (trackBar == null)
+                return;
+
+            nudMapBgAlpha.Value = trackBar.Value;
+            pnlMapBgColor.BackColor = Color.FromArgb((int)nudMapBgAlpha.Value, pnlMapBgColor.BackColor);
+            pbxMain.BackColor = pnlMapBgColor.BackColor;
+            Refresh();
+        }
+
+        /// <summary>
+        /// The TrackBarMarkerSize_ValueChanged method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void TrackBarMarkerSize_ValueChanged(object sender, EventArgs args)
+        {
+            var trackBar = sender as TrackBar;
+            if (trackBar == null)
+                return;
+
+            nudMarkerSize.Value = trackBar.Value;
+            foreach (Control control in pbxMain.Controls)
+            {
+                var pbx = control as PictureBox;
+                if (pbx != null)
+                {
+                    pbx.Size = new Size((int)nudMarkerSize.Value, (int)nudMarkerSize.Value);
+                }
+            }
+
+            Refresh();
+        }
+
+        /// <summary>
+        /// The TrackBarNumberAlpha_ValueChanged method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void TrackBarNumberAlpha_ValueChanged(object sender, EventArgs args)
+        {
+            var trackBar = sender as TrackBar;
+            if (trackBar == null)
+                return;
+
+            nudNumberAlpha.Value = trackBar.Value;
+            pnlNumberColor.BackColor = Color.FromArgb((int)nudNumberAlpha.Value, pnlNumberColor.BackColor);
+            Refresh();
         }
 
         #endregion Private Methods

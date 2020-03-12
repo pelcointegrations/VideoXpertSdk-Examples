@@ -35,6 +35,7 @@
             this.chStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnRefresh = new System.Windows.Forms.Button();
             this.btnModify = new System.Windows.Forms.Button();
+            this.chType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // lvAlarmInputManager
@@ -43,9 +44,11 @@
             this.chName,
             this.chDescription,
             this.chId,
-            this.chStatus});
+            this.chStatus,
+            this.chType});
             this.lvAlarmInputManager.FullRowSelect = true;
             this.lvAlarmInputManager.GridLines = true;
+            this.lvAlarmInputManager.HideSelection = false;
             this.lvAlarmInputManager.Location = new System.Drawing.Point(12, 12);
             this.lvAlarmInputManager.MultiSelect = false;
             this.lvAlarmInputManager.Name = "lvAlarmInputManager";
@@ -62,7 +65,7 @@
             // chDescription
             // 
             this.chDescription.Text = "Description";
-            this.chDescription.Width = 185;
+            this.chDescription.Width = 145;
             // 
             // chId
             // 
@@ -72,7 +75,7 @@
             // chStatus
             // 
             this.chStatus.Text = "Status";
-            this.chStatus.Width = 150;
+            this.chStatus.Width = 100;
             // 
             // btnRefresh
             // 
@@ -93,6 +96,11 @@
             this.btnModify.Text = "Modify";
             this.btnModify.UseVisualStyleBackColor = true;
             this.btnModify.Click += new System.EventHandler(this.ButtonModify_Click);
+            // 
+            // chType
+            // 
+            this.chType.Text = "Type";
+            this.chType.Width = 95;
             // 
             // AlarmInputManagerForm
             // 
@@ -121,5 +129,6 @@
         private System.Windows.Forms.Button btnRefresh;
         private System.Windows.Forms.ColumnHeader chName;
         private System.Windows.Forms.Button btnModify;
+        private System.Windows.Forms.ColumnHeader chType;
     }
 }

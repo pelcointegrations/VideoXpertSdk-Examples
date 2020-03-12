@@ -80,10 +80,112 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="VxSdk.NET-Media, Version=0.0.0.0, Culture=neutral, PublicKeyToken=2604320bde3eedc4, processorArchitecture=x86">
-      <HintPath>packages\VxSdk.NET-Media.3.0.31\lib\$(Platform)\VxSdk.NET-Media.dll</HintPath>
+      <HintPath>packages\VxSdk.NET-Media.3.0.46\lib\$(Platform)\VxSdk.NET-Media.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Source\AccessPoints\AccessPointManagerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\AccessPoints\AccessPointManagerForm.Designer.cs">
+      <DependentUpon>AccessPointManagerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\AccessPoints\RelationDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\AccessPoints\RelationDetailsForm.Designer.cs">
+      <DependentUpon>RelationDetailsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\AccessPoints\ModifyAccessPointForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\AccessPoints\ModifyAccessPointForm.Designer.cs">
+      <DependentUpon>ModifyAccessPointForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Analytics\AddAnalyticBehaviorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Analytics\AddAnalyticBehaviorForm.Designer.cs">
+      <DependentUpon>AddAnalyticBehaviorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Analytics\AddAnalyticSessionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Analytics\AddAnalyticSessionForm.Designer.cs">
+      <DependentUpon>AddAnalyticSessionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Analytics\AnalyticConfigManagerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Analytics\AnalyticConfigManagerForm.Designer.cs">
+      <DependentUpon>AnalyticConfigManagerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Analytics\AnalyticSessionManagerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Analytics\AnalyticSessionManagerForm.Designer.cs">
+      <DependentUpon>AnalyticSessionManagerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Analytics\ModifyAnalyticSessionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Analytics\ModifyAnalyticSessionForm.Designer.cs">
+      <DependentUpon>ModifyAnalyticSessionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Bookmarks\BookmarkConfigForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Bookmarks\BookmarkConfigForm.Designer.cs">
+      <DependentUpon>BookmarkConfigForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Configuration\TwilioConfigurationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Configuration\TwilioConfigurationForm.Designer.cs">
+      <DependentUpon>TwilioConfigurationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Configuration\SnmpConfigurationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Configuration\SnmpConfigurationForm.Designer.cs">
+      <DependentUpon>SnmpConfigurationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Configuration\SmtpConfigurationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Configuration\SmtpConfigurationForm.Designer.cs">
+      <DependentUpon>SmtpConfigurationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Configuration\ServerConfigurationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Configuration\ServerConfigurationForm.Designer.cs">
+      <DependentUpon>ServerConfigurationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\DataStorages\TriggerFileRecoveryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\DataStorages\TriggerFileRecoveryForm.Designer.cs">
+      <DependentUpon>TriggerFileRecoveryForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\DataStorages\FileRecoveryManagerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\DataStorages\FileRecoveryManagerForm.Designer.cs">
+      <DependentUpon>FileRecoveryManagerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Members\MemberManagerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Members\MemberManagerForm.Designer.cs">
+      <DependentUpon>MemberManagerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Members\ModifyMemberForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Members\ModifyMemberForm.Designer.cs">
+      <DependentUpon>ModifyMemberForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Source\DataSources\BookmarkDetailsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -95,6 +197,12 @@
     </Compile>
     <Compile Include="Source\DataSources\MetadataDetailsForm.Designer.cs">
       <DependentUpon>MetadataDetailsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\DataSources\PtzLinkDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\DataSources\PtzLinkDetailsForm.Designer.cs">
+      <DependentUpon>PtzLinkDetailsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\DataSources\TagDetailsForm.cs">
       <SubType>Form</SubType>
@@ -108,11 +216,47 @@
     <Compile Include="Source\DataSources\ModifyMotionConfigForm.Designer.cs">
       <DependentUpon>ModifyMotionConfigForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\DataStorages\AddEditVolumeGroupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\DataStorages\AddEditVolumeGroupForm.Designer.cs">
+      <DependentUpon>AddEditVolumeGroupForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\DataStorages\AddEditVolumeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\DataStorages\AddEditVolumeForm.Designer.cs">
+      <DependentUpon>AddEditVolumeForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Source\DataStorages\AddEdgeClipForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Source\DataStorages\AddEdgeClipForm.Designer.cs">
       <DependentUpon>AddEdgeClipForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\DataStorages\VolumeGroupManagerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\DataStorages\VolumeGroupManagerForm.Designer.cs">
+      <DependentUpon>VolumeGroupManagerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\DataStorages\VolumeManagerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\DataStorages\VolumeManagerForm.Designer.cs">
+      <DependentUpon>VolumeManagerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Devices\LicenseFeatureDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Devices\LicenseFeatureDetailsForm.Designer.cs">
+      <DependentUpon>LicenseFeatureDetailsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Exports\ExportStreamForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Exports\ExportStreamForm.Designer.cs">
+      <DependentUpon>ExportStreamForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\Exports\ExportDownloadProgess.cs">
       <SubType>Form</SubType>
@@ -125,6 +269,30 @@
     </Compile>
     <Compile Include="Source\Exports\LocalExportSelect.Designer.cs">
       <DependentUpon>LocalExportSelect.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Devices\DiagnosticDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Devices\DiagnosticDetailsForm.Designer.cs">
+      <DependentUpon>DiagnosticDetailsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Configuration\LdapConfigurationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Configuration\LdapConfigurationForm.Designer.cs">
+      <DependentUpon>LdapConfigurationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Misc\LimitDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Misc\LimitDetailsForm.Designer.cs">
+      <DependentUpon>LimitDetailsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\MonitorWalls\ManageMonitorSelectionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\MonitorWalls\ManageMonitorSelectionsForm.Designer.cs">
+      <DependentUpon>ManageMonitorSelectionsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\Rules\AddRuleTriggerForm.cs">
       <SubType>Form</SubType>
@@ -306,6 +474,12 @@
     <Compile Include="Source\Devices\DeviceManagerForm.Designer.cs">
       <DependentUpon>DeviceManagerForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\Devices\DatabaseBackupManagerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Devices\DatabaseBackupManagerForm.Designer.cs">
+      <DependentUpon>DatabaseBackupManagerForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Source\Devices\ModifyDeviceForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -414,6 +588,12 @@
     </Compile>
     <Compile Include="Source\Tags\AddTagForm.Designer.cs">
       <DependentUpon>AddTagForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Users\AuthConfigForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Users\AuthConfigForm.Designer.cs">
+      <DependentUpon>AuthConfigForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\Users\ModifyPhoneNumberForm.cs">
       <SubType>Form</SubType>
@@ -527,6 +707,12 @@
     <Compile Include="Source\Tags\ModifyTagForm.Designer.cs">
       <DependentUpon>ModifyTagForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\Users\UserAccountForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Users\UserAccountForm.Designer.cs">
+      <DependentUpon>UserAccountForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Source\Users\ModifyUserForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -631,11 +817,68 @@
     <Compile Include="Source\Users\UserManagerForm.Designer.cs">
       <DependentUpon>UserManagerForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Source\AccessPoints\AccessPointManagerForm.resx">
+      <DependentUpon>AccessPointManagerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\AccessPoints\RelationDetailsForm.resx">
+      <DependentUpon>RelationDetailsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\AccessPoints\ModifyAccessPointForm.resx">
+      <DependentUpon>ModifyAccessPointForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Analytics\AddAnalyticBehaviorForm.resx">
+      <DependentUpon>AddAnalyticBehaviorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Analytics\AddAnalyticSessionForm.resx">
+      <DependentUpon>AddAnalyticSessionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Analytics\AnalyticConfigManagerForm.resx">
+      <DependentUpon>AnalyticConfigManagerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Analytics\AnalyticSessionManagerForm.resx">
+      <DependentUpon>AnalyticSessionManagerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Analytics\ModifyAnalyticSessionForm.resx">
+      <DependentUpon>ModifyAnalyticSessionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Bookmarks\BookmarkConfigForm.resx">
+      <DependentUpon>BookmarkConfigForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Configuration\TwilioConfigurationForm.resx">
+      <DependentUpon>TwilioConfigurationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Configuration\SnmpConfigurationForm.resx">
+      <DependentUpon>SnmpConfigurationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Configuration\SmtpConfigurationForm.resx">
+      <DependentUpon>SmtpConfigurationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Configuration\ServerConfigurationForm.resx">
+      <DependentUpon>ServerConfigurationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Configuration\LdapConfigurationForm.resx">
+      <DependentUpon>LdapConfigurationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\DataStorages\TriggerFileRecoveryForm.resx">
+      <DependentUpon>TriggerFileRecoveryForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\DataStorages\FileRecoveryManagerForm.resx">
+      <DependentUpon>FileRecoveryManagerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Members\MemberManagerForm.resx">
+      <DependentUpon>MemberManagerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Members\ModifyMemberForm.resx">
+      <DependentUpon>ModifyMemberForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Source\DataSources\BookmarkDetailsForm.resx">
       <DependentUpon>BookmarkDetailsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Source\DataSources\MetadataDetailsForm.resx">
       <DependentUpon>MetadataDetailsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\DataSources\PtzLinkDetailsForm.resx">
+      <DependentUpon>PtzLinkDetailsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Source\DataSources\TagDetailsForm.resx">
       <DependentUpon>TagDetailsForm.cs</DependentUpon>
@@ -643,14 +886,42 @@
     <EmbeddedResource Include="Source\DataSources\ModifyMotionConfigForm.resx">
       <DependentUpon>ModifyMotionConfigForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Source\DataStorages\AddEditVolumeGroupForm.resx">
+      <DependentUpon>AddEditVolumeGroupForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\DataStorages\AddEditVolumeForm.resx">
+      <DependentUpon>AddEditVolumeForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Source\DataStorages\AddEdgeClipForm.resx">
       <DependentUpon>AddEdgeClipForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\DataStorages\VolumeGroupManagerForm.resx">
+      <DependentUpon>VolumeGroupManagerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\DataStorages\VolumeManagerForm.resx">
+      <DependentUpon>VolumeManagerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Devices\LicenseFeatureDetailsForm.resx">
+      <DependentUpon>LicenseFeatureDetailsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Exports\ExportStreamForm.resx">
+      <DependentUpon>ExportStreamForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Source\Exports\ExportDownloadProgess.resx">
       <DependentUpon>ExportDownloadProgess.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Source\Exports\LocalExportSelect.resx">
       <DependentUpon>LocalExportSelect.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Devices\DiagnosticDetailsForm.resx">
+      <DependentUpon>DiagnosticDetailsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Misc\LimitDetailsForm.resx">
+      <DependentUpon>LimitDetailsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\MonitorWalls\ManageMonitorSelectionsForm.resx">
+      <DependentUpon>ManageMonitorSelectionsForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Source\Rules\AddRuleTriggerForm.resx">
       <DependentUpon>AddRuleTriggerForm.cs</DependentUpon>
@@ -744,6 +1015,9 @@
     <EmbeddedResource Include="Source\Devices\DeviceManagerForm.resx">
       <DependentUpon>DeviceManagerForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Source\Devices\DatabaseBackupManagerForm.resx">
+      <DependentUpon>DatabaseBackupManagerForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Source\Devices\ModifyDeviceForm.resx">
       <DependentUpon>ModifyDeviceForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -802,6 +1076,9 @@
     <EmbeddedResource Include="Source\Tags\AddTagForm.resx">
       <DependentUpon>AddTagForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Source\Users\AuthConfigForm.resx">
+      <DependentUpon>AuthConfigForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Source\Users\ModifyPhoneNumberForm.resx">
       <DependentUpon>ModifyPhoneNumberForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -855,6 +1132,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Source\Tags\ModifyTagForm.resx">
       <DependentUpon>ModifyTagForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Users\UserAccountForm.resx">
+      <DependentUpon>UserAccountForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Source\Users\ModifyUserForm.resx">
       <DependentUpon>ModifyUserForm.cs</DependentUpon>
@@ -952,6 +1232,12 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bg_logo.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CellLogo.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
@@ -960,11 +1246,11 @@
   <PropertyGroup>
     <PostBuildEvent>xcopy /Y /F "$(ProjectDir)ThirdParty\ffmpeg.exe" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
-  <Import Project="packages\VxSdk.NET-Media.3.0.31\build\VxSdk.NET-Media.targets" Condition="Exists('packages\VxSdk.NET-Media.3.0.31\build\VxSdk.NET-Media.targets')" />
+  <Import Project="packages\VxSdk.NET-Media.3.0.46\build\VxSdk.NET-Media.targets" Condition="Exists('packages\VxSdk.NET-Media.3.0.46\build\VxSdk.NET-Media.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\VxSdk.NET-Media.3.0.31\build\VxSdk.NET-Media.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VxSdk.NET-Media.3.0.31\build\VxSdk.NET-Media.targets'))" />
+    <Error Condition="!Exists('packages\VxSdk.NET-Media.3.0.46\build\VxSdk.NET-Media.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VxSdk.NET-Media.3.0.46\build\VxSdk.NET-Media.targets'))" />
   </Target>
 </Project>

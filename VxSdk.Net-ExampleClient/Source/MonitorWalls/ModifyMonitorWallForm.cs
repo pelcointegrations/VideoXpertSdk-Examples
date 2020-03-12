@@ -133,8 +133,16 @@ namespace ExampleClient.Source
         /// <param name="position">The monitor position to display.</param>
         public void DisplayMonitorPosition(MonitorPosition position)
         {
-            var width = position.Position.Width;
-            var height = position.Position.Height;
+            var width = position.Position.Width / 2;
+            var height = position.Position.Height / 2;
+
+            int left = 0;
+            if (position.Position.Left > 0)
+                left = position.Position.Left / 2;
+
+            int top = 0;
+            if (position.Position.Top > 0)
+                top = position.Position.Top / 2;
 
             if (position.Position.Width < 10)
                 width = 10;
@@ -145,7 +153,7 @@ namespace ExampleClient.Source
             var panel = new MonitorPanel
             {
                 Tag = position,
-                Location = new Point(position.Position.Left, position.Position.Top),
+                Location = new Point(left, top),
                 Size = new Size(width, height),
                 BorderStyle = BorderStyle.FixedSingle
             };
@@ -329,14 +337,14 @@ namespace ExampleClient.Source
                 return;
 
             var heightValue = (decimal)monitorPosition.Position.Height;
-            InputBox.Show("Resize Monitor", "Enter new height value:", ref heightValue, 10, 300);
+            InputBox.Show("Resize Monitor", "Enter new height value:", ref heightValue, 10, 10000);
             monitorPosition.Position.Height = (int)heightValue;
 
             var widthValue = (decimal)monitorPosition.Position.Width;
-            InputBox.Show("Resize Monitor", "Enter new width value:", ref widthValue, 10, 400);
+            InputBox.Show("Resize Monitor", "Enter new width value:", ref widthValue, 10, 10000);
             monitorPosition.Position.Width = (int)widthValue;
 
-            monitorPanel.Size = new Size(monitorPosition.Position.Width, monitorPosition.Position.Height);
+            monitorPanel.Size = new Size(monitorPosition.Position.Width/2, monitorPosition.Position.Height/2);
             Refresh();
         }
 

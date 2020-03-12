@@ -41,7 +41,7 @@
             this.btnNewBookmark = new System.Windows.Forms.Button();
             this.btnRefresh = new System.Windows.Forms.Button();
             this.btnModify = new System.Windows.Forms.Button();
-            this.btnConfigureAutoUnlock = new System.Windows.Forms.Button();
+            this.btnConfigureBookmarks = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lvBookmarkManager
@@ -58,6 +58,7 @@
             this.chLockEndTime});
             this.lvBookmarkManager.FullRowSelect = true;
             this.lvBookmarkManager.GridLines = true;
+            this.lvBookmarkManager.HideSelection = false;
             this.lvBookmarkManager.Location = new System.Drawing.Point(12, 12);
             this.lvBookmarkManager.MultiSelect = false;
             this.lvBookmarkManager.Name = "lvBookmarkManager";
@@ -148,22 +149,22 @@
             this.btnModify.UseVisualStyleBackColor = true;
             this.btnModify.Click += new System.EventHandler(this.ButtonModify_Click);
             // 
-            // btnConfigureAutoUnlock
+            // btnConfigureBookmarks
             // 
-            this.btnConfigureAutoUnlock.Location = new System.Drawing.Point(987, 297);
-            this.btnConfigureAutoUnlock.Name = "btnConfigureAutoUnlock";
-            this.btnConfigureAutoUnlock.Size = new System.Drawing.Size(89, 35);
-            this.btnConfigureAutoUnlock.TabIndex = 6;
-            this.btnConfigureAutoUnlock.Text = "Configure Auto-Unlock";
-            this.btnConfigureAutoUnlock.UseVisualStyleBackColor = true;
-            this.btnConfigureAutoUnlock.Click += new System.EventHandler(this.ButtonConfigureAutoUnlock_Click);
+            this.btnConfigureBookmarks.Location = new System.Drawing.Point(987, 297);
+            this.btnConfigureBookmarks.Name = "btnConfigureBookmarks";
+            this.btnConfigureBookmarks.Size = new System.Drawing.Size(89, 35);
+            this.btnConfigureBookmarks.TabIndex = 6;
+            this.btnConfigureBookmarks.Text = "Configure Bookmarks";
+            this.btnConfigureBookmarks.UseVisualStyleBackColor = true;
+            this.btnConfigureBookmarks.Click += new System.EventHandler(this.ButtonConfigureBookmarks_Click);
             // 
             // BookmarkManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1083, 350);
-            this.Controls.Add(this.btnConfigureAutoUnlock);
+            this.Controls.Add(this.btnConfigureBookmarks);
             this.Controls.Add(this.btnModify);
             this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.btnNewBookmark);
@@ -194,6 +195,6 @@
         private System.Windows.Forms.ColumnHeader chLockEndTime;
         private System.Windows.Forms.ColumnHeader chChecked;
         private System.Windows.Forms.Button btnModify;
-        private System.Windows.Forms.Button btnConfigureAutoUnlock;
+        private System.Windows.Forms.Button btnConfigureBookmarks;
     }
 }

@@ -41,6 +41,7 @@
             this.chMotionMode = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chManualRecord = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chEnabled = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chCapabilities = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnManageLinks = new System.Windows.Forms.Button();
             this.btnAutoNumber = new System.Windows.Forms.Button();
             this.btnViewerInfo = new System.Windows.Forms.Button();
@@ -49,11 +50,13 @@
             this.btnViewBookmarks = new System.Windows.Forms.Button();
             this.btnMetadata = new System.Windows.Forms.Button();
             this.btnViewTags = new System.Windows.Forms.Button();
+            this.btnViewPtzLinkInfo = new System.Windows.Forms.Button();
+            this.btnLimits = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnRefresh
             // 
-            this.btnRefresh.Location = new System.Drawing.Point(1193, 273);
+            this.btnRefresh.Location = new System.Drawing.Point(1194, 331);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(94, 23);
             this.btnRefresh.TabIndex = 12;
@@ -83,8 +86,10 @@
             this.chRetentionLimit,
             this.chMotionMode,
             this.chManualRecord,
-            this.chEnabled});
+            this.chEnabled,
+            this.chCapabilities});
             this.lvDataSources.FullRowSelect = true;
+            this.lvDataSources.HideSelection = false;
             this.lvDataSources.Location = new System.Drawing.Point(12, 12);
             this.lvDataSources.MultiSelect = false;
             this.lvDataSources.Name = "lvDataSources";
@@ -101,27 +106,27 @@
             // chType
             // 
             this.chType.Text = "Type";
-            this.chType.Width = 70;
+            this.chType.Width = 50;
             // 
             // chName
             // 
             this.chName.Text = "Name";
-            this.chName.Width = 287;
+            this.chName.Width = 253;
             // 
             // chIp
             // 
             this.chIp.Text = "IP";
-            this.chIp.Width = 120;
+            this.chIp.Width = 100;
             // 
             // chId
             // 
             this.chId.Text = "ID";
-            this.chId.Width = 255;
+            this.chId.Width = 225;
             // 
             // chState
             // 
             this.chState.Text = "State";
-            this.chState.Width = 75;
+            this.chState.Width = 45;
             // 
             // chRetentionLimit
             // 
@@ -141,6 +146,11 @@
             // chEnabled
             // 
             this.chEnabled.Text = "Enabled";
+            // 
+            // chCapabilities
+            // 
+            this.chCapabilities.Text = "Capabilities";
+            this.chCapabilities.Width = 135;
             // 
             // btnManageLinks
             // 
@@ -222,11 +232,33 @@
             this.btnViewTags.UseVisualStyleBackColor = true;
             this.btnViewTags.Click += new System.EventHandler(this.ButtonViewTags_Click);
             // 
+            // btnViewPtzLinkInfo
+            // 
+            this.btnViewPtzLinkInfo.Location = new System.Drawing.Point(1193, 273);
+            this.btnViewPtzLinkInfo.Name = "btnViewPtzLinkInfo";
+            this.btnViewPtzLinkInfo.Size = new System.Drawing.Size(94, 23);
+            this.btnViewPtzLinkInfo.TabIndex = 21;
+            this.btnViewPtzLinkInfo.Text = "View PTZ Links";
+            this.btnViewPtzLinkInfo.UseVisualStyleBackColor = true;
+            this.btnViewPtzLinkInfo.Click += new System.EventHandler(this.ButtonViewPtzLinkInfo_Click);
+            // 
+            // btnLimits
+            // 
+            this.btnLimits.Location = new System.Drawing.Point(1194, 302);
+            this.btnLimits.Name = "btnLimits";
+            this.btnLimits.Size = new System.Drawing.Size(94, 23);
+            this.btnLimits.TabIndex = 22;
+            this.btnLimits.Text = "Limits";
+            this.btnLimits.UseVisualStyleBackColor = true;
+            this.btnLimits.Click += new System.EventHandler(this.ButtonLimits_Click);
+            // 
             // DataSourceManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1295, 419);
+            this.Controls.Add(this.btnLimits);
+            this.Controls.Add(this.btnViewPtzLinkInfo);
             this.Controls.Add(this.btnViewTags);
             this.Controls.Add(this.btnMetadata);
             this.Controls.Add(this.btnViewBookmarks);
@@ -272,5 +304,8 @@
         private System.Windows.Forms.ColumnHeader chManualRecord;
         private System.Windows.Forms.ColumnHeader chEnabled;
         private System.Windows.Forms.Button btnViewTags;
+        private System.Windows.Forms.ColumnHeader chCapabilities;
+        private System.Windows.Forms.Button btnViewPtzLinkInfo;
+        private System.Windows.Forms.Button btnLimits;
     }
 }

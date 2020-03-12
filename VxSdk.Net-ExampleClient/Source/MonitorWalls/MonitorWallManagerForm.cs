@@ -46,6 +46,25 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The ButtonManageSelections_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonManageSelections_Click(object sender, EventArgs args)
+        {
+            // Verify that an item is selected.
+            if (lvMonitorWallManager.SelectedItems.Count == 0)
+                return;
+
+            // Show the ManageMonitorSelectionsForm dialog.
+            var monitorWall = (MonitorWall)lvMonitorWallManager.SelectedItems[0].Tag;
+            using (var manageMonitorSelectionsForm = new ManageMonitorSelectionsForm(monitorWall))
+            {
+                manageMonitorSelectionsForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
         /// The ButtonModify_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>

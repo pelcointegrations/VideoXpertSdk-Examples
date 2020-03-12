@@ -36,13 +36,16 @@
             this.rbCamera = new System.Windows.Forms.RadioButton();
             this.rbRecorder = new System.Windows.Forms.RadioButton();
             this.lblMotionDetectionMode = new System.Windows.Forms.Label();
+            this.nudThreshold = new System.Windows.Forms.NumericUpDown();
+            this.lblThreshold = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.nudSensitivity)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudThreshold)).BeginInit();
             this.SuspendLayout();
             // 
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(191, 81);
+            this.btnCancel.Location = new System.Drawing.Point(186, 68);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 32;
@@ -52,7 +55,7 @@
             // btnSave
             // 
             this.btnSave.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnSave.Location = new System.Drawing.Point(272, 81);
+            this.btnSave.Location = new System.Drawing.Point(267, 68);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 31;
@@ -62,7 +65,7 @@
             // 
             // lblSensitivity
             // 
-            this.lblSensitivity.Location = new System.Drawing.Point(75, 44);
+            this.lblSensitivity.Location = new System.Drawing.Point(59, 38);
             this.lblSensitivity.Name = "lblSensitivity";
             this.lblSensitivity.Size = new System.Drawing.Size(61, 13);
             this.lblSensitivity.TabIndex = 33;
@@ -71,7 +74,7 @@
             // 
             // nudSensitivity
             // 
-            this.nudSensitivity.Location = new System.Drawing.Point(139, 42);
+            this.nudSensitivity.Location = new System.Drawing.Point(123, 34);
             this.nudSensitivity.Margin = new System.Windows.Forms.Padding(2);
             this.nudSensitivity.Name = "nudSensitivity";
             this.nudSensitivity.Size = new System.Drawing.Size(50, 20);
@@ -123,11 +126,30 @@
             this.lblMotionDetectionMode.Text = "Motion Detection Mode: ";
             this.lblMotionDetectionMode.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // nudThreshold
+            // 
+            this.nudThreshold.Location = new System.Drawing.Point(245, 34);
+            this.nudThreshold.Margin = new System.Windows.Forms.Padding(2);
+            this.nudThreshold.Name = "nudThreshold";
+            this.nudThreshold.Size = new System.Drawing.Size(50, 20);
+            this.nudThreshold.TabIndex = 45;
+            // 
+            // lblThreshold
+            // 
+            this.lblThreshold.Location = new System.Drawing.Point(181, 38);
+            this.lblThreshold.Name = "lblThreshold";
+            this.lblThreshold.Size = new System.Drawing.Size(61, 13);
+            this.lblThreshold.TabIndex = 44;
+            this.lblThreshold.Text = "Threshold: ";
+            this.lblThreshold.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // ModifyMotionConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(354, 112);
+            this.ClientSize = new System.Drawing.Size(354, 100);
+            this.Controls.Add(this.nudThreshold);
+            this.Controls.Add(this.lblThreshold);
             this.Controls.Add(this.lblMotionDetectionMode);
             this.Controls.Add(this.rbRecorder);
             this.Controls.Add(this.rbCamera);
@@ -143,6 +165,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Modify Motion Config";
             ((System.ComponentModel.ISupportInitialize)(this.nudSensitivity)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudThreshold)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -157,5 +180,7 @@
         private System.Windows.Forms.RadioButton rbRecorder;
         private System.Windows.Forms.RadioButton rbCamera;
         private System.Windows.Forms.Label lblMotionDetectionMode;
+        private System.Windows.Forms.NumericUpDown nudThreshold;
+        private System.Windows.Forms.Label lblThreshold;
     }
 }

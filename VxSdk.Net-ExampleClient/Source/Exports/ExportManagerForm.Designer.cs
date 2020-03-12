@@ -36,13 +36,14 @@
             this.chFileSize = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chTrashed = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chPath = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnDownload = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnNewExport = new System.Windows.Forms.Button();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.btnRefresh = new System.Windows.Forms.Button();
             this.btnTrashRestore = new System.Windows.Forms.Button();
-            this.chPath = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.btnStream = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lvExportManager
@@ -59,6 +60,7 @@
             this.chPath});
             this.lvExportManager.FullRowSelect = true;
             this.lvExportManager.GridLines = true;
+            this.lvExportManager.HideSelection = false;
             this.lvExportManager.Location = new System.Drawing.Point(12, 12);
             this.lvExportManager.MultiSelect = false;
             this.lvExportManager.Name = "lvExportManager";
@@ -103,6 +105,11 @@
             // 
             this.chTrashed.Text = "Trashed";
             this.chTrashed.Width = 55;
+            // 
+            // chPath
+            // 
+            this.chPath.Text = "Path";
+            this.chPath.Width = 162;
             // 
             // btnDownload
             // 
@@ -160,16 +167,22 @@
             this.btnTrashRestore.UseVisualStyleBackColor = true;
             this.btnTrashRestore.Click += new System.EventHandler(this.ButtonTrashRestore_Click);
             // 
-            // chPath
+            // btnStream
             // 
-            this.chPath.Text = "Path";
-            this.chPath.Width = 162;
+            this.btnStream.Location = new System.Drawing.Point(828, 128);
+            this.btnStream.Name = "btnStream";
+            this.btnStream.Size = new System.Drawing.Size(75, 23);
+            this.btnStream.TabIndex = 6;
+            this.btnStream.Text = "Stream";
+            this.btnStream.UseVisualStyleBackColor = true;
+            this.btnStream.Click += new System.EventHandler(this.ButtonStream_Click);
             // 
             // ExportManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(909, 350);
+            this.Controls.Add(this.btnStream);
             this.Controls.Add(this.btnTrashRestore);
             this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.btnNewExport);
@@ -203,5 +216,6 @@
         private System.Windows.Forms.Button btnTrashRestore;
         private System.Windows.Forms.ColumnHeader chTrashed;
         private System.Windows.Forms.ColumnHeader chPath;
+        private System.Windows.Forms.Button btnStream;
     }
 }

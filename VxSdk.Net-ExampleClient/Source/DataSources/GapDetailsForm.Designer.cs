@@ -36,6 +36,7 @@
             this.chReasonData = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnClose = new System.Windows.Forms.Button();
             this.btnRefresh = new System.Windows.Forms.Button();
+            this.chGapStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // lvGapInfo
@@ -44,9 +45,11 @@
             this.chReason,
             this.chStartTime,
             this.chEndTime,
+            this.chGapStatus,
             this.chDataStorageId,
             this.chReasonData});
             this.lvGapInfo.FullRowSelect = true;
+            this.lvGapInfo.HideSelection = false;
             this.lvGapInfo.Location = new System.Drawing.Point(12, 12);
             this.lvGapInfo.MultiSelect = false;
             this.lvGapInfo.Name = "lvGapInfo";
@@ -78,7 +81,7 @@
             // chReasonData
             // 
             this.chReasonData.Text = "Reason Data";
-            this.chReasonData.Width = 555;
+            this.chReasonData.Width = 470;
             // 
             // btnClose
             // 
@@ -99,6 +102,11 @@
             this.btnRefresh.Text = "Refresh";
             this.btnRefresh.UseVisualStyleBackColor = true;
             this.btnRefresh.Click += new System.EventHandler(this.ButtonRefresh_Click);
+            // 
+            // chGapStatus
+            // 
+            this.chGapStatus.Text = "Gap Fill Status";
+            this.chGapStatus.Width = 85;
             // 
             // GapDetailsForm
             // 
@@ -129,5 +137,6 @@
         private System.Windows.Forms.ColumnHeader chReasonData;
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Button btnRefresh;
+        private System.Windows.Forms.ColumnHeader chGapStatus;
     }
 }

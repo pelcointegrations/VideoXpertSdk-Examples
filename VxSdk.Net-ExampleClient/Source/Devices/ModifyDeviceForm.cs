@@ -23,6 +23,7 @@ namespace ExampleClient.Source
             tbxName.Text = device.Name;
             tbxUsername.Text = device.Username;
             tbxIp.Text = device.Ip;
+            tbxHostname.Text = device.Hostname;
             nudPort.Value = device.Port;
             tbxVersion.Text = device.Version;
 
@@ -72,6 +73,9 @@ namespace ExampleClient.Source
 
             if (!string.IsNullOrEmpty(tbxIp.Text) && SelectedDevice.Ip != tbxIp.Text)
                 SelectedDevice.Ip = tbxIp.Text;
+
+            if (!string.IsNullOrEmpty(tbxHostname.Text) && SelectedDevice.Hostname != tbxHostname.Text)
+                SelectedDevice.Hostname = tbxHostname.Text;
 
             if (!string.IsNullOrEmpty(tbxVersion.Text) && SelectedDevice.Version != tbxVersion.Text)
                 SelectedDevice.Version = tbxVersion.Text;

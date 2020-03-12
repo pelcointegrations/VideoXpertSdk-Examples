@@ -39,13 +39,15 @@
             this.chState = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chPasswordExpiration = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chPhoneNumbers = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.btnUserAccount = new System.Windows.Forms.Button();
+            this.btnConfiguration = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnRefresh
             // 
-            this.btnRefresh.Location = new System.Drawing.Point(833, 99);
+            this.btnRefresh.Location = new System.Drawing.Point(833, 157);
             this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(75, 23);
+            this.btnRefresh.Size = new System.Drawing.Size(80, 23);
             this.btnRefresh.TabIndex = 12;
             this.btnRefresh.Text = "Refresh";
             this.btnRefresh.UseVisualStyleBackColor = true;
@@ -55,7 +57,7 @@
             // 
             this.btnModify.Location = new System.Drawing.Point(833, 70);
             this.btnModify.Name = "btnModify";
-            this.btnModify.Size = new System.Drawing.Size(75, 23);
+            this.btnModify.Size = new System.Drawing.Size(80, 23);
             this.btnModify.TabIndex = 11;
             this.btnModify.Text = "Modify";
             this.btnModify.UseVisualStyleBackColor = true;
@@ -65,7 +67,7 @@
             // 
             this.btnDelete.Location = new System.Drawing.Point(833, 41);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(75, 23);
+            this.btnDelete.Size = new System.Drawing.Size(80, 23);
             this.btnDelete.TabIndex = 10;
             this.btnDelete.Text = "Delete";
             this.btnDelete.UseVisualStyleBackColor = true;
@@ -75,7 +77,7 @@
             // 
             this.btnNewUser.Location = new System.Drawing.Point(833, 12);
             this.btnNewUser.Name = "btnNewUser";
-            this.btnNewUser.Size = new System.Drawing.Size(75, 23);
+            this.btnNewUser.Size = new System.Drawing.Size(80, 23);
             this.btnNewUser.TabIndex = 9;
             this.btnNewUser.Text = "New User";
             this.btnNewUser.UseVisualStyleBackColor = true;
@@ -91,10 +93,11 @@
             this.chPasswordExpiration,
             this.chPhoneNumbers});
             this.lvUsers.FullRowSelect = true;
+            this.lvUsers.HideSelection = false;
             this.lvUsers.Location = new System.Drawing.Point(12, 12);
             this.lvUsers.MultiSelect = false;
             this.lvUsers.Name = "lvUsers";
-            this.lvUsers.Size = new System.Drawing.Size(815, 139);
+            this.lvUsers.Size = new System.Drawing.Size(815, 168);
             this.lvUsers.TabIndex = 8;
             this.lvUsers.UseCompatibleStateImageBehavior = false;
             this.lvUsers.View = System.Windows.Forms.View.Details;
@@ -128,11 +131,33 @@
             this.chPhoneNumbers.Text = "Phone Nums";
             this.chPhoneNumbers.Width = 77;
             // 
+            // btnUserAccount
+            // 
+            this.btnUserAccount.Location = new System.Drawing.Point(833, 99);
+            this.btnUserAccount.Name = "btnUserAccount";
+            this.btnUserAccount.Size = new System.Drawing.Size(80, 23);
+            this.btnUserAccount.TabIndex = 13;
+            this.btnUserAccount.Text = "User Account";
+            this.btnUserAccount.UseVisualStyleBackColor = true;
+            this.btnUserAccount.Click += new System.EventHandler(this.ButtonUserAccount_Click);
+            // 
+            // btnConfiguration
+            // 
+            this.btnConfiguration.Location = new System.Drawing.Point(833, 128);
+            this.btnConfiguration.Name = "btnConfiguration";
+            this.btnConfiguration.Size = new System.Drawing.Size(80, 23);
+            this.btnConfiguration.TabIndex = 14;
+            this.btnConfiguration.Text = "Configuration";
+            this.btnConfiguration.UseVisualStyleBackColor = true;
+            this.btnConfiguration.Click += new System.EventHandler(this.ButtonConfiguration_Click);
+            // 
             // UserManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(917, 162);
+            this.ClientSize = new System.Drawing.Size(920, 187);
+            this.Controls.Add(this.btnConfiguration);
+            this.Controls.Add(this.btnUserAccount);
             this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.btnModify);
             this.Controls.Add(this.btnDelete);
@@ -161,5 +186,7 @@
         private System.Windows.Forms.ColumnHeader chState;
         private System.Windows.Forms.ColumnHeader chPasswordExpiration;
         private System.Windows.Forms.ColumnHeader chPhoneNumbers;
+        private System.Windows.Forms.Button btnUserAccount;
+        private System.Windows.Forms.Button btnConfiguration;
     }
 }

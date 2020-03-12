@@ -56,6 +56,12 @@ namespace ExampleClient.Source
             foreach (var dataSource in from ListViewItem item in lvDataSources.CheckedItems select (DataSource)item.Tag)
                 newDeviceAssignment.DataSourceIds.Add(dataSource.Id);
 
+            var cbxItem = cbxVolumeGroups.SelectedItem as ComboboxItem;
+            if (cbxItem?.Value != null)
+            {
+                newDeviceAssignment.VolumeGroupId = (string)cbxItem.Value;
+            }
+
             // Assign the device.
             var result = SelectedDataStorage.AssignDevice(newDeviceAssignment);
             if (result != Results.Value.OK)
@@ -101,6 +107,18 @@ namespace ExampleClient.Source
 
                 cbxDevices.Items.Add(new ComboboxItem { Text = device.Name, Value = device });
             }
+
+            cbxVolumeGroups.Items.Add(new ComboboxItem { Text = "None", Value = null });
+            var volumeGroups = SelectedDataStorage.Configuration?.VolumeGroups;
+            if (volumeGroups != null)
+            {
+                foreach (var group in volumeGroups)
+                {
+                    cbxVolumeGroups.Items.Add(new ComboboxItem {Text = group.Name, Value = group.Id});
+                }
+            }
+
+            cbxVolumeGroups.SelectedIndex = 0;
 
             UpdateControls();
         }

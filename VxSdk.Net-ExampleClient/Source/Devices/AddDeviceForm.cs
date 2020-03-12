@@ -39,6 +39,7 @@ namespace ExampleClient.Source
                 var newDevice = new NewDevice
                 {
                     Ip = tbxIp.Text,
+                    Host = tbxHostname.Text,
                     Name = tbxName.Text,
                     Username = tbxUsername.Text,
                     Password = tbxPassword.Text,

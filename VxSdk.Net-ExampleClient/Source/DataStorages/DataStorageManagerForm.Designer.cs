@@ -38,6 +38,9 @@
             this.chHostDevice = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chAssignmentCount = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnAddClip = new System.Windows.Forms.Button();
+            this.btnVolumes = new System.Windows.Forms.Button();
+            this.btnVolumeGroups = new System.Windows.Forms.Button();
+            this.btnFileRecovery = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnAssignDevice
@@ -126,11 +129,45 @@
             this.btnAddClip.UseVisualStyleBackColor = true;
             this.btnAddClip.Click += new System.EventHandler(this.ButtonAddClip_Click);
             // 
+            // btnVolumes
+            // 
+            this.btnVolumes.Location = new System.Drawing.Point(772, 157);
+            this.btnVolumes.Name = "btnVolumes";
+            this.btnVolumes.Size = new System.Drawing.Size(100, 23);
+            this.btnVolumes.TabIndex = 16;
+            this.btnVolumes.Text = "Volumes";
+            this.btnVolumes.UseVisualStyleBackColor = true;
+            this.btnVolumes.Click += new System.EventHandler(this.ButtonVolumes_Click);
+            // 
+            // btnVolumeGroups
+            // 
+            this.btnVolumeGroups.Location = new System.Drawing.Point(772, 186);
+            this.btnVolumeGroups.Name = "btnVolumeGroups";
+            this.btnVolumeGroups.Size = new System.Drawing.Size(100, 23);
+            this.btnVolumeGroups.TabIndex = 17;
+            this.btnVolumeGroups.Text = "Volume Groups";
+            this.btnVolumeGroups.UseVisualStyleBackColor = true;
+            this.btnVolumeGroups.Click += new System.EventHandler(this.ButtonVolumeGroups_Click);
+            // 
+            // btnFileRecovery
+            // 
+            this.btnFileRecovery.Enabled = false;
+            this.btnFileRecovery.Location = new System.Drawing.Point(774, 128);
+            this.btnFileRecovery.Name = "btnFileRecovery";
+            this.btnFileRecovery.Size = new System.Drawing.Size(99, 23);
+            this.btnFileRecovery.TabIndex = 18;
+            this.btnFileRecovery.Text = "File Recovery";
+            this.btnFileRecovery.UseVisualStyleBackColor = true;
+            this.btnFileRecovery.Click += new System.EventHandler(this.ButtonFileRecovery_Click);
+            // 
             // DataStorageManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(878, 349);
+            this.Controls.Add(this.btnFileRecovery);
+            this.Controls.Add(this.btnVolumeGroups);
+            this.Controls.Add(this.btnVolumes);
             this.Controls.Add(this.btnAddClip);
             this.Controls.Add(this.btnAssignDevice);
             this.Controls.Add(this.btnViewDetails);
@@ -158,5 +195,8 @@
         private System.Windows.Forms.ColumnHeader chHostDevice;
         private System.Windows.Forms.ColumnHeader chAssignmentCount;
         private System.Windows.Forms.Button btnAddClip;
+        private System.Windows.Forms.Button btnVolumes;
+        private System.Windows.Forms.Button btnVolumeGroups;
+        private System.Windows.Forms.Button btnFileRecovery;
     }
 }
