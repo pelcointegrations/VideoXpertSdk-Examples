@@ -400,7 +400,7 @@ namespace ExampleClient.Source
                             //   that will be used instead of the seek time to the seek call.
                             //  So, go ahead and select the first interface, unless there is more than one
                             interfaceList = clip.DataInterfaces;
-                            if (interfaceList.Count == 1)
+                            if (interfaceList.Count == 0)
                             {
                                 interfaceList[0] = dataSource.DataInterfaces[0];
                             }
@@ -2016,7 +2016,7 @@ namespace ExampleClient.Source
                 if (audioLink != null)
                 {
                     audioDataSource = audioLink.Resource;
-                    audioDataInterface = SelectDataInterface(DataInterface.StreamProtocols.RtspRtp, audioDataSource, false, rtspTcpToolStripMenuItem.Checked, default(DateTime));
+                    audioDataInterface = SelectDataInterface(DataInterface.StreamProtocols.RtspRtp, audioDataSource, false, rtspTcpToolStripMenuItem.Checked, seekTime);
                 }
                 else
                     SelectAudioData(SelectedDataSource, showWindow, out audioDataSource, out audioDataInterface, rtspTcpToolStripMenuItem.Checked);
