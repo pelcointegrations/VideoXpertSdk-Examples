@@ -39,6 +39,7 @@
             this.txbxPassword = new System.Windows.Forms.TextBox();
             this.btnConnect = new System.Windows.Forms.Button();
             this.fbdSelectLogPath = new System.Windows.Forms.FolderBrowserDialog();
+            this.cbxUseSsl = new System.Windows.Forms.CheckBox();
             this.tblLoginControls.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -60,6 +61,7 @@
             this.tblLoginControls.Controls.Add(this.lblPassword, 0, 4);
             this.tblLoginControls.Controls.Add(this.txbxPassword, 1, 4);
             this.tblLoginControls.Controls.Add(this.btnConnect, 3, 4);
+            this.tblLoginControls.Controls.Add(this.cbxUseSsl, 3, 1);
             this.tblLoginControls.Location = new System.Drawing.Point(28, 12);
             this.tblLoginControls.Name = "tblLoginControls";
             this.tblLoginControls.RowCount = 5;
@@ -68,7 +70,7 @@
             this.tblLoginControls.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tblLoginControls.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tblLoginControls.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tblLoginControls.Size = new System.Drawing.Size(237, 105);
+            this.tblLoginControls.Size = new System.Drawing.Size(245, 105);
             this.tblLoginControls.TabIndex = 1;
             // 
             // lblIp
@@ -160,6 +162,19 @@
             // 
             this.fbdSelectLogPath.RootFolder = System.Environment.SpecialFolder.MyComputer;
             // 
+            // cbxUseSsl
+            // 
+            this.cbxUseSsl.AutoSize = true;
+            this.cbxUseSsl.Checked = true;
+            this.cbxUseSsl.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbxUseSsl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbxUseSsl.Location = new System.Drawing.Point(174, 29);
+            this.cbxUseSsl.Name = "cbxUseSsl";
+            this.cbxUseSsl.Size = new System.Drawing.Size(68, 20);
+            this.cbxUseSsl.TabIndex = 15;
+            this.cbxUseSsl.Text = "Use SSL";
+            this.cbxUseSsl.UseVisualStyleBackColor = true;
+            // 
             // ConnectForm
             // 
             this.AcceptButton = this.btnConnect;
@@ -196,5 +211,6 @@
         private System.Windows.Forms.FolderBrowserDialog fbdSelectLogPath;
         private System.Windows.Forms.Label lblPort;
         private System.Windows.Forms.TextBox tbxPort;
+        private System.Windows.Forms.CheckBox cbxUseSsl;
     }
 }

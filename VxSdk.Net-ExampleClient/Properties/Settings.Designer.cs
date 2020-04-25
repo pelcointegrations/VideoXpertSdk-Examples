@@ -82,5 +82,17 @@ namespace ExampleClient.Properties {
                 this["LogDirectory"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UseSsl {
+            get {
+                return ((bool)(this["UseSsl"]));
+            }
+            set {
+                this["UseSsl"] = value;
+            }
+        }
     }
 }

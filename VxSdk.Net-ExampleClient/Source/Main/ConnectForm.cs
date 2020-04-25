@@ -23,6 +23,7 @@ namespace ExampleClient.Source
             tbxPort.Text = Properties.Settings.Default.Port;
             txbxUserName.Text = Properties.Settings.Default.UserName;
             txbxPassword.Text = Properties.Settings.Default.Password;
+            cbxUseSsl.Checked = Properties.Settings.Default.UseSsl;
         }
 
         #endregion Public Constructors
@@ -36,7 +37,7 @@ namespace ExampleClient.Source
         /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonConnect_Click(object sender, EventArgs args)
         {
-            MainForm.CurrentSystem = new VXSystem(txbxIp.Text, Convert.ToInt32(tbxPort.Text), true, Program.LicenseString);
+            MainForm.CurrentSystem = new VXSystem(txbxIp.Text, Convert.ToInt32(tbxPort.Text), cbxUseSsl.Checked, Program.LicenseString);
             try
             {
                 var result = MainForm.CurrentSystem.Login(txbxUserName.Text, txbxPassword.Text);
@@ -94,6 +95,7 @@ namespace ExampleClient.Source
             Properties.Settings.Default.Port = tbxPort.Text;
             Properties.Settings.Default.UserName = txbxUserName.Text;
             Properties.Settings.Default.Password = txbxPassword.Text;
+            Properties.Settings.Default.UseSsl = cbxUseSsl.Checked;
             Properties.Settings.Default.Save();
         }
 
