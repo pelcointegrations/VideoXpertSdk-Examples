@@ -371,10 +371,8 @@ namespace ExampleClient.Source
         /// <param name="selProtocol">The selected protocol.</param>
         /// <param name="dataSource">The selected data source.</param>
         /// <param name="showWindow">Selects the first available stream if False.</param>
-        /// <param name="useRtspTcp">Only valid if protocol is RtspRtp.  Selects TCP or UDP transport</param>
-        /// <param name="recordDateTime">Only show the data intefaces with recording if using playback</param>
         /// <returns>The currently selected data interface.</returns>
-        private static DataInterface SelectDataInterface(DataInterface.StreamProtocols selProtocol, DataSource dataSource, bool showWindow, bool useRtspTcp, DateTime recordDateTime)
+        private static DataInterface SelectDataInterface(DataInterface.StreamProtocols selProtocol, DataSource dataSource, bool showWindow)
         {
             DataInterface dataInterface;
             if (selProtocol == DataInterface.StreamProtocols.RtspRtp)
@@ -382,32 +380,6 @@ namespace ExampleClient.Source
                 var interfaceList = dataSource.DataInterfaces.Where(iface =>
                     iface.Protocol == DataInterface.StreamProtocols.RtspRtp).ToList();
 
-                if (useRtspTcp == true)
-                {
-                    interfaceList = interfaceList.Where(iface => iface.SupportsMulticast == false).ToList();
-                }
-
-                if (recordDateTime != default(DateTime))
-                {
-                    // Need to figure out which interfaces have the clip for the time you want
-                    interfaceList.Clear();
-                    var clips = dataSource.Clips;
-                    foreach (var clip in clips)
-                    {
-                        if ((recordDateTime >= clip.StartTime) && (recordDateTime < clip.EndTime))
-                        {
-                            // There is a problem in that the data interface on playback also includes a start time
-                            //   that will be used instead of the seek time to the seek call.
-                            //  So, go ahead and select the first interface, unless there is more than one
-                            interfaceList = clip.DataInterfaces;
-                            if (interfaceList.Count == 0)
-                            {
-                                interfaceList[0] = dataSource.DataInterfaces[0];
-                            }
-                            break;
-                        }
-                    }
-                }
                 if (interfaceList.Count == 0)
                     return null;
 
@@ -1896,34 +1868,6 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
-        /// Select the audio data source and data interfaces from the MainForm.CurrentDataSources
-        /// </summary>
-        /// <param name="videoSource">Video data source</param>
-        /// <param name="showWindow">Specifies wheather to show the window or not</param>
-        /// <param name="audioSource">Out parameter for audio data source</param>
-        /// <param name="audioInterface">Out parameter for audio data interface</param>
-        private void SelectAudioData(DataSource videoSource, bool showWindow, out DataSource audioSource, out DataInterface audioInterface, bool useTCP)
-        {
-            audioSource = null;
-            audioInterface = null;
-
-            foreach (var ds in CurrentDataSources)
-            {
-                if (videoSource.Name != ds.Name || ds.Type != DataSource.Types.Audio)
-                    continue;
-
-                audioInterface = SelectDataInterface(DataInterface.StreamProtocols.RtspRtp, ds, showWindow, useTCP, default(DateTime));
-                if (audioInterface == null)
-                {
-                    WriteToLog("Error: No audio data interface found for selected camera.\n");
-                    return;
-                }
-
-                audioSource = ds;
-            }
-        }
-
-        /// <summary>
         /// Sets the state of the manual recording UI elements based on the manual recording status of the current stream.
         /// </summary>
         private void SetManualRecordingStatus()
@@ -2003,23 +1947,22 @@ namespace ExampleClient.Source
                     showWindow = Control.States.MediaController.Mode == MediaControl.Modes.Stopped;
                 }
 
-                var dataInterface = SelectDataInterface(protocol, SelectedDataSource, showWindow, rtspTcpToolStripMenuItem.Checked, seekTime);
+                var dataInterface = SelectDataInterface(protocol, SelectedDataSource, showWindow);
                 if (dataInterface == null)
                 {
                     WriteToLog("Error: No data interface found for selected camera and/or the seek time requested.\n");
                     return;
                 }
 
-                DataSource audioDataSource;
-                DataInterface audioDataInterface;
+                DataSource audioDataSource = null;
+                DataInterface audioDataInterface = null;
                 var audioLink = SelectedDataSource.LinkedAudioRelation;
                 if (audioLink != null)
                 {
                     audioDataSource = audioLink.Resource;
-                    audioDataInterface = SelectDataInterface(DataInterface.StreamProtocols.RtspRtp, audioDataSource, false, rtspTcpToolStripMenuItem.Checked, seekTime);
+                    audioDataInterface = audioDataSource.DataInterfaces.FirstOrDefault(iface =>
+                        iface.SupportsMulticast == dataInterface.SupportsMulticast && iface.Protocol == dataInterface.Protocol);
                 }
-                else
-                    SelectAudioData(SelectedDataSource, showWindow, out audioDataSource, out audioDataInterface, rtspTcpToolStripMenuItem.Checked);
 
                 // If the audioDataInterface is null, you cannot play audio
                 if (audioDataInterface == null)
@@ -2097,9 +2040,6 @@ namespace ExampleClient.Source
                 }
                 else
                 {
-                    // In playback, we force TCP since it's the better protocol for the job
-                    transport = MediaControl.RTSPNetworkTransports.RTPOverRTSP;
-
                     // In this case, demonstrate how to get the storage information for the clip
                     foreach (Clip clip in Control.States.CachedClips)
                     {
