@@ -42,7 +42,9 @@ namespace ExampleClient.Source
 
                 // Get each item if the value is a List type and generate a string.
                 string valList;
-                if (val.GetType() == typeof(List<string>))
+                if (val == null)
+                    valList = "[null]";
+                else if (val.GetType() == typeof(List<string>))
                     valList = string.Join(", ", (List<string>)val);
                 else if (val.GetType() == typeof(List<int>))
                     valList = string.Join(", ", (List<int>)val);
