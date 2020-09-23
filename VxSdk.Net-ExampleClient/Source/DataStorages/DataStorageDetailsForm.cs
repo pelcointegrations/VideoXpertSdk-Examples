@@ -146,7 +146,7 @@ namespace ExampleClient.Source
                 var val = prop.GetValue(config, null);
 
                 // Skip the property if the value is a volume or volume group list.
-                if (val.GetType() == typeof(List<VolumeGroup>) || val.GetType() == typeof(List<Volume>))
+                if (val == null || val.GetType() == typeof(List<VolumeGroup>) || val.GetType() == typeof(List<Volume>))
                     continue;
 
                 // Convert the property to a local time string if it's a DateTime type.
