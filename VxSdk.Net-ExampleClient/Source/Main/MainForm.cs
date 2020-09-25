@@ -2008,7 +2008,11 @@ namespace ExampleClient.Source
                 Control.RemovePlaybackProgress();
                 var transport = (rtspTcpToolStripMenuItem.Checked == true) ? MediaControl.RTSPNetworkTransports.RTPOverRTSP : MediaControl.RTSPNetworkTransports.UDP;
 
-                var dataStorage = SelectedDataSource.AllDataStorages.FirstOrDefault(ds => ds.Type != DataStorage.DataStorageTypes.Edge && ds.Type != DataStorage.DataStorageTypes.Unknown);
+                DataStorage dataStorage = SelectedDataSource.AllDataStorages.FirstOrDefault(ds => ds.Type != DataStorage.DataStorageTypes.Edge && ds.Type != DataStorage.DataStorageTypes.Unknown);
+                var startingClip = SelectedDataSource.Clips?.FirstOrDefault(clip => clip.StartTime <= seekTime && clip.EndTime >= seekTime);
+                if (startingClip != null && !string.IsNullOrEmpty(startingClip.DataStorageId))
+                    dataStorage = CurrentSystem.DataStorages.FirstOrDefault(ds => ds.Id == startingClip.DataStorageId);
+
                 string recorder = "None";
                 if (dataStorage != null)
                     recorder = dataStorage.Name;
