@@ -160,6 +160,8 @@ namespace ExampleClient.Source
                 return;
 
             var dataStorage = (DataStorage)lvDataStorageManager.SelectedItems[0].Tag;
+            if (dataStorage?.Configuration?.Volumes == null)
+                return;
 
             using (var volumeManagerForm = new VolumeManagerForm(dataStorage))
             {
@@ -178,6 +180,8 @@ namespace ExampleClient.Source
                 return;
 
             var dataStorage = (DataStorage)lvDataStorageManager.SelectedItems[0].Tag;
+            if (dataStorage?.Configuration?.VolumeGroups == null)
+                return;
 
             using (var volumeGroupManagerForm = new VolumeGroupManagerForm(dataStorage))
             {
@@ -196,8 +200,10 @@ namespace ExampleClient.Source
                 return;
 
             var dataStorage = (DataStorage)lvDataStorageManager.SelectedItems[0].Tag;
-            btnAddClip.Enabled = dataStorage.Type == DataStorage.DataStorageTypes.VideoXpertStorage;
-            btnFileRecovery.Enabled = dataStorage.Configuration?.FileRecoveryResource != null;
+            btnAddClip.Enabled = dataStorage?.Type == DataStorage.DataStorageTypes.VideoXpertStorage;
+            btnFileRecovery.Enabled = dataStorage?.Configuration?.FileRecoveryResource != null;
+            btnVolumes.Enabled = dataStorage?.Configuration?.Volumes != null;
+            btnVolumeGroups.Enabled = dataStorage?.Configuration?.VolumeGroups != null;
         }
 
         /// <summary>

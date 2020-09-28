@@ -131,6 +131,7 @@
             // 
             // btnVolumes
             // 
+            this.btnVolumes.Enabled = false;
             this.btnVolumes.Location = new System.Drawing.Point(772, 157);
             this.btnVolumes.Name = "btnVolumes";
             this.btnVolumes.Size = new System.Drawing.Size(100, 23);
@@ -141,6 +142,7 @@
             // 
             // btnVolumeGroups
             // 
+            this.btnVolumeGroups.Enabled = false;
             this.btnVolumeGroups.Location = new System.Drawing.Point(772, 186);
             this.btnVolumeGroups.Name = "btnVolumeGroups";
             this.btnVolumeGroups.Size = new System.Drawing.Size(100, 23);
