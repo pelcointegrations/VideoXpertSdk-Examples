@@ -69,6 +69,7 @@
             this.normalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.skipGapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aspectRatioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ratioAutoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ratio16x9ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ratio4x3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ratio1x1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -104,6 +105,7 @@
             this.snmpConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tagManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timeTablesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.twillioSMSConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.usersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btnSeek = new System.Windows.Forms.Button();
             this.btnLive = new System.Windows.Forms.Button();
@@ -137,7 +139,6 @@
             this.scOuter = new System.Windows.Forms.SplitContainer();
             this.txbxLog = new System.Windows.Forms.TextBox();
             this.bgWorker = new System.ComponentModel.BackgroundWorker();
-            this.twillioSMSConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelVideoStreamLeft.SuspendLayout();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpeed)).BeginInit();
@@ -468,7 +469,7 @@
             this.rtspTcpToolStripMenuItem,
             this.jpegPullToolStripMenuItem});
             this.streamProtocolToolStripMenuItem.Name = "streamProtocolToolStripMenuItem";
-            this.streamProtocolToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.streamProtocolToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.streamProtocolToolStripMenuItem.Text = "Stream Protocol";
             // 
             // rtspUdpToolStripMenuItem
@@ -500,7 +501,7 @@
             this.normalToolStripMenuItem,
             this.skipGapsToolStripMenuItem});
             this.playbackToolStripMenuItem.Name = "playbackToolStripMenuItem";
-            this.playbackToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.playbackToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.playbackToolStripMenuItem.Text = "Playback";
             // 
             // normalToolStripMenuItem
@@ -522,21 +523,29 @@
             // aspectRatioToolStripMenuItem
             // 
             this.aspectRatioToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ratioAutoToolStripMenuItem,
             this.ratio16x9ToolStripMenuItem,
             this.ratio4x3ToolStripMenuItem,
             this.ratio1x1ToolStripMenuItem,
             this.ratio3x2ToolStripMenuItem,
             this.ratio5x4ToolStripMenuItem});
             this.aspectRatioToolStripMenuItem.Name = "aspectRatioToolStripMenuItem";
-            this.aspectRatioToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.aspectRatioToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.aspectRatioToolStripMenuItem.Text = "Aspect Ratio";
+            // 
+            // ratioAutoToolStripMenuItem
+            // 
+            this.ratioAutoToolStripMenuItem.Checked = true;
+            this.ratioAutoToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ratioAutoToolStripMenuItem.Name = "ratioAutoToolStripMenuItem";
+            this.ratioAutoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ratioAutoToolStripMenuItem.Text = "Auto";
+            this.ratioAutoToolStripMenuItem.Click += new System.EventHandler(this.MenuItemAspectRatio_Click);
             // 
             // ratio16x9ToolStripMenuItem
             // 
-            this.ratio16x9ToolStripMenuItem.Checked = true;
-            this.ratio16x9ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ratio16x9ToolStripMenuItem.Name = "ratio16x9ToolStripMenuItem";
-            this.ratio16x9ToolStripMenuItem.Size = new System.Drawing.Size(95, 22);
+            this.ratio16x9ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.ratio16x9ToolStripMenuItem.Tag = 0;
             this.ratio16x9ToolStripMenuItem.Text = "16:9";
             this.ratio16x9ToolStripMenuItem.Click += new System.EventHandler(this.MenuItemAspectRatio_Click);
@@ -544,7 +553,7 @@
             // ratio4x3ToolStripMenuItem
             // 
             this.ratio4x3ToolStripMenuItem.Name = "ratio4x3ToolStripMenuItem";
-            this.ratio4x3ToolStripMenuItem.Size = new System.Drawing.Size(95, 22);
+            this.ratio4x3ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.ratio4x3ToolStripMenuItem.Tag = 1;
             this.ratio4x3ToolStripMenuItem.Text = "4:3";
             this.ratio4x3ToolStripMenuItem.Click += new System.EventHandler(this.MenuItemAspectRatio_Click);
@@ -552,7 +561,7 @@
             // ratio1x1ToolStripMenuItem
             // 
             this.ratio1x1ToolStripMenuItem.Name = "ratio1x1ToolStripMenuItem";
-            this.ratio1x1ToolStripMenuItem.Size = new System.Drawing.Size(95, 22);
+            this.ratio1x1ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.ratio1x1ToolStripMenuItem.Tag = 2;
             this.ratio1x1ToolStripMenuItem.Text = "1:1";
             this.ratio1x1ToolStripMenuItem.Click += new System.EventHandler(this.MenuItemAspectRatio_Click);
@@ -560,7 +569,7 @@
             // ratio3x2ToolStripMenuItem
             // 
             this.ratio3x2ToolStripMenuItem.Name = "ratio3x2ToolStripMenuItem";
-            this.ratio3x2ToolStripMenuItem.Size = new System.Drawing.Size(95, 22);
+            this.ratio3x2ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.ratio3x2ToolStripMenuItem.Tag = 3;
             this.ratio3x2ToolStripMenuItem.Text = "3:2";
             this.ratio3x2ToolStripMenuItem.Click += new System.EventHandler(this.MenuItemAspectRatio_Click);
@@ -568,7 +577,7 @@
             // ratio5x4ToolStripMenuItem
             // 
             this.ratio5x4ToolStripMenuItem.Name = "ratio5x4ToolStripMenuItem";
-            this.ratio5x4ToolStripMenuItem.Size = new System.Drawing.Size(95, 22);
+            this.ratio5x4ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.ratio5x4ToolStripMenuItem.Tag = 4;
             this.ratio5x4ToolStripMenuItem.Text = "5:4";
             this.ratio5x4ToolStripMenuItem.Click += new System.EventHandler(this.MenuItemAspectRatio_Click);
@@ -577,7 +586,7 @@
             // 
             this.stretchToFitToolStripMenuItem.CheckOnClick = true;
             this.stretchToFitToolStripMenuItem.Name = "stretchToFitToolStripMenuItem";
-            this.stretchToFitToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.stretchToFitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.stretchToFitToolStripMenuItem.Text = "Stretch To Fit";
             this.stretchToFitToolStripMenuItem.Click += new System.EventHandler(this.MenuItemStretchToFit_Click);
             // 
@@ -814,6 +823,13 @@
             this.timeTablesToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
             this.timeTablesToolStripMenuItem.Text = "Time Tables";
             this.timeTablesToolStripMenuItem.Click += new System.EventHandler(this.MenuItemTimeTables_Click);
+            // 
+            // twillioSMSConfigurationToolStripMenuItem
+            // 
+            this.twillioSMSConfigurationToolStripMenuItem.Name = "twillioSMSConfigurationToolStripMenuItem";
+            this.twillioSMSConfigurationToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.twillioSMSConfigurationToolStripMenuItem.Text = "Twillio SMS Configuration";
+            this.twillioSMSConfigurationToolStripMenuItem.Click += new System.EventHandler(this.MenuItemTwilioConfiguration_Click);
             // 
             // usersToolStripMenuItem
             // 
@@ -1271,13 +1287,6 @@
             this.txbxLog.Size = new System.Drawing.Size(1554, 78);
             this.txbxLog.TabIndex = 0;
             // 
-            // twillioSMSConfigurationToolStripMenuItem
-            // 
-            this.twillioSMSConfigurationToolStripMenuItem.Name = "twillioSMSConfigurationToolStripMenuItem";
-            this.twillioSMSConfigurationToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
-            this.twillioSMSConfigurationToolStripMenuItem.Text = "Twillio SMS Configuration";
-            this.twillioSMSConfigurationToolStripMenuItem.Click += new System.EventHandler(this.MenuItemTwilioConfiguration_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1433,6 +1442,7 @@
         private System.Windows.Forms.ToolStripMenuItem smtpConfigurationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem snmpConfigurationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem twillioSMSConfigurationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ratioAutoToolStripMenuItem;
     }
 }
 

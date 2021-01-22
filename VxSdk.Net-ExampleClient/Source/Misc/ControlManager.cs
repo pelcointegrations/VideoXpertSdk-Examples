@@ -461,6 +461,7 @@ namespace ExampleClient.Source
         #region Public Properties
 
         public MediaControl.AspectRatios AspectRatio { get; set; }
+        public bool AutoAspectRatio { get; set; } = true;
         public DataInterface AudioDataInterface { get; set; }
         public DataSource AudioDataSource { get; set; }
 

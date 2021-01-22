@@ -45,7 +45,7 @@
             this.lblName = new System.Windows.Forms.Label();
             this.ckbxIsEnabled = new System.Windows.Forms.CheckBox();
             this.gbxObjectCounter = new System.Windows.Forms.GroupBox();
-            this.cbxIntersectionArea = new System.Windows.Forms.ComboBox();
+            this.cbxLineCounterTypes = new System.Windows.Forms.ComboBox();
             this.gbxEndPoint = new System.Windows.Forms.GroupBox();
             this.nudEndPointX = new System.Windows.Forms.NumericUpDown();
             this.lblEndPointY = new System.Windows.Forms.Label();
@@ -56,7 +56,7 @@
             this.lblStartPointY = new System.Windows.Forms.Label();
             this.nudStartPointY = new System.Windows.Forms.NumericUpDown();
             this.lblStartPointX = new System.Windows.Forms.Label();
-            this.lblIntersectionArea = new System.Windows.Forms.Label();
+            this.lblLineCounterType = new System.Windows.Forms.Label();
             this.gbxObjectZone = new System.Windows.Forms.GroupBox();
             this.lvObjectZonePoints = new System.Windows.Forms.ListView();
             this.chBlank = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -269,10 +269,10 @@
             // 
             // gbxObjectCounter
             // 
-            this.gbxObjectCounter.Controls.Add(this.cbxIntersectionArea);
+            this.gbxObjectCounter.Controls.Add(this.cbxLineCounterTypes);
             this.gbxObjectCounter.Controls.Add(this.gbxEndPoint);
             this.gbxObjectCounter.Controls.Add(this.gbxStartPoint);
-            this.gbxObjectCounter.Controls.Add(this.lblIntersectionArea);
+            this.gbxObjectCounter.Controls.Add(this.lblLineCounterType);
             this.gbxObjectCounter.Location = new System.Drawing.Point(338, 12);
             this.gbxObjectCounter.Name = "gbxObjectCounter";
             this.gbxObjectCounter.Size = new System.Drawing.Size(200, 228);
@@ -280,31 +280,18 @@
             this.gbxObjectCounter.TabStop = false;
             this.gbxObjectCounter.Text = "Object Counter Settings";
             // 
-            // cbxIntersectionArea
+            // cbxLineCounterTypes
             // 
-            this.cbxIntersectionArea.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxIntersectionArea.FormattingEnabled = true;
-            this.cbxIntersectionArea.Items.AddRange(new object[] {
-            "East-bound Left",
-            "East-bound Pedestrian",
-            "East-bound Right",
-            "East-bound Through",
-            "North-bound Left",
-            "North-bound Pedestrian",
-            "North-bound Right",
-            "North-bound Through",
-            "South-bound Left",
-            "South-bound Pedestrian",
-            "South-bound Right",
-            "South-bound Through",
-            "West-bound Left",
-            "West-bound Pedestrian",
-            "West-bound Right",
-            "West-bound Through"});
-            this.cbxIntersectionArea.Location = new System.Drawing.Point(19, 198);
-            this.cbxIntersectionArea.Name = "cbxIntersectionArea";
-            this.cbxIntersectionArea.Size = new System.Drawing.Size(175, 21);
-            this.cbxIntersectionArea.TabIndex = 18;
+            this.cbxLineCounterTypes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxLineCounterTypes.FormattingEnabled = true;
+            this.cbxLineCounterTypes.Items.AddRange(new object[] {
+            "Unidirectional",
+            "Bidirectional",
+            "Omnidirectional"});
+            this.cbxLineCounterTypes.Location = new System.Drawing.Point(19, 198);
+            this.cbxLineCounterTypes.Name = "cbxLineCounterTypes";
+            this.cbxLineCounterTypes.Size = new System.Drawing.Size(175, 21);
+            this.cbxLineCounterTypes.TabIndex = 18;
             // 
             // gbxEndPoint
             // 
@@ -416,14 +403,14 @@
             this.lblStartPointX.TabIndex = 13;
             this.lblStartPointX.Text = "X:";
             // 
-            // lblIntersectionArea
+            // lblLineCounterType
             // 
-            this.lblIntersectionArea.AutoSize = true;
-            this.lblIntersectionArea.Location = new System.Drawing.Point(16, 179);
-            this.lblIntersectionArea.Name = "lblIntersectionArea";
-            this.lblIntersectionArea.Size = new System.Drawing.Size(90, 13);
-            this.lblIntersectionArea.TabIndex = 17;
-            this.lblIntersectionArea.Text = "Intersection Area:";
+            this.lblLineCounterType.AutoSize = true;
+            this.lblLineCounterType.Location = new System.Drawing.Point(16, 179);
+            this.lblLineCounterType.Name = "lblLineCounterType";
+            this.lblLineCounterType.Size = new System.Drawing.Size(97, 13);
+            this.lblLineCounterType.TabIndex = 17;
+            this.lblLineCounterType.Text = "Line Counter Type:";
             // 
             // gbxObjectZone
             // 
@@ -549,14 +536,14 @@
         private System.Windows.Forms.NumericUpDown nudStartPointX;
         private System.Windows.Forms.Label lblStartPointX;
         private System.Windows.Forms.NumericUpDown nudStartPointY;
-        private System.Windows.Forms.ComboBox cbxIntersectionArea;
+        private System.Windows.Forms.ComboBox cbxLineCounterTypes;
         private System.Windows.Forms.GroupBox gbxEndPoint;
         private System.Windows.Forms.NumericUpDown nudEndPointX;
         private System.Windows.Forms.Label lblEndPointY;
         private System.Windows.Forms.NumericUpDown nudEndPointY;
         private System.Windows.Forms.Label lblEndPointX;
         private System.Windows.Forms.GroupBox gbxStartPoint;
-        private System.Windows.Forms.Label lblIntersectionArea;
+        private System.Windows.Forms.Label lblLineCounterType;
         private System.Windows.Forms.GroupBox gbxObjectZone;
         private System.Windows.Forms.ListView lvObjectZonePoints;
         private System.Windows.Forms.ColumnHeader chY;

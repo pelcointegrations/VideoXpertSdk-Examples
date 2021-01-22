@@ -133,9 +133,9 @@ namespace ExampleClient.Source
         /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonSet_Click(object sender, EventArgs args)
         {
-            if (nudX.Value != _selectedAnalyticConfig.Size.X || nudY.Value != _selectedAnalyticConfig.Size.Y)
+            if (nudX.Value != _selectedAnalyticConfig.Size.Width || nudY.Value != _selectedAnalyticConfig.Size.Height)
             {
-                var point = new GridPoint {X = (int) nudX.Value, Y = (int) nudY.Value};
+                var point = new Resolution() {Width = (int) nudX.Value, Height = (int) nudY.Value};
                 _selectedAnalyticConfig.Size = point;
             }
         }
@@ -178,8 +178,8 @@ namespace ExampleClient.Source
         /// </summary>
         private void PopulateAnalyticConfig()
         {
-            nudX.Value = _selectedAnalyticConfig.Size.X;
-            nudY.Value = _selectedAnalyticConfig.Size.Y;
+            nudX.Value = _selectedAnalyticConfig.Size.Width;
+            nudY.Value = _selectedAnalyticConfig.Size.Height;
             lblId.Text = _selectedAnalyticConfig.Id;
 
             // Get the existing analytic behaviors from the VideoXpert system and add
@@ -192,7 +192,6 @@ namespace ExampleClient.Source
                 lvItem.SubItems.Add(analyticBehavior.IsEnabled.ToString());
                 lvItem.SubItems.Add(analyticBehavior.BehaviorType.ToString());
                 lvItem.SubItems.Add(analyticBehavior.ObjectType.ToString());
-                lvItem.SubItems.Add(analyticBehavior.Sensitivity.ToString());
                 lvItem.SubItems.Add(analyticBehavior.Severity.ToString());
                 lvItem.Tag = analyticBehavior;
                 lvAnalyticBehaviors.Items.Add(lvItem);

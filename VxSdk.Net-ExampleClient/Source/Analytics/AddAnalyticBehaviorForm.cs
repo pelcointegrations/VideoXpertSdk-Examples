@@ -48,21 +48,20 @@ namespace ExampleClient.Source
                 tbxId.Text = _selectedAnalyticBehavior.Id;
                 tbxId.Enabled = false;
                 ckbxIsEnabled.Checked = _selectedAnalyticBehavior.IsEnabled;
-                nudSensitivity.Value = _selectedAnalyticBehavior.Sensitivity;
                 nudSeverity.Value = _selectedAnalyticBehavior.Severity;
 
-                if (_selectedAnalyticBehavior.ObjectCounter != null)
+                if (_selectedAnalyticBehavior.ObjectLineCounter != null)
                 {
-                    nudEndPointX.Value = _selectedAnalyticBehavior.ObjectCounter.EndPoint.X;
-                    nudEndPointY.Value = _selectedAnalyticBehavior.ObjectCounter.EndPoint.Y;
-                    nudStartPointX.Value = _selectedAnalyticBehavior.ObjectCounter.StartPoint.X;
-                    nudStartPointY.Value = _selectedAnalyticBehavior.ObjectCounter.StartPoint.Y;
-                    cbxIntersectionArea.SelectedIndex = (int)_selectedAnalyticBehavior.ObjectCounter.IntersectionArea - 1;
+                    nudEndPointX.Value = _selectedAnalyticBehavior.ObjectLineCounter.EndPoint.X;
+                    nudEndPointY.Value = _selectedAnalyticBehavior.ObjectLineCounter.EndPoint.Y;
+                    nudStartPointX.Value = _selectedAnalyticBehavior.ObjectLineCounter.StartPoint.X;
+                    nudStartPointY.Value = _selectedAnalyticBehavior.ObjectLineCounter.StartPoint.Y;
+                    cbxLineCounterTypes.SelectedIndex = (int)_selectedAnalyticBehavior.ObjectLineCounter.LineCounterType - 1;
                 }
 
-                if (_selectedAnalyticBehavior.ObjectZone != null)
+                if (_selectedAnalyticBehavior.ObjectInZone != null)
                 {
-                    foreach (var point in _selectedAnalyticBehavior.ObjectZone.Vertices)
+                    foreach (var point in _selectedAnalyticBehavior.ObjectInZone.Vertices)
                     {
                         var lvitem = new ListViewItem(string.Empty);
                         lvitem.SubItems.Add(point.X.ToString());
@@ -74,16 +73,16 @@ namespace ExampleClient.Source
                 cbxObjectType.SelectedIndex = (int)_selectedAnalyticBehavior.ObjectType - 1;
                 cbxBehaviorType.SelectedIndex = (int)_selectedAnalyticBehavior.BehaviorType - 1;
                 cbxBehaviorType.Enabled = false;
-                if (_selectedAnalyticBehavior.ObjectCounter?.IntersectionArea != null)
-                    cbxIntersectionArea.SelectedIndex = (int)_selectedAnalyticBehavior.ObjectCounter.IntersectionArea - 1;
+                if (_selectedAnalyticBehavior.ObjectLineCounter?.LineCounterType != null)
+                    cbxLineCounterTypes.SelectedIndex = (int)_selectedAnalyticBehavior.ObjectLineCounter.LineCounterType - 1;
                 else
-                    cbxIntersectionArea.SelectedIndex = 0;
+                    cbxLineCounterTypes.SelectedIndex = 0;
             }
             else
             {
                 cbxObjectType.SelectedIndex = 0;
                 cbxBehaviorType.SelectedIndex = 0;
-                cbxIntersectionArea.SelectedIndex = 0;
+                cbxLineCounterTypes.SelectedIndex = 0;
             }
         }
 
@@ -111,26 +110,23 @@ namespace ExampleClient.Source
                     if (_selectedAnalyticBehavior.IsEnabled != ckbxIsEnabled.Checked)
                         _selectedAnalyticBehavior.IsEnabled = ckbxIsEnabled.Checked;
 
-                    if (_selectedAnalyticBehavior.Sensitivity != (int)nudSensitivity.Value)
-                        _selectedAnalyticBehavior.Sensitivity = (int)nudSensitivity.Value;
-
                     if (_selectedAnalyticBehavior.Severity != (int)nudSeverity.Value)
                         _selectedAnalyticBehavior.Severity = (int)nudSeverity.Value;
 
-                    if (_selectedAnalyticBehavior.BehaviorType == AnalyticBehavior.AnalyticBehaviorType.ObjectCounter)
+                    if (_selectedAnalyticBehavior.BehaviorType == AnalyticBehavior.AnalyticBehaviorType.ObjectLineCounter)
                     {
-                        var objectCounter = new ObjectCounter
+                        var objectCounter = new ObjectLineCounter
                         {
                             EndPoint = { X = (int)nudEndPointX.Value, Y = (int)nudEndPointY.Value },
                             StartPoint = { X = (int)nudStartPointX.Value, Y = (int)nudStartPointY.Value },
-                            IntersectionArea = (ObjectCounter.IntersectionAreas)cbxIntersectionArea.SelectedIndex + 1
+                            LineCounterType = (ObjectLineCounter.LineCounterTypes)cbxLineCounterTypes.SelectedIndex + 1
                         };
 
-                        _selectedAnalyticBehavior.ObjectCounter = objectCounter;
+                        _selectedAnalyticBehavior.ObjectLineCounter = objectCounter;
                     }
                     else
                     {
-                        var objectZone = new ObjectZone();
+                        var objectZone = new ObjectInZone();
                         foreach (ListViewItem item in lvObjectZonePoints.Items)
                         {
                             int x = Convert.ToInt32(item.SubItems[1].Text);
@@ -138,7 +134,7 @@ namespace ExampleClient.Source
                             objectZone.Vertices.Add(new GridPoint { X = x, Y = y });
                         }
 
-                        _selectedAnalyticBehavior.ObjectZone = objectZone;
+                        _selectedAnalyticBehavior.ObjectInZone = objectZone;
                     }
                 }
                 else
@@ -152,20 +148,20 @@ namespace ExampleClient.Source
                     newAnalyticBehavior.Sensitivity = (int) nudSensitivity.Value;
                     newAnalyticBehavior.Severity = (int) nudSeverity.Value;
 
-                    if (newAnalyticBehavior.BehaviorType == AnalyticBehavior.AnalyticBehaviorType.ObjectCounter)
+                    if (newAnalyticBehavior.BehaviorType == AnalyticBehavior.AnalyticBehaviorType.ObjectLineCounter)
                     {
-                        var objectCounter = new ObjectCounter
+                        var objectCounter = new ObjectLineCounter
                         {
                             EndPoint = {X = (int) nudEndPointX.Value, Y = (int) nudEndPointY.Value},
                             StartPoint = {X = (int) nudStartPointX.Value, Y = (int) nudStartPointY.Value},
-                            IntersectionArea = (ObjectCounter.IntersectionAreas) cbxIntersectionArea.SelectedIndex + 1
+                            LineCounterType = (ObjectLineCounter.LineCounterTypes) cbxLineCounterTypes.SelectedIndex + 1
                         };
 
-                        newAnalyticBehavior.ObjectCounter = objectCounter;
+                        newAnalyticBehavior.ObjectLineCounter = objectCounter;
                     }
                     else
                     {
-                        var objectZone = new ObjectZone();
+                        var objectZone = new ObjectInZone();
                         foreach (ListViewItem item in lvObjectZonePoints.Items)
                         {
                             int x = Convert.ToInt32(item.SubItems[1].Text);
@@ -173,7 +169,7 @@ namespace ExampleClient.Source
                             objectZone.Vertices.Add(new GridPoint {X = x, Y = y});
                         }
 
-                        newAnalyticBehavior.ObjectZone = objectZone;
+                        newAnalyticBehavior.ObjectInZone = objectZone;
                     }
 
                     _selectedAnalyticConfig.AddAnalyticBehavior(newAnalyticBehavior);

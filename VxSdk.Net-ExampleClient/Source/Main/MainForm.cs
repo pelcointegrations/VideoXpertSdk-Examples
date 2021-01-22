@@ -366,6 +366,39 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The GetAspectRatio method.
+        /// </summary>
+        /// <param name="dataInterface">The data interface to get the aspect ratio for, if any.</param>
+        /// <returns>The aspect ratio.</returns>
+        private MediaControl.AspectRatios GetAspectRatio(DataInterface dataInterface = null)
+        {
+            var di = dataInterface ?? Control.States.VideoDataInterface;
+            var ratioPercent = (float)di.YResolution / di.XResolution;
+            if (Math.Abs(ratioPercent - 0.75) < 0.05)
+            {
+                WriteToLog("Ratio: 4x3");
+                return MediaControl.AspectRatios.k4x3;
+            }
+            else if (Math.Abs(ratioPercent - 1) < 0.05)
+            {
+                WriteToLog("Ratio: 1x1");
+                return MediaControl.AspectRatios.k1x1;
+            }
+            else if (Math.Abs(ratioPercent - 0.667) < 0.05)
+            {
+                WriteToLog("Ratio: 1x1");
+                return MediaControl.AspectRatios.k3x2;
+            }
+            else if (Math.Abs(ratioPercent - 0.667) < 0.05)
+            {
+                WriteToLog("Ratio: 1x1");
+                return MediaControl.AspectRatios.k5x4;
+            }
+
+            return MediaControl.AspectRatios.k16x9;
+        }
+
+        /// <summary>
         /// The SelectDataInterface method.
         /// </summary>
         /// <param name="selProtocol">The selected protocol.</param>
@@ -641,12 +674,11 @@ namespace ExampleClient.Source
         {
             if (Control.States.MediaController == null) return;
 
-            var dataSource = Control.States.MediaController.CurrentDataSource;
             if (Control.States.MediaController.Mode == MediaControl.Modes.Live)
-                SaveSnapshotLive(dataSource);
+                SaveSnapshotLive(Control.States.VideoDataSource);
 
             if (Control.States.MediaController.Mode == MediaControl.Modes.Playback)
-                SaveSnapshotRecorded(dataSource);
+                SaveSnapshotRecorded(Control.States.VideoDataSource);
         }
 
         /// <summary>
@@ -907,7 +939,17 @@ namespace ExampleClient.Source
             if (item == null)
                 return;
 
-            Control.States.AspectRatio = (MediaControl.AspectRatios)item.Tag;
+            if (item.Tag == null)
+            {
+                Control.States.AutoAspectRatio = true;
+                Control.States.AspectRatio = GetAspectRatio();
+            }
+            else
+            {
+                Control.States.AutoAspectRatio = false;
+                Control.States.AspectRatio = (MediaControl.AspectRatios) item.Tag;
+            }
+
             UpdateSelectedAspectRatio();
 
             if (Control.States.MediaController != null)
@@ -1538,7 +1580,7 @@ namespace ExampleClient.Source
             }
             else
             {
-                CurrentSystem.SystemEvent -= OnSystemEvent;
+                CurrentSystem.UnsubscribeToEvents();
                 subscribeToSystemEventsByTypeToolStripMenuItem.Checked = false;
                 WriteToLog("Unsubscribed to events.");
             }
@@ -1980,7 +2022,7 @@ namespace ExampleClient.Source
                     Control.SubscribeToTimestamps();
                     Control.SubscribeToStreamEvents();
                     Control.States.MediaController.SetVideoWindow(Control.States.StreamPanel.Handle);
-                    Control.States.MediaController.AspectRatio = Control.States.AspectRatio;
+                    Control.States.MediaController.AspectRatio = Control.States.AutoAspectRatio ? GetAspectRatio(dataInterface) : Control.States.AspectRatio;
                     Control.States.MediaController.StretchToFit = Control.States.StretchToFit;
                 }
                 else
@@ -2008,11 +2050,7 @@ namespace ExampleClient.Source
                 Control.RemovePlaybackProgress();
                 var transport = (rtspTcpToolStripMenuItem.Checked == true) ? MediaControl.RTSPNetworkTransports.RTPOverRTSP : MediaControl.RTSPNetworkTransports.UDP;
 
-                DataStorage dataStorage = SelectedDataSource.AllDataStorages.FirstOrDefault(ds => ds.Type != DataStorage.DataStorageTypes.Edge && ds.Type != DataStorage.DataStorageTypes.Unknown);
-                var startingClip = SelectedDataSource.Clips?.FirstOrDefault(clip => clip.StartTime <= seekTime && clip.EndTime >= seekTime);
-                if (startingClip != null && !string.IsNullOrEmpty(startingClip.DataStorageId))
-                    dataStorage = CurrentSystem.DataStorages.FirstOrDefault(ds => ds.Id == startingClip.DataStorageId);
-
+                var dataStorage = SelectedDataSource.AllDataStorages.FirstOrDefault(ds => ds.Type != DataStorage.DataStorageTypes.Edge && ds.Type != DataStorage.DataStorageTypes.Unknown);
                 string recorder = "None";
                 if (dataStorage != null)
                     recorder = dataStorage.Name;
@@ -2112,11 +2150,12 @@ namespace ExampleClient.Source
 
         private void UpdateSelectedAspectRatio()
         {
-            ratio16x9ToolStripMenuItem.Checked = Control.States.AspectRatio == MediaControl.AspectRatios.k16x9;
-            ratio4x3ToolStripMenuItem.Checked = Control.States.AspectRatio == MediaControl.AspectRatios.k4x3;
-            ratio1x1ToolStripMenuItem.Checked = Control.States.AspectRatio == MediaControl.AspectRatios.k1x1;
-            ratio3x2ToolStripMenuItem.Checked = Control.States.AspectRatio == MediaControl.AspectRatios.k3x2;
-            ratio5x4ToolStripMenuItem.Checked = Control.States.AspectRatio == MediaControl.AspectRatios.k5x4;
+            ratioAutoToolStripMenuItem.Checked = Control.States.AutoAspectRatio;
+            ratio16x9ToolStripMenuItem.Checked = Control.States.AspectRatio == MediaControl.AspectRatios.k16x9 && !Control.States.AutoAspectRatio;
+            ratio4x3ToolStripMenuItem.Checked = Control.States.AspectRatio == MediaControl.AspectRatios.k4x3 && !Control.States.AutoAspectRatio;
+            ratio1x1ToolStripMenuItem.Checked = Control.States.AspectRatio == MediaControl.AspectRatios.k1x1 && !Control.States.AutoAspectRatio;
+            ratio3x2ToolStripMenuItem.Checked = Control.States.AspectRatio == MediaControl.AspectRatios.k3x2 && !Control.States.AutoAspectRatio;
+            ratio5x4ToolStripMenuItem.Checked = Control.States.AspectRatio == MediaControl.AspectRatios.k5x4 && !Control.States.AutoAspectRatio;
         }
 
         #endregion Private Methods
