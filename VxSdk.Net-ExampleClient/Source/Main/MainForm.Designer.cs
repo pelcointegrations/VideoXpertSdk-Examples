@@ -189,7 +189,7 @@
             this.lblStreamLossLeft.Name = "lblStreamLossLeft";
             this.lblStreamLossLeft.Size = new System.Drawing.Size(584, 345);
             this.lblStreamLossLeft.TabIndex = 0;
-            this.lblStreamLossLeft.Text = "Stream Connection Lost: Attempting to reconnect in 5 seconds...";
+            this.lblStreamLossLeft.Text = "Stream Connection Lost: Attempting to reconnect...";
             this.lblStreamLossLeft.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lblStreamLossLeft.Visible = false;
             this.lblStreamLossLeft.Click += new System.EventHandler(this.PanelVideoStreamLeft_MouseClick);
@@ -1176,7 +1176,7 @@
             this.lblStreamLossRight.Name = "lblStreamLossRight";
             this.lblStreamLossRight.Size = new System.Drawing.Size(584, 345);
             this.lblStreamLossRight.TabIndex = 1;
-            this.lblStreamLossRight.Text = "Stream Connection Lost: Attempting to reconnect in 5 seconds...";
+            this.lblStreamLossRight.Text = "Stream Connection Lost: Attempting to reconnect...";
             this.lblStreamLossRight.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lblStreamLossRight.Visible = false;
             this.lblStreamLossRight.Click += new System.EventHandler(this.PanelVideoStreamRight_MouseClick);

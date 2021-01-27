@@ -354,6 +354,43 @@ namespace ExampleClient.Source
         #region Private Methods
 
         /// <summary>
+        /// The AddOverlays method.
+        /// </summary>
+        /// <param name="seekTime">The <paramref name="seekTime"/> in UTC format.  If no value or a default
+        /// DateTime object is given then the stream is started in live mode.</param>
+        private void AddOverlays(DateTime seekTime)
+        {
+            var dataStorage = SelectedDataSource.AllDataStorages.FirstOrDefault(ds => ds.Type != DataStorage.DataStorageTypes.Edge && ds.Type != DataStorage.DataStorageTypes.Unknown);
+            var recorder = "None";
+            if (dataStorage != null)
+                recorder = dataStorage.Name;
+
+            // Add date time stamp. See https://en.cppreference.com/w/cpp/io/manip/put_time
+            var overlayString = $"  %Y-%m-%d %H:%M:%S\nCamera: {SelectedDataSource.Name}\nRecorder: {recorder}";
+
+            if (!seekTime.Equals(default))
+            {
+                // Getting the clip information is necessary to skip gaps on playback, but is not something
+                // we want to do in the timestamp callback as it takes too long.  So, cache the clip information
+                // before starting the video
+                Control.States.CachedClips = SelectedDataSource.Clips;
+
+                // Print the clips as info
+                for (var i = 0; i < Control.States.CachedClips.Count; i++)
+                    WriteToLog($"Info: Clip Number {i} Start: {Control.States.CachedClips[i].StartTime.ToLocalTime()}  End: {Control.States.CachedClips[i].EndTime.ToLocalTime()}");
+
+                // In this case, demonstrate how to get the storage information for the clip
+                foreach (var clip in Control.States.CachedClips.Where(clip => seekTime >= clip.StartTime && seekTime < clip.EndTime))
+                {
+                    overlayString += $"\nStorage ID: {clip.DataStorageId}";
+                    break;
+                }
+            }
+
+            Control.States.MediaController.AddVideoOverlayData(overlayString, MediaControl.VideoOverlayDataPositions.BottomLeft, true);
+        }
+
+        /// <summary>
         /// The EncodeToBase64 method.
         /// </summary>
         /// <param name="toEncode">The string to encode to Base64.</param>
@@ -2031,36 +2068,14 @@ namespace ExampleClient.Source
                     // old stream and set up the new stream using the new data source.
                     if (changingDataSource)
                     {
-                        Control.States.MediaController.Stop();
                         Control.States.MediaController.SetDataSource(SelectedDataSource, dataInterface, audioDataSource, audioDataInterface);
+                        Control.States.MediaController.AspectRatio = Control.States.AutoAspectRatio ? GetAspectRatio(dataInterface) : Control.States.AspectRatio;
                     }
                 }
 
-                // Getting the clip informatoin is necessary to skip gaps on playback, but is not something
-                //   we want to do in the timestamp callback as it takes too long.  So, cache the clip information
-                //   before starting the video
-                Control.States.CachedClips = SelectedDataSource.Clips;
                 Control.States.SkipPlayback = skipGapsToolStripMenuItem.Checked;
-                // Print the clips as info
-                for (int i = 0; i < Control.States.CachedClips.Count; i++)
-                {
-                    WriteToLog("Info:  Clip Number " + i + " Start:  " + Control.States.CachedClips[i].StartTime.ToLocalTime() + "  End:  " + Control.States.CachedClips[i].EndTime.ToLocalTime());
-                }
-
                 Control.RemovePlaybackProgress();
                 var transport = (rtspTcpToolStripMenuItem.Checked == true) ? MediaControl.RTSPNetworkTransports.RTPOverRTSP : MediaControl.RTSPNetworkTransports.UDP;
-
-                var dataStorage = SelectedDataSource.AllDataStorages.FirstOrDefault(ds => ds.Type != DataStorage.DataStorageTypes.Edge && ds.Type != DataStorage.DataStorageTypes.Unknown);
-                string recorder = "None";
-                if (dataStorage != null)
-                    recorder = dataStorage.Name;
-
-                // Add date time stamp.
-                //   See https://en.cppreference.com/w/cpp/io/manip/put_time
-                string overlayString = "  %Y-%m-%d %H:%M:%S\n";
-                overlayString += $"Camera: {SelectedDataSource.Name}\n";
-                overlayString += $"Recorder: {recorder}";
-                Control.States.MediaController.AddVideoOverlayData(overlayString, MediaControl.VideoOverlayDataPositions.BottomLeft, true);
 
                 if (startingLiveStream)
                 {
@@ -2082,20 +2097,6 @@ namespace ExampleClient.Source
                 }
                 else
                 {
-                    // In this case, demonstrate how to get the storage information for the clip
-                    foreach (Clip clip in Control.States.CachedClips)
-                    {
-                        if ((seekTime >= clip.StartTime) && (seekTime < clip.EndTime))
-                        {
-                            overlayString += $"\nStorage ID: {clip.DataStorageId}";
-                            break;
-                        }
-                    }
-                    Control.States.MediaController.AddVideoOverlayData(overlayString, MediaControl.VideoOverlayDataPositions.BottomLeft, true);
-
-                    Control.EnablePlaybackProgress(seekTime, endTime);
-                    TimeSpan ts = (seekTime - new DateTime(1970, 1, 1, 0, 0, 0));
-                    double timePassedIn = ts.TotalSeconds;
                     if (!Control.States.MediaController.Seek(seekTime, (float)nudSpeed.Value, transport))
                     {
                         WriteToLog("Error: Unable to start recorded stream.\n");
@@ -2111,8 +2112,13 @@ namespace ExampleClient.Source
                         Control.States.StreamPanel.Refresh();
                         return;
                     }
+
+                    Control.EnablePlaybackProgress(seekTime, endTime);
+                    TimeSpan ts = (seekTime - new DateTime(1970, 1, 1, 0, 0, 0));
+                    double timePassedIn = ts.TotalSeconds;
                 }
 
+                Task.Run(() => AddOverlays(seekTime));
                 Control.States.PlayingIndex = dgvDataSources.SelectedRows[0].Index;
                 SetupPtzControls(SelectedDataSource);
                 Control.States.VideoDataSource = SelectedDataSource;

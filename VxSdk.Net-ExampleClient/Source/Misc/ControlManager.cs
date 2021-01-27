@@ -158,50 +158,20 @@ namespace ExampleClient.Source
             return true;
         }
 
-        public void RestartStream(Controls control)
+        public void HandleStreamDisconnect(Controls control)
         {
             States state = control == Controls.Left ? _statesLeft : _statesRight;
-            if (state.VcrState != VcrMode.Live)
-            {
-                var selControl = SelectedControl;
-                SelectControl(control);
-                MainForm.Instance.MainBeginInvoke(() => MainForm.Instance.StopStream());
-                SelectControl(selControl);
-                return;
-            }
-
             state.IsReconnecting = true;
-            state.MediaController.Stop();
             MainForm.Instance.MainBeginInvoke(() => state.StreamPanel.Refresh());
             MainForm.Instance.MainBeginInvoke(() => state.VideoLossLabel.Visible = true);
+        }
 
-            var retryCount = 0;
-            while (state.IsReconnecting)
-            {
-                try
-                {
-                    retryCount += 1;
-                    MainForm.Instance.MainBeginInvoke(() => state.VideoLossLabel.Text = $"Stream Connection Lost: Attempting to reconnect... (attempt #{retryCount})");
-                    state.MediaController.SetDataSource(state.VideoDataSource, state.VideoDataInterface, state.AudioDataSource, state.AudioDataInterface);
-                    state.IsReconnecting = !state.MediaController.Play(1.0f, state.Transport);
-                    if (!state.IsReconnecting)
-                        continue;
-
-                    var counter = 0;
-                    while (counter < 10)
-                    {
-                        counter += 1;
-                        if (!state.IsReconnecting) continue;
-                        Thread.Sleep(1000);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MainForm.Instance.MainBeginInvoke(() => MainForm.Instance.WriteToLog($@"Error: {ex.Message}\n"));
-                }
-            }
-
+        public void HandleStreamReconnect(Controls control)
+        {
+            States state = control == Controls.Left ? _statesLeft : _statesRight;
+            state.IsReconnecting = false;
             MainForm.Instance.MainBeginInvoke(() => state.VideoLossLabel.Visible = false);
+            MainForm.Instance.MainBeginInvoke(() => state.StreamPanel.Refresh());
         }
 
         /// <summary>
@@ -284,11 +254,22 @@ namespace ExampleClient.Source
         /// <param name="streamEvent">The <paramref name="streamEvent"/> parameter.</param>
         private static void OnStreamEventLeft(StreamingEvent streamEvent)
         {
-            MainForm.Instance.MainBeginInvoke(() =>
+            if (streamEvent.EventType == StreamingEvent.EventTypes.ConnectionLost)
             {
-                MainForm.Instance.WriteToLog("Stream Connection Lost.");
-                Task.Run(() => Instance.RestartStream(Controls.Left));
-            });
+                MainForm.Instance.MainBeginInvoke(() =>
+                {
+                    MainForm.Instance.WriteToLog("Stream Connection Lost.");
+                    Task.Run(() => Instance.HandleStreamDisconnect(Controls.Left));
+                });
+            }
+            else if (streamEvent.EventType == StreamingEvent.EventTypes.ConnectionRestored)
+            {
+                MainForm.Instance.MainBeginInvoke(() =>
+                {
+                    MainForm.Instance.WriteToLog("Stream Connection Restored.");
+                    Task.Run(() => Instance.HandleStreamReconnect(Controls.Left));
+                });
+            }
         }
 
         /// <summary>
@@ -297,11 +278,22 @@ namespace ExampleClient.Source
         /// <param name="streamEvent">The <paramref name="streamEvent"/> parameter.</param>
         private static void OnStreamEventRight(StreamingEvent streamEvent)
         {
-            MainForm.Instance.MainBeginInvoke(() =>
+            if (streamEvent.EventType == StreamingEvent.EventTypes.ConnectionLost)
             {
-                MainForm.Instance.WriteToLog("Stream Connection Lost.");
-                Task.Run(() => Instance.RestartStream(Controls.Right));
-            });
+                MainForm.Instance.MainBeginInvoke(() =>
+                {
+                    MainForm.Instance.WriteToLog("Stream Connection Lost.");
+                    Task.Run(() => Instance.HandleStreamDisconnect(Controls.Right));
+                });
+            }
+            else if (streamEvent.EventType == StreamingEvent.EventTypes.ConnectionRestored)
+            {
+                MainForm.Instance.MainBeginInvoke(() =>
+                {
+                    MainForm.Instance.WriteToLog("Stream Connection Restored.");
+                    Task.Run(() => Instance.HandleStreamReconnect(Controls.Right));
+                });
+            }
         }
 
         private static void OnTimestampEventLeft(MediaEvent timeEvent)
