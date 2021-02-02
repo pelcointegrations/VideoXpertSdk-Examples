@@ -80,7 +80,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="VxSdk.NET-Media, Version=0.0.0.0, Culture=neutral, PublicKeyToken=2604320bde3eedc4, processorArchitecture=x86">
-      <HintPath>packages\VxSdk.NET-Media.3.0.58\lib\$(Platform)\VxSdk.NET-Media.dll</HintPath>
+      <HintPath>packages\VxSdk.NET-Media.3.0.59\lib\$(Platform)\VxSdk.NET-Media.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -1246,11 +1246,11 @@
   <PropertyGroup>
     <PostBuildEvent>xcopy /Y /F "$(ProjectDir)ThirdParty\ffmpeg.exe" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
-  <Import Project="packages\VxSdk.NET-Media.3.0.58\build\VxSdk.NET-Media.targets" Condition="Exists('packages\VxSdk.NET-Media.3.0.58\build\VxSdk.NET-Media.targets')" />
+  <Import Project="packages\VxSdk.NET-Media.3.0.59\build\VxSdk.NET-Media.targets" Condition="Exists('packages\VxSdk.NET-Media.3.0.59\build\VxSdk.NET-Media.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\VxSdk.NET-Media.3.0.58\build\VxSdk.NET-Media.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VxSdk.NET-Media.3.0.58\build\VxSdk.NET-Media.targets'))" />
+    <Error Condition="!Exists('packages\VxSdk.NET-Media.3.0.59\build\VxSdk.NET-Media.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VxSdk.NET-Media.3.0.59\build\VxSdk.NET-Media.targets'))" />
   </Target>
 </Project>
