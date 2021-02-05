@@ -472,6 +472,7 @@ namespace ExampleClient.Source
         public bool IsReconnecting { set; get; }
         public DateTime JustJumpedTime { get; set; }
         public ManualRecording ManualRecording { get; set; }
+        public Recording Recording { get; set; }
         public MediaControl MediaController { get; set; }
         public int PlayingIndex { get; set; }
         public decimal PlaySpeed { get; set; }

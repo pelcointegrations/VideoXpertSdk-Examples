@@ -302,6 +302,7 @@ namespace ExampleClient.Source
                 Control.States.PtzControl = null;
                 Control.States.VideoDataSource = null;
                 Control.States.ManualRecording = null;
+                Control.States.Recording = null;
                 btnManualRecord.Text = @"Record";
                 btnManualRecord.Enabled = false;
                 nudPostRecord.Enabled = false;
@@ -545,15 +546,23 @@ namespace ExampleClient.Source
             if (Control.States.VideoDataSource == null)
                 return;
 
-            if (Control.States.ManualRecording == null)
+            if (Control.States.ManualRecording == null && Control.States.Recording == null)
             {
-                var newManualRecording = new NewManualRecording { DataSourceId = Control.States.VideoDataSource.Id };
+                var newRecording = new NewRecording { DataSourceId = Control.States.VideoDataSource.Id, MaxRecordingTime = 300 };
 
-                Control.States.ManualRecording = CurrentSystem.AddManualRecording(newManualRecording);
-                if (Control.States.ManualRecording == null)
+                Control.States.Recording = CurrentSystem.AddRecording(newRecording);
+                if (Control.States.Recording == null)
                 {
-                    WriteToLog("Unable to start manual recording.");
-                    return;
+                    // ManualRecording has been deprecated in later versions of VideoXpert.  We will attempt to use it here if the
+                    // AddRecording call above failed in case the system is running a version that doesn't support it.
+                    var newManualRecording = new NewManualRecording { DataSourceId = Control.States.VideoDataSource.Id };
+
+                    Control.States.ManualRecording = CurrentSystem.AddManualRecording(newManualRecording);
+                    if (Control.States.ManualRecording == null)
+                    {
+                        WriteToLog("Unable to start manual recording.");
+                        return;
+                    }
                 }
 
                 WriteToLog($"Started manual recording on {Control.States.VideoDataSource.Name}.");
@@ -563,12 +572,13 @@ namespace ExampleClient.Source
             }
             else
             {
-                var result = CurrentSystem.DeleteManualRecording(Control.States.ManualRecording);
+                var result = Control.States.Recording != null ? CurrentSystem.DeleteRecording(Control.States.Recording) : CurrentSystem.DeleteManualRecording(Control.States.ManualRecording);
                 if (result != Results.Value.OK)
                     WriteToLog($"Error: {result}.");
 
                 WriteToLog($"Stopped manual recording on {Control.States.VideoDataSource.Name}.");
                 Control.States.ManualRecording = null;
+                Control.States.Recording = null;
                 btnManualRecord.Text = @"Record";
                 if (Control.States.MediaController.Mode != MediaControl.Modes.Live)
                     return;
@@ -1967,6 +1977,19 @@ namespace ExampleClient.Source
                     continue;
 
                 Control.States.ManualRecording = manualRecording;
+                btnManualRecord.Text = @"Stop";
+                btnManualRecord.Enabled = true;
+                nudPreRecord.Enabled = false;
+                nudPostRecord.Enabled = false;
+                return;
+            }
+
+            foreach (var recording in CurrentSystem.Recordings)
+            {
+                if (recording.DataSourceId != Control.States.VideoDataSource.Id || recording.OwnerName != userUpn)
+                    continue;
+
+                Control.States.Recording = recording;
                 btnManualRecord.Text = @"Stop";
                 btnManualRecord.Enabled = true;
                 nudPreRecord.Enabled = false;
