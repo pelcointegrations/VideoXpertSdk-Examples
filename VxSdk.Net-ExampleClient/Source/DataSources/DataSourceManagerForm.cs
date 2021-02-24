@@ -29,6 +29,25 @@ namespace ExampleClient.Source
         #region Private Methods
 
         /// <summary>
+        /// The ButtonAnalytics_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonAnalytics_Click(object sender, EventArgs args)
+        {
+            if (lvDataSources.SelectedItems.Count == 0)
+                return;
+
+            var dataSource = (DataSource)lvDataSources.SelectedItems[0].Tag;
+            
+            // Show the AnalyticConfigManagerForm dialog.
+            using (var analyticConfigManagerForm = new AnalyticConfigsManagerForm(dataSource))
+            {
+                analyticConfigManagerForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
         /// The ButtonAutoNumber_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -298,5 +317,7 @@ namespace ExampleClient.Source
         }
 
         #endregion Private Methods
+
+
     }
 }

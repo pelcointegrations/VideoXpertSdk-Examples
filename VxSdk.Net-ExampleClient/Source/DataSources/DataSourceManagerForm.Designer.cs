@@ -52,11 +52,12 @@
             this.btnViewTags = new System.Windows.Forms.Button();
             this.btnViewPtzLinkInfo = new System.Windows.Forms.Button();
             this.btnLimits = new System.Windows.Forms.Button();
+            this.btnAnalytics = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnRefresh
             // 
-            this.btnRefresh.Location = new System.Drawing.Point(1194, 331);
+            this.btnRefresh.Location = new System.Drawing.Point(1194, 384);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(94, 23);
             this.btnRefresh.TabIndex = 12;
@@ -252,11 +253,22 @@
             this.btnLimits.UseVisualStyleBackColor = true;
             this.btnLimits.Click += new System.EventHandler(this.ButtonLimits_Click);
             // 
+            // btnAnalytics
+            // 
+            this.btnAnalytics.Location = new System.Drawing.Point(1194, 331);
+            this.btnAnalytics.Name = "btnAnalytics";
+            this.btnAnalytics.Size = new System.Drawing.Size(94, 23);
+            this.btnAnalytics.TabIndex = 23;
+            this.btnAnalytics.Text = "Analytics";
+            this.btnAnalytics.UseVisualStyleBackColor = true;
+            this.btnAnalytics.Click += new System.EventHandler(this.ButtonAnalytics_Click);
+            // 
             // DataSourceManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1295, 419);
+            this.Controls.Add(this.btnAnalytics);
             this.Controls.Add(this.btnLimits);
             this.Controls.Add(this.btnViewPtzLinkInfo);
             this.Controls.Add(this.btnViewTags);
@@ -307,5 +319,6 @@
         private System.Windows.Forms.ColumnHeader chCapabilities;
         private System.Windows.Forms.Button btnViewPtzLinkInfo;
         private System.Windows.Forms.Button btnLimits;
+        private System.Windows.Forms.Button btnAnalytics;
     }
 }
