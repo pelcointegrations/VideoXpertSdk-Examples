@@ -15,8 +15,34 @@ namespace ExampleClient.Source
         /// <summary>
         /// Initializes a new instance of the <see cref="ModifyMotionConfigForm" /> class.
         /// </summary>
+        /// <param name="motionConfiguration">The <paramref name="motionConfiguration"/> parameter.</param>
+        public ModifyMotionConfigForm(Configuration.Motion motionConfiguration)
+        {
+            InitializeComponent();
+            SelectedMotionConfiguration = motionConfiguration;
+            nudSensitivity.Value = motionConfiguration.Sensitivity;
+            nudThreshold.Value = motionConfiguration.Threshold;
+            switch (motionConfiguration.Mode)
+            {
+                case Configuration.MotionMode.Camera:
+                    rbCamera.Checked = true;
+                    break;
+
+                case Configuration.MotionMode.Recorder:
+                    rbRecorder.Checked = true;
+                    break;
+
+                default:
+                    rbDisabled.Checked = true;
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ModifyMotionConfigForm" /> class.
+        /// </summary>
         /// <param name="motionConfig">The <paramref name="motionConfig"/> parameter.</param>
-        public ModifyMotionConfigForm(Configuration.Motion motionConfig)
+        public ModifyMotionConfigForm(DataSourceConfig.Motion motionConfig)
         {
             InitializeComponent();
             SelectedMotionConfig = motionConfig;
@@ -41,12 +67,17 @@ namespace ExampleClient.Source
         #endregion Public Constructors
 
         #region Private Properties
-
         /// <summary>
         /// Gets or sets the SelectedMotionConfig property.
         /// </summary>
         /// <value>The currently selected motion config.</value>
-        private Configuration.Motion SelectedMotionConfig { get; }
+        private DataSourceConfig.Motion SelectedMotionConfig { get; }
+
+        /// <summary>
+        /// Gets or sets the SelectedMotionConfiguration property.
+        /// </summary>
+        /// <value>The currently selected motion configuration.</value>
+        private Configuration.Motion SelectedMotionConfiguration { get; }
 
         #endregion Private Properties
 
@@ -65,17 +96,34 @@ namespace ExampleClient.Source
             else if (rbRecorder.Checked)
                 selectedMode = Configuration.MotionMode.Recorder;
 
-            if (SelectedMotionConfig.Mode != selectedMode)
-                SelectedMotionConfig.Mode = selectedMode;
+            if (SelectedMotionConfig != null)
+            {
+                if (SelectedMotionConfig.Mode != selectedMode)
+                    SelectedMotionConfig.Mode = selectedMode;
 
-            if (selectedMode == Configuration.MotionMode.Disabled)
-                return;
+                if (selectedMode == Configuration.MotionMode.Disabled)
+                    return;
 
-            if (SelectedMotionConfig.Sensitivity != (int)nudSensitivity.Value)
-                SelectedMotionConfig.Sensitivity = (int)nudSensitivity.Value;
+                if (SelectedMotionConfig.Sensitivity != (int) nudSensitivity.Value)
+                    SelectedMotionConfig.Sensitivity = (int) nudSensitivity.Value;
 
-            if (SelectedMotionConfig.Threshold != (int)nudThreshold.Value)
-                SelectedMotionConfig.Threshold = (int)nudThreshold.Value;
+                if (SelectedMotionConfig.Threshold != (int) nudThreshold.Value)
+                    SelectedMotionConfig.Threshold = (int) nudThreshold.Value;
+            }
+            else
+            {
+                if (SelectedMotionConfiguration.Mode != selectedMode)
+                    SelectedMotionConfiguration.Mode = selectedMode;
+
+                if (selectedMode == Configuration.MotionMode.Disabled)
+                    return;
+
+                if (SelectedMotionConfiguration.Sensitivity != (int)nudSensitivity.Value)
+                    SelectedMotionConfiguration.Sensitivity = (int)nudSensitivity.Value;
+
+                if (SelectedMotionConfiguration.Threshold != (int)nudThreshold.Value)
+                    SelectedMotionConfiguration.Threshold = (int)nudThreshold.Value;
+            }
         }
 
         /// <summary>

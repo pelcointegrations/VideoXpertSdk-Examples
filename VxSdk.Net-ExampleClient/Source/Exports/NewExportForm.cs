@@ -113,20 +113,62 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
-        /// The ButtonExportSettings_Click method.
+        /// The ButtonEstimateExport_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.s</param>
+        private void ButtonEstimateExport_Click(object sender, EventArgs args)
+        {
+            var newExport = new NewExport();
+            foreach (ListViewItem item in lvAddedClips.Items)
+            {
+                var clip = (NewExportClip)item.Tag;
+                newExport.Clips.Add(clip);
+            }
+
+            newExport.Format = Export.Formats.MkvZip;
+            newExport.Name = tbxExportName.Text;
+            newExport.Password = tbxExportPassword.Text;
+            var estimate = MainForm.CurrentSystem.GetExportEstimate(newExport);
+            if (estimate != null)
+            {
+                lblTooLargeValue.Text = estimate.IsTooLarge.ToString();
+                if (estimate.Size < 1024)
+                    lblSizeValue.Text = estimate.Size + @" KB";
+                else if (estimate.Size < 1048576)
+                    lblSizeValue.Text = Math.Round((double)estimate.Size / 1024, 1) + @" MB";
+                else
+                    lblSizeValue.Text = Math.Round((double)estimate.Size / 1024 / 1024, 1) + @" GB";
+            }
+            else
+            {
+                lblTooLargeValue.Text = string.Empty;
+                lblSizeValue.Text = "Error";
+            }
+        }
+
+        /// <summary>
+        /// The ButtonExport_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
         /// <param name="args">The <paramref name="args"/> parameter.</param>
-        private void ButtonExportSettings_Click(object sender, EventArgs args)
+        private void ButtonExport_Click(object sender, EventArgs args)
         {
-            DialogResult result;
-            using (var settingsForm = new ExportSettingsForm())
-            {
-                result = settingsForm.ShowDialog();
-            }
+            if (string.IsNullOrEmpty(tbxExportName.Text))
+                return;
 
-            if (result == DialogResult.OK)
-                Close();
+            var newExport = new NewExport();
+            foreach (ListViewItem item in lvAddedClips.Items)
+            {
+                var clip = (NewExportClip)item.Tag;
+                newExport.Clips.Add(clip);
+            }
+            newExport.Format = Export.Formats.MkvZip;
+            newExport.Name = tbxExportName.Text;
+            newExport.Password = tbxExportPassword.Text;
+            MainForm.CurrentSystem.AddExport(newExport);
+
+            Close();
         }
 
         /// <summary>

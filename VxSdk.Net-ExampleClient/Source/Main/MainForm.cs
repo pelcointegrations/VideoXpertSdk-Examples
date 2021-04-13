@@ -1096,6 +1096,19 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The MenuItemDiscoveryStatus_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void MenuItemDiscoveryStatus_Click(object sender, EventArgs args)
+        {
+            using (var discoveryStatusForm = new DiscoveryStatusForm())
+            {
+                discoveryStatusForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
         /// The MenuItemDisplayEventDialogs_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -1119,6 +1132,24 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The MenuItemEventConfiguration_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void MenuItemEventConfiguration_Click(object sender, EventArgs args)
+        {
+            var eventConfig = CurrentSystem.EventConfig;
+            if (eventConfig == null)
+                return;
+
+            // Show the EventConfigurationForm dialog.
+            using (var eventConfigurationForm = new EventConfigurationForm())
+            {
+                eventConfigurationForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
         /// The MenuItemExit_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -1126,6 +1157,24 @@ namespace ExampleClient.Source
         private void MenuItemExit_Click(object sender, EventArgs args)
         {
             Close();
+        }
+
+        /// <summary>
+        /// The MenuItemExportConfiguration_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void MenuItemExportConfiguration_Click(object sender, EventArgs args)
+        {
+            var exportConfig = CurrentSystem.ExportConfig;
+            if (exportConfig == null)
+                return;
+
+            // Show the ExportConfigurationForm dialog.
+            using (var exportConfigurationForm = new ExportConfigurationForm())
+            {
+                exportConfigurationForm.ShowDialog();
+            }
         }
 
         /// <summary>
@@ -1151,6 +1200,19 @@ namespace ExampleClient.Source
             using (var exportForm = new ExportManagerForm())
             {
                 exportForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// The MenuItemFiles_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void MenuItemFiles_Click(object sender, EventArgs args)
+        {
+            using (var fileManagerForm = new FileManagerForm())
+            {
+                fileManagerForm.ShowDialog();
             }
         }
 
@@ -1420,6 +1482,19 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The MenuItemReports_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void MenuItemReports_Click(object sender, EventArgs args)
+        {
+            using (var reportManagerForm = new ReportManagerForm())
+            {
+                reportManagerForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
         /// The MenuItemRoleManager_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -1429,6 +1504,24 @@ namespace ExampleClient.Source
             using (var roleForm = new RoleManagerForm())
             {
                 roleForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// The MenuItemReportConfiguration_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void MenuItemReportConfiguration_Click(object sender, EventArgs args)
+        {
+            var reportConfig = CurrentSystem.ReportConfig;
+            if (reportConfig == null)
+                return;
+
+            // Show the ReportConfigurationForm dialog.
+            using (var reportConfigurationForm = new ReportConfigurationForm())
+            {
+                reportConfigurationForm.ShowDialog();
             }
         }
 
@@ -1643,6 +1736,24 @@ namespace ExampleClient.Source
             using (var tagForm = new TagManagerForm())
             {
                 tagForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// The MenuItemTimeConfiguration_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void MenuItemTimeConfiguration_Click(object sender, EventArgs args)
+        {
+            var timeConfig = CurrentSystem.TimeConfig;
+            if (timeConfig == null)
+                return;
+
+            // Show the TimeConfigurationForm dialog.
+            using (var timeConfigurationForm = new TimeConfigurationForm(timeConfig))
+            {
+                timeConfigurationForm.ShowDialog();
             }
         }
 

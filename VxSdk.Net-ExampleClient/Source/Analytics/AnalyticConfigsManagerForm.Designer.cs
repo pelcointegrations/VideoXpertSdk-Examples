@@ -38,6 +38,7 @@
             this.btnManageBehaviors = new System.Windows.Forms.Button();
             this.btnRefresh = new System.Windows.Forms.Button();
             this.gbxConfigs = new System.Windows.Forms.GroupBox();
+            this.btnGetLineCounts = new System.Windows.Forms.Button();
             this.btnModifyConfig = new System.Windows.Forms.Button();
             this.btnDeleteConfig = new System.Windows.Forms.Button();
             this.btnNewConfig = new System.Windows.Forms.Button();
@@ -110,7 +111,7 @@
             // 
             // btnManageBehaviors
             // 
-            this.btnManageBehaviors.Location = new System.Drawing.Point(755, 77);
+            this.btnManageBehaviors.Location = new System.Drawing.Point(755, 69);
             this.btnManageBehaviors.Name = "btnManageBehaviors";
             this.btnManageBehaviors.Size = new System.Drawing.Size(106, 23);
             this.btnManageBehaviors.TabIndex = 3;
@@ -120,7 +121,7 @@
             // 
             // btnRefresh
             // 
-            this.btnRefresh.Location = new System.Drawing.Point(755, 135);
+            this.btnRefresh.Location = new System.Drawing.Point(755, 148);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(106, 23);
             this.btnRefresh.TabIndex = 4;
@@ -130,6 +131,7 @@
             // 
             // gbxConfigs
             // 
+            this.gbxConfigs.Controls.Add(this.btnGetLineCounts);
             this.gbxConfigs.Controls.Add(this.btnModifyConfig);
             this.gbxConfigs.Controls.Add(this.btnDeleteConfig);
             this.gbxConfigs.Controls.Add(this.btnNewConfig);
@@ -143,9 +145,19 @@
             this.gbxConfigs.TabStop = false;
             this.gbxConfigs.Text = "Analytic Configs";
             // 
+            // btnGetLineCounts
+            // 
+            this.btnGetLineCounts.Location = new System.Drawing.Point(755, 119);
+            this.btnGetLineCounts.Name = "btnGetLineCounts";
+            this.btnGetLineCounts.Size = new System.Drawing.Size(106, 23);
+            this.btnGetLineCounts.TabIndex = 9;
+            this.btnGetLineCounts.Text = "Get Line Counts";
+            this.btnGetLineCounts.UseVisualStyleBackColor = true;
+            this.btnGetLineCounts.Click += new System.EventHandler(this.ButtonGetLineCounts_Click);
+            // 
             // btnModifyConfig
             // 
-            this.btnModifyConfig.Location = new System.Drawing.Point(755, 48);
+            this.btnModifyConfig.Location = new System.Drawing.Point(755, 44);
             this.btnModifyConfig.Name = "btnModifyConfig";
             this.btnModifyConfig.Size = new System.Drawing.Size(106, 23);
             this.btnModifyConfig.TabIndex = 8;
@@ -155,7 +167,7 @@
             // 
             // btnDeleteConfig
             // 
-            this.btnDeleteConfig.Location = new System.Drawing.Point(755, 106);
+            this.btnDeleteConfig.Location = new System.Drawing.Point(755, 94);
             this.btnDeleteConfig.Name = "btnDeleteConfig";
             this.btnDeleteConfig.Size = new System.Drawing.Size(106, 23);
             this.btnDeleteConfig.TabIndex = 7;
@@ -342,5 +354,6 @@
         private System.Windows.Forms.Label lblObjectLineCounterReset;
         private System.Windows.Forms.Label lblObjectLineCounterEventsCheck;
         private System.Windows.Forms.Label lblObjectLineCounterEvents;
+        private System.Windows.Forms.Button btnGetLineCounts;
     }
 }

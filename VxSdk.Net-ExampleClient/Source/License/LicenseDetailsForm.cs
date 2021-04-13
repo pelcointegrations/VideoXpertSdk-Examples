@@ -122,6 +122,9 @@ namespace ExampleClient.Source
             // Use reflection to get each available property from the license feature.
             foreach (var prop in licenseFeature.GetType().GetProperties())
             {
+                if (prop.Name == "CapabilityRequestEndpoint")
+                    continue;
+
                 // Get the value from the property.
                 var val = prop.GetValue(licenseFeature, null);
 

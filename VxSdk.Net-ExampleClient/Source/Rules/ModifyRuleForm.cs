@@ -31,7 +31,6 @@ namespace ExampleClient.Source
 
             tbxName.Text = rule.Name;
             chbxIsEnabled.Checked = rule.IsEnabled;
-            rtbScript.Text = rule.Script;
             var timetables = rule.TimeTables;
             foreach (var timeTable in MainForm.CurrentSystem.TimeTables)
             {
@@ -41,6 +40,18 @@ namespace ExampleClient.Source
                 lvItem.Checked = timetables.Any(tm => tm.Id == timeTable.Id);
                 lvTimeTables.Items.Add(lvItem);
             }
+
+            foreach (var response in SelectedRule.Responses)
+            {
+                var lvItem = new ListViewItem(string.Empty) { Tag = response };
+                if (response.IsCustomScript)
+                    lvItem.SubItems.Add($"Custom Script: {response.Script}");
+                else
+                    lvItem.SubItems.Add($"Generate Event: {response.SituationType}");
+
+                lvRuleResponses.Items.Add(lvItem);
+            }
+            lvRuleResponses.Refresh();
 
             foreach (var trigger in SelectedRule.Triggers)
             {
@@ -86,6 +97,12 @@ namespace ExampleClient.Source
         private List<Device> DeviceList { get; }
 
         /// <summary>
+        /// Gets the HaveResponsesChanged property.
+        /// </summary>
+        /// <value><c>true</c> if the responses have been modified, otherwise <c>false</c>.</value>
+        private bool HaveResponsesChanged { get; set; }
+
+        /// <summary>
         /// Gets the HaveTimeTablesChanged property.
         /// </summary>
         /// <value><c>true</c> if the time tables have been modified, otherwise <c>false</c>.</value>
@@ -125,6 +142,23 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The ButtonAddResponse_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonAddResponse_Click(object sender, EventArgs args)
+        {
+            using (var addRuleResponseForm = new AddRuleResponseForm(lvRuleResponses))
+            {
+                if (addRuleResponseForm.ShowDialog() != DialogResult.OK)
+                    return;
+
+                HaveResponsesChanged = true;
+                lvRuleResponses.Refresh();
+            }
+        }
+
+        /// <summary>
         /// The ButtonRemove_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -142,6 +176,23 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The ButtonRemoveResponse_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonRemoveResponse_Click(object sender, EventArgs args)
+        {
+            var remItems = lvRuleResponses.CheckedItems;
+            if (remItems.Count > 0)
+                HaveResponsesChanged = true;
+
+            foreach (ListViewItem item in remItems)
+                lvRuleResponses.Items.Remove(item);
+
+            lvRuleResponses.Refresh();
+        }
+
+        /// <summary>
         /// The ButtonSave_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -153,9 +204,6 @@ namespace ExampleClient.Source
 
             if (!string.IsNullOrEmpty(tbxName.Text) && SelectedRule.Name != tbxName.Text)
                 SelectedRule.Name = tbxName.Text;
-
-            if (SelectedRule.Script != rtbScript.Text)
-                SelectedRule.Script = rtbScript.Text;
 
             var currentTimeTables = SelectedRule.TimeTables;
             foreach (ListViewItem timeTableItem in lvTimeTables.Items)
@@ -192,6 +240,21 @@ namespace ExampleClient.Source
                 SelectedRule.TimeTables = timeTables;
             }
 
+            if (HaveResponsesChanged)
+            {
+                var ruleResponses = new List<RuleResponse>();
+                foreach (ListViewItem responseItem in lvRuleResponses.Items)
+                {
+                    var response = responseItem.Tag as RuleResponse;
+                    if (response == null)
+                        continue;
+
+                    ruleResponses.Add(response);
+                }
+
+                SelectedRule.Responses = ruleResponses;
+            }
+
             if (!HaveTriggersChanged)
                 return;
 
@@ -209,5 +272,7 @@ namespace ExampleClient.Source
         }
 
         #endregion Private Methods
+
+
     }
 }

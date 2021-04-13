@@ -93,6 +93,19 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The ButtonPermSchema_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonPermSchema_Click(object sender, EventArgs args)
+        {
+            using (var permissionSchemaDetailsForm = new PermissionSchemaDetailsForm())
+            {
+                permissionSchemaDetailsForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
         /// The PopulateRoles method.
         /// </summary>
         private void PopulateRoles()

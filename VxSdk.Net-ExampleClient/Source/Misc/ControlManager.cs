@@ -137,8 +137,10 @@ namespace ExampleClient.Source
             foreach (Control control in PtzControlForm.Instance.Controls)
                 control.Enabled = isEnabled;
 
+            PtzControlForm.LoadLimits();
             PtzControlForm.GetPatterns();
             PtzControlForm.GetPresets();
+            PtzControlForm.UpdatePtzLockInfo();
         }
 
         public bool EnablePlaybackProgress(System.DateTime startTime, System.DateTime endTime)

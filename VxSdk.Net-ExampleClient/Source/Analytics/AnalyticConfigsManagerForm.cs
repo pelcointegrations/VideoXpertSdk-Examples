@@ -61,6 +61,20 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The ButtonGetLineCounts_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonGetLineCounts_Click(object sender, EventArgs args)
+        {
+            // Show the LineCountRequestForm dialog.
+            using (var lineCountRequestForm = new LineCountRequestForm(_selectedDataSource))
+            {
+                lineCountRequestForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
         /// The ButtonManageBehaviors_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -157,6 +171,7 @@ namespace ExampleClient.Source
         {
             var availableTypes = _selectedDataSource.AvailableAnalyticBehaviorTypes;
             btnNewConfig.Enabled = btnModifyConfig.Enabled = btnDeleteConfig.Enabled = btnManageBehaviors.Enabled = availableTypes.Count > 0;
+            btnGetLineCounts.Enabled = availableTypes.Contains(DataSource.AnalyticBehaviorType.ObjectLineCounter);
 
             lblObjectInZoneCheck.Text = availableTypes.Contains(DataSource.AnalyticBehaviorType.ObjectInZone) ? "✓" : "X";
             lblObjectInZoneCheck.ForeColor = availableTypes.Contains(DataSource.AnalyticBehaviorType.ObjectInZone) ? Color.Green : Color.Red;

@@ -52,11 +52,14 @@
             this.btnUpdate = new System.Windows.Forms.Button();
             this.btnDbBackups = new System.Windows.Forms.Button();
             this.btnLimits = new System.Windows.Forms.Button();
+            this.btnTimeConfig = new System.Windows.Forms.Button();
+            this.btnUpdateSoftware = new System.Windows.Forms.Button();
+            this.btnThermalEtd = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnRefresh
             // 
-            this.btnRefresh.Location = new System.Drawing.Point(1213, 360);
+            this.btnRefresh.Location = new System.Drawing.Point(1213, 447);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(83, 23);
             this.btnRefresh.TabIndex = 12;
@@ -112,7 +115,7 @@
             this.lvDevices.Location = new System.Drawing.Point(12, 12);
             this.lvDevices.MultiSelect = false;
             this.lvDevices.Name = "lvDevices";
-            this.lvDevices.Size = new System.Drawing.Size(1195, 395);
+            this.lvDevices.Size = new System.Drawing.Size(1195, 458);
             this.lvDevices.TabIndex = 8;
             this.lvDevices.UseCompatibleStateImageBehavior = false;
             this.lvDevices.View = System.Windows.Forms.View.Details;
@@ -261,11 +264,46 @@
             this.btnLimits.UseVisualStyleBackColor = true;
             this.btnLimits.Click += new System.EventHandler(this.ButtonLimits_Click);
             // 
+            // btnTimeConfig
+            // 
+            this.btnTimeConfig.Enabled = false;
+            this.btnTimeConfig.Location = new System.Drawing.Point(1213, 389);
+            this.btnTimeConfig.Name = "btnTimeConfig";
+            this.btnTimeConfig.Size = new System.Drawing.Size(83, 23);
+            this.btnTimeConfig.TabIndex = 25;
+            this.btnTimeConfig.Text = "Time Config";
+            this.btnTimeConfig.UseVisualStyleBackColor = true;
+            this.btnTimeConfig.Click += new System.EventHandler(this.ButtonTimeConfig_Click);
+            // 
+            // btnUpdateSoftware
+            // 
+            this.btnUpdateSoftware.Location = new System.Drawing.Point(1213, 418);
+            this.btnUpdateSoftware.Name = "btnUpdateSoftware";
+            this.btnUpdateSoftware.Size = new System.Drawing.Size(83, 23);
+            this.btnUpdateSoftware.TabIndex = 26;
+            this.btnUpdateSoftware.Text = "Update SW";
+            this.btnUpdateSoftware.UseVisualStyleBackColor = true;
+            this.btnUpdateSoftware.Click += new System.EventHandler(this.ButtonUpdateSoftware_Click);
+            // 
+            // btnThermalEtd
+            // 
+            this.btnThermalEtd.Enabled = false;
+            this.btnThermalEtd.Location = new System.Drawing.Point(1213, 360);
+            this.btnThermalEtd.Name = "btnThermalEtd";
+            this.btnThermalEtd.Size = new System.Drawing.Size(83, 23);
+            this.btnThermalEtd.TabIndex = 27;
+            this.btnThermalEtd.Text = "Thermal ETD";
+            this.btnThermalEtd.UseVisualStyleBackColor = true;
+            this.btnThermalEtd.Click += new System.EventHandler(this.ButtonThermalEtd_Click);
+            // 
             // DeviceManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1303, 432);
+            this.ClientSize = new System.Drawing.Size(1303, 474);
+            this.Controls.Add(this.btnThermalEtd);
+            this.Controls.Add(this.btnUpdateSoftware);
+            this.Controls.Add(this.btnTimeConfig);
             this.Controls.Add(this.btnLimits);
             this.Controls.Add(this.btnDbBackups);
             this.Controls.Add(this.btnUpdate);
@@ -317,5 +355,8 @@
         private System.Windows.Forms.Button btnUpdate;
         private System.Windows.Forms.Button btnDbBackups;
         private System.Windows.Forms.Button btnLimits;
+        private System.Windows.Forms.Button btnTimeConfig;
+        private System.Windows.Forms.Button btnUpdateSoftware;
+        private System.Windows.Forms.Button btnThermalEtd;
     }
 }

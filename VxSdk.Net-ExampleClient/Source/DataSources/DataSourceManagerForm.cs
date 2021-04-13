@@ -150,6 +150,27 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The ButtonMetadataSnapshot_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonMetadataSnapshot_Click(object sender, EventArgs args)
+        {
+            if (lvDataSources.SelectedItems.Count == 0)
+                return;
+
+            var dataSource = (DataSource)lvDataSources.SelectedItems[0].Tag;
+            if (dataSource.Type != DataSource.Types.Metadata)
+                return;
+
+            // Show the MetadataSnapshotForm dialog.
+            using (var metadataSnapshotForm = new MetadataSnapshotForm(dataSource))
+            {
+                metadataSnapshotForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
         /// The ButtonModify_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -187,15 +208,27 @@ namespace ExampleClient.Source
                 return;
 
             var dataSource = (DataSource)lvDataSources.SelectedItems[0].Tag;
-            var motionConfig = dataSource.MotionConfiguration;
-            if (motionConfig == null)
-                return;
-
-            // Show the ModifyMotionConfigForm dialog.
+            var motionConfig = dataSource.MotionConfig;
             DialogResult result;
-            using (var modifyMotionConfigForm = new ModifyMotionConfigForm(motionConfig))
+            if (motionConfig != null)
             {
-                result = modifyMotionConfigForm.ShowDialog();
+                // Show the ModifyMotionConfigForm dialog.
+                using (var modifyMotionConfigForm = new ModifyMotionConfigForm(motionConfig))
+                {
+                    result = modifyMotionConfigForm.ShowDialog();
+                }
+            }
+            else
+            {
+                var motionConfiguration = dataSource.MotionConfiguration;
+                if (motionConfiguration == null)
+                    return;
+
+                // Show the ModifyMotionConfigForm dialog.
+                using (var modifyMotionConfigForm = new ModifyMotionConfigForm(motionConfiguration))
+                {
+                    result = modifyMotionConfigForm.ShowDialog();
+                }
             }
 
             // If the dialog was closed without clicking OK then skip the refresh.
@@ -225,12 +258,102 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The ButtonPtzConfig_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonPtzConfig_Click(object sender, EventArgs args)
+        {
+            if (lvDataSources.SelectedItems.Count == 0)
+                return;
+
+            var dataSource = (DataSource)lvDataSources.SelectedItems[0].Tag;
+            var ptzConfig = dataSource.PtzConfiguration;
+            if (ptzConfig == null)
+                return;
+
+            // Show the ModifyPtzConfigForm dialog.
+            DialogResult result;
+            using (var modifyPtzConfigForm = new ModifyPtzConfigForm(ptzConfig))
+            {
+                result = modifyPtzConfigForm.ShowDialog();
+            }
+
+            // If the dialog was closed without clicking OK then skip the refresh.
+            if (result != DialogResult.OK)
+                return;
+
+            // Refresh the items in the list view.
+            PopulateDataSources();
+        }
+
+        /// <summary>
         /// The ButtonRefresh_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
         /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonRefresh_Click(object sender, EventArgs args)
         {
+            PopulateDataSources();
+        }
+
+        /// <summary>
+        /// The ButtonSmartCompression_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonSmartCompression_Click(object sender, EventArgs args)
+        {
+            if (lvDataSources.SelectedItems.Count == 0)
+                return;
+
+            var dataSource = (DataSource)lvDataSources.SelectedItems[0].Tag;
+            var smartCompressionConfig = dataSource.SmartCompressionConfiguration;
+            if (smartCompressionConfig == null)
+                return;
+
+            // Show the ModifySmartCompressionConfigForm dialog.
+            DialogResult result;
+            using (var modifySmartCompressionConfigForm = new ModifySmartCompressionConfigForm(smartCompressionConfig))
+            {
+                result = modifySmartCompressionConfigForm.ShowDialog();
+            }
+
+            // If the dialog was closed without clicking OK then skip the refresh.
+            if (result != DialogResult.OK)
+                return;
+
+            // Refresh the items in the list view.
+            PopulateDataSources();
+        }
+
+        /// <summary>
+        /// The ButtonVideoEncodings_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonVideoEncodings_Click(object sender, EventArgs args)
+        {
+            if (lvDataSources.SelectedItems.Count == 0)
+                return;
+
+            var dataSource = (DataSource)lvDataSources.SelectedItems[0].Tag;
+            var videoEncodingConfigs = dataSource.VideoEncodingConfigurations;
+            if (videoEncodingConfigs == null || videoEncodingConfigs.Count == 0)
+                return;
+
+            // Show the ModifyVideoEncodingConfigsForm dialog.
+            DialogResult result;
+            using (var modifyVideoEncodingConfigsForm = new ModifyVideoEncodingConfigsForm(dataSource))
+            {
+                result = modifyVideoEncodingConfigsForm.ShowDialog();
+            }
+
+            // If the dialog was closed without clicking OK then skip the refresh.
+            if (result != DialogResult.OK)
+                return;
+
+            // Refresh the items in the list view.
             PopulateDataSources();
         }
 
@@ -317,7 +440,5 @@ namespace ExampleClient.Source
         }
 
         #endregion Private Methods
-
-
     }
 }

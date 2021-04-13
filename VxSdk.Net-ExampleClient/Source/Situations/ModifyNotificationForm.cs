@@ -23,6 +23,7 @@ namespace ExampleClient.Source
             InitializeComponent();
             SelectedNotification = notification;
             PopulateRoles();
+            PopulateUsers();
         }
 
         #endregion Public Constructors
@@ -59,6 +60,26 @@ namespace ExampleClient.Source
             }
         }
 
+        /// <summary>
+        /// The PopulateUsers method.
+        /// </summary>
+        public void PopulateUsers()
+        {
+            lvUsers.Items.Clear();
+
+            // Get the existing users from the VideoXpert system and add them to the list box.
+            var currentUserIds = SelectedNotification.UserIds;
+            foreach (var user in MainForm.CurrentSystem.Users)
+            {
+                var lvItem = new ListViewItem(string.Empty);
+                lvItem.SubItems.Add(user.Id);
+                lvItem.SubItems.Add(user.Name);
+                lvItem.Checked = currentUserIds.Any(roleId => roleId == user.Id);
+                lvItem.Tag = user;
+                lvUsers.Items.Add(lvItem);
+            }
+        }
+
         #endregion Public Methods
 
         #region Private Methods
@@ -86,6 +107,25 @@ namespace ExampleClient.Source
                 if (roleItem.Checked && currentRoleIds.All(roleId => roleId != role.Id))
                 {
                     SelectedNotification.AddRole(role);
+                }
+            }
+
+            var currentUserIds = SelectedNotification.UserIds;
+            foreach (ListViewItem userItem in lvUsers.Items)
+            {
+                var user = userItem.Tag as User;
+                if (user == null)
+                    continue;
+
+                if (!userItem.Checked && currentUserIds.Any(userId => userId == user.Id))
+                {
+                    SelectedNotification.RemoveUser(user);
+                    continue;
+                }
+
+                if (userItem.Checked && currentUserIds.All(userId => userId != user.Id))
+                {
+                    SelectedNotification.AddUser(user);
                 }
             }
         }

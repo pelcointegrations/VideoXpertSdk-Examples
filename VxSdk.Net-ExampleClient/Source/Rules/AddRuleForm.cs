@@ -81,6 +81,20 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The ButtonAddResponse_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonAddResponse_Click(object sender, EventArgs args)
+        {
+            using (var addRuleResponseForm = new AddRuleResponseForm(lvRuleResponses))
+            {
+                if (addRuleResponseForm.ShowDialog() == DialogResult.OK)
+                    lvRuleResponses.Refresh();
+            }
+        }
+
+        /// <summary>
         /// The ButtonRemove_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -95,6 +109,20 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The ButtonRemoveResponse_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonRemoveResponse_Click(object sender, EventArgs args)
+        {
+            var remItems = lvRuleResponses.CheckedItems;
+            foreach (ListViewItem item in remItems)
+                lvRuleResponses.Items.Remove(item);
+
+            lvRuleResponses.Refresh();
+        }
+
+        /// <summary>
         /// The ButtonSave_Click method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -105,8 +133,16 @@ namespace ExampleClient.Source
             {
                 IsEnabled = chbxIsEnabled.Checked,
                 Name = tbxName.Text,
-                Script = rtbScript.Text
             };
+
+            foreach (ListViewItem responseItem in lvRuleResponses.Items)
+            {
+                var response = responseItem.Tag as RuleResponse;
+                if (response == null)
+                    continue;
+
+                newRule.RuleResponses.Add(response);
+            }
 
             foreach (ListViewItem timeTableItem in lvTimeTables.CheckedItems)
             {

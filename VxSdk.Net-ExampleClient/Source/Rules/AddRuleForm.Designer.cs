@@ -28,8 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.gbxScript = new System.Windows.Forms.GroupBox();
-            this.rtbScript = new System.Windows.Forms.RichTextBox();
             this.chName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chTimeTable = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lvTimeTables = new System.Windows.Forms.ListView();
@@ -47,30 +45,17 @@
             this.gbxRuleTriggers = new System.Windows.Forms.GroupBox();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.gbxScript.SuspendLayout();
+            this.gbxRuleResponses = new System.Windows.Forms.GroupBox();
+            this.btnRemoveResponse = new System.Windows.Forms.Button();
+            this.lvRuleResponses = new System.Windows.Forms.ListView();
+            this.chSelectionResponse = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chResponse = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.btnAddResponse = new System.Windows.Forms.Button();
             this.gbxTimeTables.SuspendLayout();
             this.gbxSettings.SuspendLayout();
             this.gbxRuleTriggers.SuspendLayout();
+            this.gbxRuleResponses.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // gbxScript
-            // 
-            this.gbxScript.Controls.Add(this.rtbScript);
-            this.gbxScript.Location = new System.Drawing.Point(409, 8);
-            this.gbxScript.Name = "gbxScript";
-            this.gbxScript.Size = new System.Drawing.Size(597, 585);
-            this.gbxScript.TabIndex = 53;
-            this.gbxScript.TabStop = false;
-            this.gbxScript.Text = "Script";
-            // 
-            // rtbScript
-            // 
-            this.rtbScript.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbScript.Location = new System.Drawing.Point(3, 16);
-            this.rtbScript.Name = "rtbScript";
-            this.rtbScript.Size = new System.Drawing.Size(591, 566);
-            this.rtbScript.TabIndex = 45;
-            this.rtbScript.Text = "";
             // 
             // chName
             // 
@@ -90,10 +75,11 @@
             this.chName});
             this.lvTimeTables.FullRowSelect = true;
             this.lvTimeTables.GridLines = true;
+            this.lvTimeTables.HideSelection = false;
             this.lvTimeTables.Location = new System.Drawing.Point(7, 19);
             this.lvTimeTables.MultiSelect = false;
             this.lvTimeTables.Name = "lvTimeTables";
-            this.lvTimeTables.Size = new System.Drawing.Size(377, 192);
+            this.lvTimeTables.Size = new System.Drawing.Size(377, 207);
             this.lvTimeTables.TabIndex = 0;
             this.lvTimeTables.UseCompatibleStateImageBehavior = false;
             this.lvTimeTables.View = System.Windows.Forms.View.Details;
@@ -103,7 +89,7 @@
             this.gbxTimeTables.Controls.Add(this.lvTimeTables);
             this.gbxTimeTables.Location = new System.Drawing.Point(12, 73);
             this.gbxTimeTables.Name = "gbxTimeTables";
-            this.gbxTimeTables.Size = new System.Drawing.Size(391, 217);
+            this.gbxTimeTables.Size = new System.Drawing.Size(391, 232);
             this.gbxTimeTables.TabIndex = 51;
             this.gbxTimeTables.TabStop = false;
             this.gbxTimeTables.Text = "Time Tables";
@@ -176,6 +162,7 @@
             this.chSource});
             this.lvRuleTriggers.FullRowSelect = true;
             this.lvRuleTriggers.GridLines = true;
+            this.lvRuleTriggers.HideSelection = false;
             this.lvRuleTriggers.Location = new System.Drawing.Point(7, 19);
             this.lvRuleTriggers.MultiSelect = false;
             this.lvRuleTriggers.Name = "lvRuleTriggers";
@@ -204,7 +191,7 @@
             this.gbxRuleTriggers.Controls.Add(this.btnRemove);
             this.gbxRuleTriggers.Controls.Add(this.lvRuleTriggers);
             this.gbxRuleTriggers.Controls.Add(this.btnAdd);
-            this.gbxRuleTriggers.Location = new System.Drawing.Point(12, 296);
+            this.gbxRuleTriggers.Location = new System.Drawing.Point(409, 8);
             this.gbxRuleTriggers.Name = "gbxRuleTriggers";
             this.gbxRuleTriggers.Size = new System.Drawing.Size(391, 297);
             this.gbxRuleTriggers.TabIndex = 50;
@@ -214,7 +201,7 @@
             // btnSave
             // 
             this.btnSave.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnSave.Location = new System.Drawing.Point(931, 599);
+            this.btnSave.Location = new System.Drawing.Point(1136, 316);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 48;
@@ -225,19 +212,78 @@
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(841, 599);
+            this.btnCancel.Location = new System.Drawing.Point(1046, 316);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 49;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
+            // gbxRuleResponses
+            // 
+            this.gbxRuleResponses.Controls.Add(this.btnRemoveResponse);
+            this.gbxRuleResponses.Controls.Add(this.lvRuleResponses);
+            this.gbxRuleResponses.Controls.Add(this.btnAddResponse);
+            this.gbxRuleResponses.Location = new System.Drawing.Point(806, 8);
+            this.gbxRuleResponses.Name = "gbxRuleResponses";
+            this.gbxRuleResponses.Size = new System.Drawing.Size(405, 302);
+            this.gbxRuleResponses.TabIndex = 53;
+            this.gbxRuleResponses.TabStop = false;
+            this.gbxRuleResponses.Text = "Rule Responses";
+            // 
+            // btnRemoveResponse
+            // 
+            this.btnRemoveResponse.Location = new System.Drawing.Point(14, 269);
+            this.btnRemoveResponse.Name = "btnRemoveResponse";
+            this.btnRemoveResponse.Size = new System.Drawing.Size(63, 23);
+            this.btnRemoveResponse.TabIndex = 24;
+            this.btnRemoveResponse.Text = "Remove";
+            this.btnRemoveResponse.UseVisualStyleBackColor = true;
+            this.btnRemoveResponse.Click += new System.EventHandler(this.ButtonRemoveResponse_Click);
+            // 
+            // lvRuleResponses
+            // 
+            this.lvRuleResponses.CheckBoxes = true;
+            this.lvRuleResponses.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.chSelectionResponse,
+            this.chResponse});
+            this.lvRuleResponses.FullRowSelect = true;
+            this.lvRuleResponses.GridLines = true;
+            this.lvRuleResponses.HideSelection = false;
+            this.lvRuleResponses.Location = new System.Drawing.Point(14, 19);
+            this.lvRuleResponses.MultiSelect = false;
+            this.lvRuleResponses.Name = "lvRuleResponses";
+            this.lvRuleResponses.Size = new System.Drawing.Size(377, 244);
+            this.lvRuleResponses.TabIndex = 0;
+            this.lvRuleResponses.UseCompatibleStateImageBehavior = false;
+            this.lvRuleResponses.View = System.Windows.Forms.View.Details;
+            // 
+            // chSelectionResponse
+            // 
+            this.chSelectionResponse.Text = "";
+            this.chSelectionResponse.Width = 24;
+            // 
+            // chResponse
+            // 
+            this.chResponse.Text = "Response Info";
+            this.chResponse.Width = 349;
+            // 
+            // btnAddResponse
+            // 
+            this.btnAddResponse.Location = new System.Drawing.Point(328, 269);
+            this.btnAddResponse.Name = "btnAddResponse";
+            this.btnAddResponse.Size = new System.Drawing.Size(63, 23);
+            this.btnAddResponse.TabIndex = 22;
+            this.btnAddResponse.Text = "Add";
+            this.btnAddResponse.UseVisualStyleBackColor = true;
+            this.btnAddResponse.Click += new System.EventHandler(this.ButtonAddResponse_Click);
+            // 
             // AddRuleForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1019, 632);
-            this.Controls.Add(this.gbxScript);
+            this.ClientSize = new System.Drawing.Size(1219, 347);
+            this.Controls.Add(this.gbxRuleResponses);
             this.Controls.Add(this.gbxTimeTables);
             this.Controls.Add(this.gbxSettings);
             this.Controls.Add(this.gbxRuleTriggers);
@@ -249,18 +295,16 @@
             this.Name = "AddRuleForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Add Rule";
-            this.gbxScript.ResumeLayout(false);
             this.gbxTimeTables.ResumeLayout(false);
             this.gbxSettings.ResumeLayout(false);
             this.gbxSettings.PerformLayout();
             this.gbxRuleTriggers.ResumeLayout(false);
+            this.gbxRuleResponses.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private System.Windows.Forms.GroupBox gbxScript;
-        private System.Windows.Forms.RichTextBox rtbScript;
         private System.Windows.Forms.ColumnHeader chName;
         private System.Windows.Forms.ColumnHeader chTimeTable;
         private System.Windows.Forms.ListView lvTimeTables;
@@ -278,5 +322,11 @@
         private System.Windows.Forms.GroupBox gbxRuleTriggers;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.GroupBox gbxRuleResponses;
+        private System.Windows.Forms.Button btnRemoveResponse;
+        public System.Windows.Forms.ListView lvRuleResponses;
+        private System.Windows.Forms.ColumnHeader chSelectionResponse;
+        private System.Windows.Forms.ColumnHeader chResponse;
+        private System.Windows.Forms.Button btnAddResponse;
     }
 }

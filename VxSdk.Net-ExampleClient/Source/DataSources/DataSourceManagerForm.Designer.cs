@@ -53,13 +53,17 @@
             this.btnViewPtzLinkInfo = new System.Windows.Forms.Button();
             this.btnLimits = new System.Windows.Forms.Button();
             this.btnAnalytics = new System.Windows.Forms.Button();
+            this.btnPtzConfig = new System.Windows.Forms.Button();
+            this.btnSmartCompression = new System.Windows.Forms.Button();
+            this.btnVideoEncodings = new System.Windows.Forms.Button();
+            this.btnMetadataSnapshot = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnRefresh
             // 
-            this.btnRefresh.Location = new System.Drawing.Point(1194, 384);
+            this.btnRefresh.Location = new System.Drawing.Point(1193, 478);
             this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(94, 23);
+            this.btnRefresh.Size = new System.Drawing.Size(108, 23);
             this.btnRefresh.TabIndex = 12;
             this.btnRefresh.Text = "Refresh";
             this.btnRefresh.UseVisualStyleBackColor = true;
@@ -67,9 +71,9 @@
             // 
             // btnModify
             // 
-            this.btnModify.Location = new System.Drawing.Point(1193, 12);
+            this.btnModify.Location = new System.Drawing.Point(1195, 12);
             this.btnModify.Name = "btnModify";
-            this.btnModify.Size = new System.Drawing.Size(94, 23);
+            this.btnModify.Size = new System.Drawing.Size(108, 23);
             this.btnModify.TabIndex = 11;
             this.btnModify.Text = "Modify";
             this.btnModify.UseVisualStyleBackColor = true;
@@ -94,7 +98,7 @@
             this.lvDataSources.Location = new System.Drawing.Point(12, 12);
             this.lvDataSources.MultiSelect = false;
             this.lvDataSources.Name = "lvDataSources";
-            this.lvDataSources.Size = new System.Drawing.Size(1175, 395);
+            this.lvDataSources.Size = new System.Drawing.Size(1175, 489);
             this.lvDataSources.TabIndex = 8;
             this.lvDataSources.UseCompatibleStateImageBehavior = false;
             this.lvDataSources.View = System.Windows.Forms.View.Details;
@@ -155,9 +159,9 @@
             // 
             // btnManageLinks
             // 
-            this.btnManageLinks.Location = new System.Drawing.Point(1193, 41);
+            this.btnManageLinks.Location = new System.Drawing.Point(1195, 41);
             this.btnManageLinks.Name = "btnManageLinks";
-            this.btnManageLinks.Size = new System.Drawing.Size(94, 23);
+            this.btnManageLinks.Size = new System.Drawing.Size(108, 23);
             this.btnManageLinks.TabIndex = 13;
             this.btnManageLinks.Text = "Manage Links";
             this.btnManageLinks.UseVisualStyleBackColor = true;
@@ -165,9 +169,9 @@
             // 
             // btnAutoNumber
             // 
-            this.btnAutoNumber.Location = new System.Drawing.Point(1194, 70);
+            this.btnAutoNumber.Location = new System.Drawing.Point(1195, 70);
             this.btnAutoNumber.Name = "btnAutoNumber";
-            this.btnAutoNumber.Size = new System.Drawing.Size(94, 23);
+            this.btnAutoNumber.Size = new System.Drawing.Size(108, 23);
             this.btnAutoNumber.TabIndex = 14;
             this.btnAutoNumber.Text = "Auto-Number";
             this.btnAutoNumber.UseVisualStyleBackColor = true;
@@ -175,9 +179,9 @@
             // 
             // btnViewerInfo
             // 
-            this.btnViewerInfo.Location = new System.Drawing.Point(1193, 99);
+            this.btnViewerInfo.Location = new System.Drawing.Point(1195, 99);
             this.btnViewerInfo.Name = "btnViewerInfo";
-            this.btnViewerInfo.Size = new System.Drawing.Size(94, 23);
+            this.btnViewerInfo.Size = new System.Drawing.Size(108, 23);
             this.btnViewerInfo.TabIndex = 15;
             this.btnViewerInfo.Text = "Viewer Info";
             this.btnViewerInfo.UseVisualStyleBackColor = true;
@@ -185,9 +189,9 @@
             // 
             // btnGapInfo
             // 
-            this.btnGapInfo.Location = new System.Drawing.Point(1193, 128);
+            this.btnGapInfo.Location = new System.Drawing.Point(1195, 128);
             this.btnGapInfo.Name = "btnGapInfo";
-            this.btnGapInfo.Size = new System.Drawing.Size(94, 23);
+            this.btnGapInfo.Size = new System.Drawing.Size(108, 23);
             this.btnGapInfo.TabIndex = 16;
             this.btnGapInfo.Text = "Gap Info";
             this.btnGapInfo.UseVisualStyleBackColor = true;
@@ -195,9 +199,9 @@
             // 
             // btnMotionConfig
             // 
-            this.btnMotionConfig.Location = new System.Drawing.Point(1193, 157);
+            this.btnMotionConfig.Location = new System.Drawing.Point(1195, 157);
             this.btnMotionConfig.Name = "btnMotionConfig";
-            this.btnMotionConfig.Size = new System.Drawing.Size(94, 23);
+            this.btnMotionConfig.Size = new System.Drawing.Size(108, 23);
             this.btnMotionConfig.TabIndex = 17;
             this.btnMotionConfig.Text = "Motion Config";
             this.btnMotionConfig.UseVisualStyleBackColor = true;
@@ -205,9 +209,9 @@
             // 
             // btnViewBookmarks
             // 
-            this.btnViewBookmarks.Location = new System.Drawing.Point(1193, 186);
+            this.btnViewBookmarks.Location = new System.Drawing.Point(1195, 273);
             this.btnViewBookmarks.Name = "btnViewBookmarks";
-            this.btnViewBookmarks.Size = new System.Drawing.Size(94, 23);
+            this.btnViewBookmarks.Size = new System.Drawing.Size(108, 23);
             this.btnViewBookmarks.TabIndex = 18;
             this.btnViewBookmarks.Text = "View Bookmarks";
             this.btnViewBookmarks.UseVisualStyleBackColor = true;
@@ -215,9 +219,9 @@
             // 
             // btnMetadata
             // 
-            this.btnMetadata.Location = new System.Drawing.Point(1193, 215);
+            this.btnMetadata.Location = new System.Drawing.Point(1195, 302);
             this.btnMetadata.Name = "btnMetadata";
-            this.btnMetadata.Size = new System.Drawing.Size(94, 23);
+            this.btnMetadata.Size = new System.Drawing.Size(108, 23);
             this.btnMetadata.TabIndex = 19;
             this.btnMetadata.Text = "Metadata Rels.";
             this.btnMetadata.UseVisualStyleBackColor = true;
@@ -225,9 +229,9 @@
             // 
             // btnViewTags
             // 
-            this.btnViewTags.Location = new System.Drawing.Point(1193, 244);
+            this.btnViewTags.Location = new System.Drawing.Point(1195, 331);
             this.btnViewTags.Name = "btnViewTags";
-            this.btnViewTags.Size = new System.Drawing.Size(94, 23);
+            this.btnViewTags.Size = new System.Drawing.Size(108, 23);
             this.btnViewTags.TabIndex = 20;
             this.btnViewTags.Text = "View Tags";
             this.btnViewTags.UseVisualStyleBackColor = true;
@@ -235,9 +239,9 @@
             // 
             // btnViewPtzLinkInfo
             // 
-            this.btnViewPtzLinkInfo.Location = new System.Drawing.Point(1193, 273);
+            this.btnViewPtzLinkInfo.Location = new System.Drawing.Point(1195, 360);
             this.btnViewPtzLinkInfo.Name = "btnViewPtzLinkInfo";
-            this.btnViewPtzLinkInfo.Size = new System.Drawing.Size(94, 23);
+            this.btnViewPtzLinkInfo.Size = new System.Drawing.Size(108, 23);
             this.btnViewPtzLinkInfo.TabIndex = 21;
             this.btnViewPtzLinkInfo.Text = "View PTZ Links";
             this.btnViewPtzLinkInfo.UseVisualStyleBackColor = true;
@@ -245,9 +249,9 @@
             // 
             // btnLimits
             // 
-            this.btnLimits.Location = new System.Drawing.Point(1194, 302);
+            this.btnLimits.Location = new System.Drawing.Point(1195, 389);
             this.btnLimits.Name = "btnLimits";
-            this.btnLimits.Size = new System.Drawing.Size(94, 23);
+            this.btnLimits.Size = new System.Drawing.Size(108, 23);
             this.btnLimits.TabIndex = 22;
             this.btnLimits.Text = "Limits";
             this.btnLimits.UseVisualStyleBackColor = true;
@@ -255,19 +259,63 @@
             // 
             // btnAnalytics
             // 
-            this.btnAnalytics.Location = new System.Drawing.Point(1194, 331);
+            this.btnAnalytics.Location = new System.Drawing.Point(1195, 418);
             this.btnAnalytics.Name = "btnAnalytics";
-            this.btnAnalytics.Size = new System.Drawing.Size(94, 23);
+            this.btnAnalytics.Size = new System.Drawing.Size(108, 23);
             this.btnAnalytics.TabIndex = 23;
             this.btnAnalytics.Text = "Analytics";
             this.btnAnalytics.UseVisualStyleBackColor = true;
             this.btnAnalytics.Click += new System.EventHandler(this.ButtonAnalytics_Click);
             // 
+            // btnPtzConfig
+            // 
+            this.btnPtzConfig.Location = new System.Drawing.Point(1195, 186);
+            this.btnPtzConfig.Name = "btnPtzConfig";
+            this.btnPtzConfig.Size = new System.Drawing.Size(108, 23);
+            this.btnPtzConfig.TabIndex = 24;
+            this.btnPtzConfig.Text = "PTZ Config";
+            this.btnPtzConfig.UseVisualStyleBackColor = true;
+            this.btnPtzConfig.Click += new System.EventHandler(this.ButtonPtzConfig_Click);
+            // 
+            // btnSmartCompression
+            // 
+            this.btnSmartCompression.Location = new System.Drawing.Point(1195, 215);
+            this.btnSmartCompression.Name = "btnSmartCompression";
+            this.btnSmartCompression.Size = new System.Drawing.Size(108, 23);
+            this.btnSmartCompression.TabIndex = 25;
+            this.btnSmartCompression.Text = "Smart Compression";
+            this.btnSmartCompression.UseVisualStyleBackColor = true;
+            this.btnSmartCompression.Click += new System.EventHandler(this.ButtonSmartCompression_Click);
+            // 
+            // btnVideoEncodings
+            // 
+            this.btnVideoEncodings.Location = new System.Drawing.Point(1195, 244);
+            this.btnVideoEncodings.Name = "btnVideoEncodings";
+            this.btnVideoEncodings.Size = new System.Drawing.Size(108, 23);
+            this.btnVideoEncodings.TabIndex = 26;
+            this.btnVideoEncodings.Text = "Video Encodings";
+            this.btnVideoEncodings.UseVisualStyleBackColor = true;
+            this.btnVideoEncodings.Click += new System.EventHandler(this.ButtonVideoEncodings_Click);
+            // 
+            // btnMetadataSnapshot
+            // 
+            this.btnMetadataSnapshot.Location = new System.Drawing.Point(1193, 447);
+            this.btnMetadataSnapshot.Name = "btnMetadataSnapshot";
+            this.btnMetadataSnapshot.Size = new System.Drawing.Size(108, 23);
+            this.btnMetadataSnapshot.TabIndex = 27;
+            this.btnMetadataSnapshot.Text = "Metadata Snapshot";
+            this.btnMetadataSnapshot.UseVisualStyleBackColor = true;
+            this.btnMetadataSnapshot.Click += new System.EventHandler(this.ButtonMetadataSnapshot_Click);
+            // 
             // DataSourceManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1295, 419);
+            this.ClientSize = new System.Drawing.Size(1313, 506);
+            this.Controls.Add(this.btnMetadataSnapshot);
+            this.Controls.Add(this.btnVideoEncodings);
+            this.Controls.Add(this.btnSmartCompression);
+            this.Controls.Add(this.btnPtzConfig);
             this.Controls.Add(this.btnAnalytics);
             this.Controls.Add(this.btnLimits);
             this.Controls.Add(this.btnViewPtzLinkInfo);
@@ -320,5 +368,9 @@
         private System.Windows.Forms.Button btnViewPtzLinkInfo;
         private System.Windows.Forms.Button btnLimits;
         private System.Windows.Forms.Button btnAnalytics;
+        private System.Windows.Forms.Button btnPtzConfig;
+        private System.Windows.Forms.Button btnSmartCompression;
+        private System.Windows.Forms.Button btnVideoEncodings;
+        private System.Windows.Forms.Button btnMetadataSnapshot;
     }
 }

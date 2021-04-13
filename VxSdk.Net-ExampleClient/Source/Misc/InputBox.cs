@@ -221,6 +221,9 @@ namespace ExampleClient.Source
             form.Text = title;
             label.Text = prompt;
 
+            if (!string.IsNullOrEmpty(value))
+                textBox.Text = value;
+
             buttonOk.Text = @"OK";
             buttonCancel.Text = @"Cancel";
             buttonOk.DialogResult = DialogResult.OK;

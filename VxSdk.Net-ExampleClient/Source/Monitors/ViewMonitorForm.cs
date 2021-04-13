@@ -26,7 +26,21 @@ namespace ExampleClient.Source
             dtpTime.Value = DateTime.Now.AddHours(-1);
             CurrentMonitor = monitor;
             IsInitialized = false;
-            cbxLayouts.SelectedIndex = (int)CurrentMonitor.Layout;
+            foreach (var layout in Enum.GetValues(typeof(Monitor.Layouts)).Cast<Monitor.Layouts>())
+            {
+                if (layout == Monitor.Layouts.MonitorWall)
+                    continue;
+
+                var cbxItem = new ComboboxItem {Text = layout.ToString().Replace("CellLayout", ""), Value = layout};
+                var index = cbxLayouts.Items.Add(cbxItem);
+                if (layout == CurrentMonitor.Layout)
+                    cbxLayouts.SelectedIndex = index;
+            }
+
+            if (cbxLayouts.SelectedIndex < 0)
+                cbxLayouts.SelectedIndex = 0;
+
+            cbxLayouts.SelectedIndexChanged += ComboBoxLayouts_SelectedIndexChanged;
             ResetTableValues();
             SetCellLayout();
         }
@@ -158,7 +172,7 @@ namespace ExampleClient.Source
             }
 
             // Set the layout on the monitor and refresh the cell layout in the UI.
-            CurrentMonitor.Layout = (Monitor.Layouts)cbxLayouts.SelectedIndex;
+            CurrentMonitor.Layout = (Monitor.Layouts)((ComboboxItem)cbxLayouts.SelectedItem).Value;
             SetCellLayout();
         }
 
@@ -388,6 +402,7 @@ namespace ExampleClient.Source
                     break;
 
                 case Monitor.Layouts.CellLayout4x3:
+                    tlpCells.ColumnCount = 4;
                     tlpCells.ColumnStyles[0].Width = 25;
                     tlpCells.ColumnStyles[1].Width = 25;
                     tlpCells.ColumnStyles[2].Width = 25;
@@ -399,6 +414,7 @@ namespace ExampleClient.Source
                     break;
 
                 case Monitor.Layouts.CellLayout4x4:
+                    tlpCells.ColumnCount = 4;
                     tlpCells.ColumnStyles[0].Width = 25;
                     tlpCells.ColumnStyles[1].Width = 25;
                     tlpCells.ColumnStyles[2].Width = 25;
@@ -407,9 +423,63 @@ namespace ExampleClient.Source
                     tlpCells.RowStyles[1].Height = 25;
                     tlpCells.RowStyles[2].Height = 25;
                     tlpCells.RowStyles[3].Height = 25;
+                    DisableExtraRows(4);
+                    break;
+
+                case Monitor.Layouts.CellLayout5x5:
+                    tlpCells.ColumnCount = 5;
+                    tlpCells.ColumnStyles[0].Width = 20;
+                    tlpCells.ColumnStyles[1].Width = 20;
+                    tlpCells.ColumnStyles[2].Width = 20;
+                    tlpCells.ColumnStyles[3].Width = 20;
+                    tlpCells.ColumnStyles[4].Width = 20;
+                    tlpCells.RowStyles[0].Height = 20;
+                    tlpCells.RowStyles[1].Height = 20;
+                    tlpCells.RowStyles[2].Height = 20;
+                    tlpCells.RowStyles[3].Height = 20;
+                    tlpCells.RowStyles[4].Height = 20;
+                    DisableExtraRows(5);
+                    break;
+
+                case Monitor.Layouts.CellLayout6x6:
+                    tlpCells.ColumnCount = 6;
+                    tlpCells.ColumnStyles[0].Width = 16.66f;
+                    tlpCells.ColumnStyles[1].Width = 16.66f;
+                    tlpCells.ColumnStyles[2].Width = 16.66f;
+                    tlpCells.ColumnStyles[3].Width = 16.66f;
+                    tlpCells.ColumnStyles[4].Width = 16.66f;
+                    tlpCells.ColumnStyles[5].Width = 16.66f;
+                    tlpCells.RowStyles[0].Height = 16.66f;
+                    tlpCells.RowStyles[1].Height = 16.66f;
+                    tlpCells.RowStyles[2].Height = 16.66f;
+                    tlpCells.RowStyles[3].Height = 16.66f;
+                    tlpCells.RowStyles[4].Height = 16.66f;
+                    tlpCells.RowStyles[5].Height = 16.66f;
+                    DisableExtraRows(6);
+                    break;
+
+                case Monitor.Layouts.CellLayout8x8:
+                    tlpCells.ColumnCount = 8;
+                    tlpCells.ColumnStyles[0].Width = 12.5f;
+                    tlpCells.ColumnStyles[1].Width = 12.5f;
+                    tlpCells.ColumnStyles[2].Width = 12.5f;
+                    tlpCells.ColumnStyles[3].Width = 12.5f;
+                    tlpCells.ColumnStyles[4].Width = 12.5f;
+                    tlpCells.ColumnStyles[5].Width = 12.5f;
+                    tlpCells.ColumnStyles[6].Width = 12.5f;
+                    tlpCells.ColumnStyles[7].Width = 12.5f;
+                    tlpCells.RowStyles[0].Height = 12.5f;
+                    tlpCells.RowStyles[1].Height = 12.5f;
+                    tlpCells.RowStyles[2].Height = 12.5f;
+                    tlpCells.RowStyles[3].Height = 12.5f;
+                    tlpCells.RowStyles[4].Height = 12.5f;
+                    tlpCells.RowStyles[5].Height = 12.5f;
+                    tlpCells.RowStyles[6].Height = 12.5f;
+                    tlpCells.RowStyles[7].Height = 12.5f;
                     break;
 
                 case Monitor.Layouts.CellLayout1plus12:
+                    tlpCells.ColumnCount = 4;
                     tlpCells.SetColumnSpan(pnlCell_01, 2);
                     tlpCells.SetRowSpan(pnlCell_01, 2);
                     tlpCells.ColumnStyles[0].Width = 25;
@@ -424,6 +494,7 @@ namespace ExampleClient.Source
                     break;
 
                 case Monitor.Layouts.CellLayout2plus8:
+                    tlpCells.ColumnCount = 4;
                     tlpCells.SetColumnSpan(pnlCell_01, 2);
                     tlpCells.SetColumnSpan(pnlCell_02, 2);
                     tlpCells.SetRowSpan(pnlCell_01, 2);
@@ -440,6 +511,7 @@ namespace ExampleClient.Source
                     break;
 
                 case Monitor.Layouts.CellLayout3plus4:
+                    tlpCells.ColumnCount = 4;
                     tlpCells.SetColumnSpan(pnlCell_01, 2);
                     tlpCells.SetColumnSpan(pnlCell_02, 2);
                     tlpCells.SetColumnSpan(pnlCell_03, 2);
@@ -471,6 +543,7 @@ namespace ExampleClient.Source
                     break;
 
                 case Monitor.Layouts.CellLayout1plus7:
+                    tlpCells.ColumnCount = 4;
                     tlpCells.SetColumnSpan(pnlCell_01, 3);
                     tlpCells.SetRowSpan(pnlCell_01, 3);
                     tlpCells.ColumnStyles[0].Width = 25;
@@ -485,6 +558,7 @@ namespace ExampleClient.Source
                     break;
 
                 case Monitor.Layouts.CellLayout12plus1:
+                    tlpCells.ColumnCount = 4;
                     tlpCells.SetColumnSpan(pnlCell_06, 2);
                     tlpCells.SetRowSpan(pnlCell_06, 2);
                     tlpCells.ColumnStyles[0].Width = 25;
@@ -499,6 +573,7 @@ namespace ExampleClient.Source
                     break;
 
                 case Monitor.Layouts.CellLayout8plus2:
+                    tlpCells.ColumnCount = 4;
                     tlpCells.SetColumnSpan(pnlCell_05, 2);
                     tlpCells.SetColumnSpan(pnlCell_06, 2);
                     tlpCells.SetRowSpan(pnlCell_05, 2);
@@ -515,6 +590,7 @@ namespace ExampleClient.Source
                     break;
 
                 case Monitor.Layouts.CellLayout1plus4tall:
+                    tlpCells.ColumnCount = 4;
                     tlpCells.SetColumnSpan(pnlCell_01, 3);
                     tlpCells.SetRowSpan(pnlCell_01, 4);
                     tlpCells.ColumnStyles[0].Width = 25;
@@ -529,6 +605,7 @@ namespace ExampleClient.Source
                     break;
 
                 case Monitor.Layouts.CellLayout1plus4wide:
+                    tlpCells.ColumnCount = 4;
                     tlpCells.SetColumnSpan(pnlCell_01, 4);
                     tlpCells.SetRowSpan(pnlCell_01, 3);
                     tlpCells.ColumnStyles[0].Width = 25;
@@ -542,6 +619,20 @@ namespace ExampleClient.Source
                     DisableExtraRows(4);
                     break;
 
+                case Monitor.Layouts.CellLayout1plus1plus4:
+                    tlpCells.ColumnCount = 5;
+                    tlpCells.SetRowSpan(pnlCell_01, 2);
+                    tlpCells.SetColumnSpan(pnlCell_02, 4);
+                    tlpCells.ColumnStyles[0].Width = 33.36f;
+                    tlpCells.ColumnStyles[1].Width = 16.66f;
+                    tlpCells.ColumnStyles[2].Width = 16.66f;
+                    tlpCells.ColumnStyles[3].Width = 16.66f;
+                    tlpCells.ColumnStyles[4].Width = 16.66f;
+                    tlpCells.RowStyles[0].Height = 75;
+                    tlpCells.RowStyles[1].Height = 25;
+                    DisableExtraRows(2);
+                    break;
+
                 default:
                     MainForm.Instance.WriteToLog("Unknown Monitor Layout Selected.");
                     break;
@@ -553,5 +644,6 @@ namespace ExampleClient.Source
         }
 
         #endregion Private Methods
+
     }
 }

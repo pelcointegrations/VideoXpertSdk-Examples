@@ -258,6 +258,69 @@ namespace ExampleClient.Source
         }
 
         /// <summary>
+        /// The ButtonUpdateSoftware_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonUpdateSoftware_Click(object sender, EventArgs args)
+        {
+            if (lvDevices.SelectedItems.Count == 0)
+                return;
+
+            var device = (Device)lvDevices.SelectedItems[0].Tag;
+
+            // Show the FileSelectionForm dialog.
+            using (var fileSelectionForm = new FileSelectionForm(device))
+            {
+                fileSelectionForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// The ButtonThermalEtd_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonThermalEtd_Click(object sender, EventArgs args)
+        {
+            if (lvDevices.SelectedItems.Count == 0)
+                return;
+
+            var device = (Device)lvDevices.SelectedItems[0].Tag;
+            var thermalEtdConfig = device.ThermalEtdConfig;
+            if (thermalEtdConfig == null)
+                return;
+
+            // Show the ThermalEtdConfigurationForm dialog.
+            using (var thermalEtdConfigurationForm = new ThermalEtdConfigurationForm(thermalEtdConfig))
+            {
+                thermalEtdConfigurationForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// The ButtonTimeConfig_Click method.
+        /// </summary>
+        /// <param name="sender">The <paramref name="sender"/> parameter.</param>
+        /// <param name="args">The <paramref name="args"/> parameter.</param>
+        private void ButtonTimeConfig_Click(object sender, EventArgs args)
+        {
+            if (lvDevices.SelectedItems.Count == 0)
+                return;
+
+            var device = (Device)lvDevices.SelectedItems[0].Tag;
+            var timeConfig = device.TimeConfig;
+            if (timeConfig == null)
+                return;
+
+            // Show the TimeConfigurationForm dialog.
+            using (var timeConfigurationForm = new TimeConfigurationForm(timeConfig))
+            {
+                timeConfigurationForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
         /// The ListViewDevices_SelectedIndexChanged method.
         /// </summary>
         /// <param name="sender">The <paramref name="sender"/> parameter.</param>
@@ -272,6 +335,8 @@ namespace ExampleClient.Source
             btnDiagnostics.Enabled = device.HasDeviceDiagnostics;
             btnLicenseInfo.Enabled = device.LicensableFeatures.Count > 0 || device.LicensedFeatures.Count > 0;
             btnDbBackups.Enabled = device.DatabaseBackups != null;
+            btnThermalEtd.Enabled = device.ThermalEtdConfig != null;
+            btnTimeConfig.Enabled = device.TimeConfig != null;
         }
 
         /// <summary>
@@ -331,5 +396,6 @@ namespace ExampleClient.Source
 
 
         #endregion Private Methods
+
     }
 }

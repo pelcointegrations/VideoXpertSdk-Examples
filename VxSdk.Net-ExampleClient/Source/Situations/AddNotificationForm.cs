@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Data;
-using System.Linq;
 using System.Windows.Forms;
 using VxSdkNet;
 
@@ -23,6 +21,8 @@ namespace ExampleClient.Source
         {
             InitializeComponent();
             SelectedSituation = situation;
+            PopulateRoles();
+            PopulateUsers();
         }
 
         #endregion Public Constructors
@@ -44,18 +44,35 @@ namespace ExampleClient.Source
         /// </summary>
         public void PopulateRoles()
         {
-            clbRoles.Items.Clear();
+            lvRoles.Items.Clear();
 
             // Get the existing roles from the VideoXpert system and add them to the list box.
-            var table = new DataTable();
-            table.Columns.Add(new DataColumn("OBJECT", typeof(Role)));
-            table.Columns.Add(new DataColumn("NAME", typeof(string)));
-            foreach (var role in MainForm.CurrentSystem.Roles.Where(role => !role.IsReadOnly || role.Name == "administrator"))
-                table.Rows.Add(role, role.Name);
+            foreach (var role in MainForm.CurrentSystem.Roles)
+            {
+                var lvItem = new ListViewItem(string.Empty);
+                lvItem.SubItems.Add(role.Id);
+                lvItem.SubItems.Add(role.Name);
+                lvItem.Tag = role;
+                lvRoles.Items.Add(lvItem);
+            }
+        }
 
-            clbRoles.DataSource = table;
-            clbRoles.ValueMember = "OBJECT";
-            clbRoles.DisplayMember = "NAME";
+        /// <summary>
+        /// The PopulateUsers method.
+        /// </summary>
+        public void PopulateUsers()
+        {
+            lvUsers.Items.Clear();
+
+            // Get the existing users from the VideoXpert system and add them to the list box.
+            foreach (var user in MainForm.CurrentSystem.Users)
+            {
+                var lvItem = new ListViewItem(string.Empty);
+                lvItem.SubItems.Add(user.Id);
+                lvItem.SubItems.Add(user.Name);
+                lvItem.Tag = user;
+                lvUsers.Items.Add(lvItem);
+            }
         }
 
         #endregion Public Methods
@@ -69,11 +86,30 @@ namespace ExampleClient.Source
         /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonAdd_Click(object sender, EventArgs args)
         {
-            var roles = (from DataRowView view in clbRoles.CheckedItems select (Role)view["OBJECT"]).ToList();
-
             var newNotification = new NewNotification();
-            foreach (var role in roles)
+            foreach (ListViewItem roleItem in lvRoles.Items)
+            {
+                if (!roleItem.Checked)
+                    continue;
+
+                var role = roleItem.Tag as Role;
+                if (role == null)
+                    continue;
+
                 newNotification.Roles.Add(role);
+            }
+
+            foreach (ListViewItem userItem in lvUsers.Items)
+            {
+                if (!userItem.Checked)
+                    continue;
+
+                var user = userItem.Tag as User;
+                if (user == null)
+                    continue;
+
+                newNotification.Users.Add(user);
+            }
 
             SelectedSituation.AddNotification(newNotification);
         }

@@ -64,8 +64,11 @@ namespace ExampleClient.Source
         /// <param name="args">The <paramref name="args"/> parameter.</param>
         private void ButtonModifyNotification_Click(object sender, EventArgs args)
         {
+            if (lvNotificationManager.SelectedItems.Count == 0)
+                return;
+
             // Show the ModifyNotificationForm dialog.
-            DialogResult result;
+                DialogResult result;
             var notification = (Notification)lvNotificationManager.SelectedItems[0].Tag;
             using (var modifyNotificationForm = new ModifyNotificationForm(notification))
             {
@@ -93,7 +96,6 @@ namespace ExampleClient.Source
             DialogResult result;
             using (var addNotificationForm = new AddNotificationForm(SelectedSituation))
             {
-                addNotificationForm.PopulateRoles();
                 result = addNotificationForm.ShowDialog();
             }
 
@@ -101,7 +103,7 @@ namespace ExampleClient.Source
             if (result != DialogResult.OK)
                 return;
 
-            // Refresh the items in the list view to include the newly added notification.
+            // Refresh the items in the list view to include the modified notification.
             lvNotificationManager.Items.Clear();
             PopulateNotifications();
             lvNotificationManager.Refresh();
@@ -129,18 +131,28 @@ namespace ExampleClient.Source
             // them to the list view.
             var notifications = SelectedSituation.Notifications;
             var roles = MainForm.CurrentSystem.Roles;
+            var users = MainForm.CurrentSystem.Users;
             foreach (var notification in notifications)
             {
-                var nameList = new List<string>();
+                var roleList = new List<string>();
                 foreach (var roleId in notification.RoleIds)
                 {
                     var matchingRole = roles.FirstOrDefault(role => role.Id == roleId);
-                    nameList.Add(matchingRole != null ? matchingRole.Name : roleId);
+                    roleList.Add(matchingRole != null ? matchingRole.Name : roleId);
                 }
-                var names = string.Join(", ", nameList);
+                var roleString = string.Join(", ", roleList);
+
+                var userList = new List<string>();
+                foreach (var userId in notification.UserIds)
+                {
+                    var matchingUser = users.FirstOrDefault(user => user.Id == userId);
+                    userList.Add(matchingUser != null ? matchingUser.Name : userId);
+                }
+                var userString = string.Join(", ", userList);
 
                 var lvItem = new ListViewItem(notification.Id);
-                lvItem.SubItems.Add(names);
+                lvItem.SubItems.Add(roleString);
+                lvItem.SubItems.Add(userString);
                 lvItem.Tag = notification;
                 lvNotificationManager.Items.Add(lvItem);
             }

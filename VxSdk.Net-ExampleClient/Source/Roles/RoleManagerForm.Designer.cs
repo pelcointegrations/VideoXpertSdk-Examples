@@ -35,6 +35,7 @@
             this.chName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chReadOnly = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.btnPermSchema = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnManagePrivileges
@@ -59,7 +60,7 @@
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(527, 70);
+            this.btnDelete.Location = new System.Drawing.Point(527, 99);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(102, 23);
             this.btnDelete.TabIndex = 11;
@@ -75,6 +76,7 @@
             this.chReadOnly});
             this.lvRoles.FullRowSelect = true;
             this.lvRoles.GridLines = true;
+            this.lvRoles.HideSelection = false;
             this.lvRoles.Location = new System.Drawing.Point(12, 12);
             this.lvRoles.MultiSelect = false;
             this.lvRoles.Name = "lvRoles";
@@ -98,11 +100,22 @@
             this.chReadOnly.Text = "Read Only";
             this.chReadOnly.Width = 72;
             // 
+            // btnPermSchema
+            // 
+            this.btnPermSchema.Location = new System.Drawing.Point(527, 70);
+            this.btnPermSchema.Name = "btnPermSchema";
+            this.btnPermSchema.Size = new System.Drawing.Size(102, 23);
+            this.btnPermSchema.TabIndex = 15;
+            this.btnPermSchema.Text = "Perm. Schema";
+            this.btnPermSchema.UseVisualStyleBackColor = true;
+            this.btnPermSchema.Click += new System.EventHandler(this.ButtonPermSchema_Click);
+            // 
             // RoleManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(635, 253);
+            this.Controls.Add(this.btnPermSchema);
             this.Controls.Add(this.btnManagePrivileges);
             this.Controls.Add(this.btnNewRole);
             this.Controls.Add(this.btnDelete);
@@ -126,5 +139,6 @@
         private System.Windows.Forms.ColumnHeader chName;
         private System.Windows.Forms.ColumnHeader chId;
         private System.Windows.Forms.ColumnHeader chReadOnly;
+        private System.Windows.Forms.Button btnPermSchema;
     }
 }

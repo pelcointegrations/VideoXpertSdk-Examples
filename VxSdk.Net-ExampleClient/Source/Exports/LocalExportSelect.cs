@@ -375,10 +375,10 @@ namespace ExampleClient.Source.Exports
             var filesToDelete = Directory.EnumerateFiles(tempDir);
             foreach (var file in filesToDelete)
             {
-                File.Delete(file);
+                System.IO.File.Delete(file);
             }
             Directory.Delete(tempDir);
-            File.Delete(Path.GetTempPath() + addedExport.Name + ".zip");
+            System.IO.File.Delete(Path.GetTempPath() + addedExport.Name + ".zip");
 
             exportDownloadProgess?.BeginInvoke((MethodInvoker)delegate
             {

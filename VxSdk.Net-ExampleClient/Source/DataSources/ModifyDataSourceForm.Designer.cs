@@ -37,14 +37,17 @@
             this.nudRetentionLimit = new System.Windows.Forms.NumericUpDown();
             this.lblRetentionLimit = new System.Windows.Forms.Label();
             this.chbxEnabled = new System.Windows.Forms.CheckBox();
+            this.nudPruningThreshold = new System.Windows.Forms.NumericUpDown();
+            this.lblPruningThreshold = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.nudNumber)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudRetentionLimit)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPruningThreshold)).BeginInit();
             this.SuspendLayout();
             // 
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(153, 109);
+            this.btnCancel.Location = new System.Drawing.Point(128, 139);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 32;
@@ -54,7 +57,7 @@
             // btnSave
             // 
             this.btnSave.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnSave.Location = new System.Drawing.Point(234, 109);
+            this.btnSave.Location = new System.Drawing.Point(211, 139);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 31;
@@ -64,7 +67,7 @@
             // 
             // lblNumber
             // 
-            this.lblNumber.Location = new System.Drawing.Point(32, 47);
+            this.lblNumber.Location = new System.Drawing.Point(47, 49);
             this.lblNumber.Name = "lblNumber";
             this.lblNumber.Size = new System.Drawing.Size(61, 13);
             this.lblNumber.TabIndex = 33;
@@ -73,14 +76,14 @@
             // 
             // tbxName
             // 
-            this.tbxName.Location = new System.Drawing.Point(99, 13);
+            this.tbxName.Location = new System.Drawing.Point(113, 13);
             this.tbxName.Name = "tbxName";
-            this.tbxName.Size = new System.Drawing.Size(210, 20);
+            this.tbxName.Size = new System.Drawing.Size(173, 20);
             this.tbxName.TabIndex = 36;
             // 
             // lblName
             // 
-            this.lblName.Location = new System.Drawing.Point(32, 16);
+            this.lblName.Location = new System.Drawing.Point(47, 16);
             this.lblName.Name = "lblName";
             this.lblName.Size = new System.Drawing.Size(61, 13);
             this.lblName.TabIndex = 35;
@@ -89,7 +92,7 @@
             // 
             // nudNumber
             // 
-            this.nudNumber.Location = new System.Drawing.Point(99, 45);
+            this.nudNumber.Location = new System.Drawing.Point(113, 45);
             this.nudNumber.Margin = new System.Windows.Forms.Padding(2);
             this.nudNumber.Maximum = new decimal(new int[] {
             999999999,
@@ -102,7 +105,7 @@
             // 
             // nudRetentionLimit
             // 
-            this.nudRetentionLimit.Location = new System.Drawing.Point(99, 76);
+            this.nudRetentionLimit.Location = new System.Drawing.Point(113, 77);
             this.nudRetentionLimit.Margin = new System.Windows.Forms.Padding(2);
             this.nudRetentionLimit.Maximum = new decimal(new int[] {
             999999999,
@@ -115,7 +118,7 @@
             // 
             // lblRetentionLimit
             // 
-            this.lblRetentionLimit.Location = new System.Drawing.Point(7, 78);
+            this.lblRetentionLimit.Location = new System.Drawing.Point(22, 79);
             this.lblRetentionLimit.Name = "lblRetentionLimit";
             this.lblRetentionLimit.Size = new System.Drawing.Size(86, 13);
             this.lblRetentionLimit.TabIndex = 38;
@@ -125,18 +128,42 @@
             // chbxEnabled
             // 
             this.chbxEnabled.AutoSize = true;
-            this.chbxEnabled.Location = new System.Drawing.Point(229, 79);
+            this.chbxEnabled.Location = new System.Drawing.Point(221, 48);
             this.chbxEnabled.Name = "chbxEnabled";
             this.chbxEnabled.Size = new System.Drawing.Size(65, 17);
             this.chbxEnabled.TabIndex = 40;
             this.chbxEnabled.Text = "Enabled";
             this.chbxEnabled.UseVisualStyleBackColor = true;
             // 
+            // nudPruningThreshold
+            // 
+            this.nudPruningThreshold.Location = new System.Drawing.Point(113, 109);
+            this.nudPruningThreshold.Margin = new System.Windows.Forms.Padding(2);
+            this.nudPruningThreshold.Maximum = new decimal(new int[] {
+            999999999,
+            0,
+            0,
+            0});
+            this.nudPruningThreshold.Name = "nudPruningThreshold";
+            this.nudPruningThreshold.Size = new System.Drawing.Size(90, 20);
+            this.nudPruningThreshold.TabIndex = 42;
+            // 
+            // lblPruningThreshold
+            // 
+            this.lblPruningThreshold.Location = new System.Drawing.Point(7, 111);
+            this.lblPruningThreshold.Name = "lblPruningThreshold";
+            this.lblPruningThreshold.Size = new System.Drawing.Size(101, 13);
+            this.lblPruningThreshold.TabIndex = 41;
+            this.lblPruningThreshold.Text = "Pruning Threshold: ";
+            this.lblPruningThreshold.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // ModifyDataSourceForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(321, 144);
+            this.ClientSize = new System.Drawing.Size(299, 168);
+            this.Controls.Add(this.nudPruningThreshold);
+            this.Controls.Add(this.lblPruningThreshold);
             this.Controls.Add(this.chbxEnabled);
             this.Controls.Add(this.nudRetentionLimit);
             this.Controls.Add(this.lblRetentionLimit);
@@ -154,6 +181,7 @@
             this.Text = "Modify Data Source";
             ((System.ComponentModel.ISupportInitialize)(this.nudNumber)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudRetentionLimit)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPruningThreshold)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -169,5 +197,7 @@
         private System.Windows.Forms.NumericUpDown nudRetentionLimit;
         private System.Windows.Forms.Label lblRetentionLimit;
         private System.Windows.Forms.CheckBox chbxEnabled;
+        private System.Windows.Forms.NumericUpDown nudPruningThreshold;
+        private System.Windows.Forms.Label lblPruningThreshold;
     }
 }

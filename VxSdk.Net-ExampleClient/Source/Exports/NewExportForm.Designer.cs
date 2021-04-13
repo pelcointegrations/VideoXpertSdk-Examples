@@ -42,8 +42,21 @@ namespace ExampleClient.Source
             this.colHeadAddType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colHeadAddStartTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colHeadAddEndTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.btnExportSettings = new System.Windows.Forms.Button();
+            this.btnExport = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.gbxName = new System.Windows.Forms.GroupBox();
+            this.tbxExportName = new System.Windows.Forms.TextBox();
+            this.gbxPassword = new System.Windows.Forms.GroupBox();
+            this.tbxExportPassword = new System.Windows.Forms.TextBox();
+            this.btnEstimateExport = new System.Windows.Forms.Button();
+            this.gbxExportEstimate = new System.Windows.Forms.GroupBox();
+            this.lblSizeValue = new System.Windows.Forms.Label();
+            this.lblTooLargeValue = new System.Windows.Forms.Label();
+            this.lblSize = new System.Windows.Forms.Label();
+            this.lblTooLarge = new System.Windows.Forms.Label();
+            this.gbxName.SuspendLayout();
+            this.gbxPassword.SuspendLayout();
+            this.gbxExportEstimate.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnAddClip
@@ -74,7 +87,7 @@ namespace ExampleClient.Source
             this.lvDataSources.Location = new System.Drawing.Point(12, 13);
             this.lvDataSources.MultiSelect = false;
             this.lvDataSources.Name = "lvDataSources";
-            this.lvDataSources.Size = new System.Drawing.Size(210, 374);
+            this.lvDataSources.Size = new System.Drawing.Size(210, 345);
             this.lvDataSources.TabIndex = 15;
             this.lvDataSources.UseCompatibleStateImageBehavior = false;
             this.lvDataSources.View = System.Windows.Forms.View.Details;
@@ -95,7 +108,7 @@ namespace ExampleClient.Source
             this.lvAvailableClips.Location = new System.Drawing.Point(228, 13);
             this.lvAvailableClips.MultiSelect = false;
             this.lvAvailableClips.Name = "lvAvailableClips";
-            this.lvAvailableClips.Size = new System.Drawing.Size(436, 374);
+            this.lvAvailableClips.Size = new System.Drawing.Size(436, 345);
             this.lvAvailableClips.TabIndex = 16;
             this.lvAvailableClips.UseCompatibleStateImageBehavior = false;
             this.lvAvailableClips.View = System.Windows.Forms.View.Details;
@@ -145,34 +158,131 @@ namespace ExampleClient.Source
             this.colHeadAddEndTime.Text = "End Time";
             this.colHeadAddEndTime.Width = 160;
             // 
-            // btnExportSettings
+            // btnExport
             // 
-            this.btnExportSettings.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnExportSettings.Location = new System.Drawing.Point(1114, 364);
-            this.btnExportSettings.Name = "btnExportSettings";
-            this.btnExportSettings.Size = new System.Drawing.Size(75, 23);
-            this.btnExportSettings.TabIndex = 18;
-            this.btnExportSettings.Text = "Export";
-            this.btnExportSettings.UseVisualStyleBackColor = true;
-            this.btnExportSettings.Click += new System.EventHandler(this.ButtonExportSettings_Click);
+            this.btnExport.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btnExport.Location = new System.Drawing.Point(1379, 335);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(75, 23);
+            this.btnExport.TabIndex = 18;
+            this.btnExport.Text = "Export";
+            this.btnExport.UseVisualStyleBackColor = true;
+            this.btnExport.Click += new System.EventHandler(this.ButtonExport_Click);
             // 
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(1033, 364);
+            this.btnCancel.Location = new System.Drawing.Point(1195, 335);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 19;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
+            // gbxName
+            // 
+            this.gbxName.Controls.Add(this.tbxExportName);
+            this.gbxName.Location = new System.Drawing.Point(1195, 13);
+            this.gbxName.Name = "gbxName";
+            this.gbxName.Size = new System.Drawing.Size(260, 51);
+            this.gbxName.TabIndex = 20;
+            this.gbxName.TabStop = false;
+            this.gbxName.Text = "Export Name";
+            // 
+            // tbxExportName
+            // 
+            this.tbxExportName.Location = new System.Drawing.Point(6, 19);
+            this.tbxExportName.Name = "tbxExportName";
+            this.tbxExportName.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.tbxExportName.Size = new System.Drawing.Size(248, 20);
+            this.tbxExportName.TabIndex = 8;
+            this.tbxExportName.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // gbxPassword
+            // 
+            this.gbxPassword.Controls.Add(this.tbxExportPassword);
+            this.gbxPassword.Location = new System.Drawing.Point(1195, 70);
+            this.gbxPassword.Name = "gbxPassword";
+            this.gbxPassword.Size = new System.Drawing.Size(260, 51);
+            this.gbxPassword.TabIndex = 19;
+            this.gbxPassword.TabStop = false;
+            this.gbxPassword.Text = "Export Password";
+            // 
+            // tbxExportPassword
+            // 
+            this.tbxExportPassword.Location = new System.Drawing.Point(6, 19);
+            this.tbxExportPassword.Name = "tbxExportPassword";
+            this.tbxExportPassword.Size = new System.Drawing.Size(248, 20);
+            this.tbxExportPassword.TabIndex = 8;
+            // 
+            // btnEstimateExport
+            // 
+            this.btnEstimateExport.Location = new System.Drawing.Point(1287, 335);
+            this.btnEstimateExport.Name = "btnEstimateExport";
+            this.btnEstimateExport.Size = new System.Drawing.Size(75, 23);
+            this.btnEstimateExport.TabIndex = 21;
+            this.btnEstimateExport.Text = "Estimate";
+            this.btnEstimateExport.UseVisualStyleBackColor = true;
+            this.btnEstimateExport.Click += new System.EventHandler(this.ButtonEstimateExport_Click);
+            // 
+            // gbxExportEstimate
+            // 
+            this.gbxExportEstimate.Controls.Add(this.lblSizeValue);
+            this.gbxExportEstimate.Controls.Add(this.lblTooLargeValue);
+            this.gbxExportEstimate.Controls.Add(this.lblSize);
+            this.gbxExportEstimate.Controls.Add(this.lblTooLarge);
+            this.gbxExportEstimate.Location = new System.Drawing.Point(1195, 127);
+            this.gbxExportEstimate.Name = "gbxExportEstimate";
+            this.gbxExportEstimate.Size = new System.Drawing.Size(260, 48);
+            this.gbxExportEstimate.TabIndex = 20;
+            this.gbxExportEstimate.TabStop = false;
+            this.gbxExportEstimate.Text = "Export Estimate";
+            // 
+            // lblSizeValue
+            // 
+            this.lblSizeValue.AutoSize = true;
+            this.lblSizeValue.Location = new System.Drawing.Point(151, 20);
+            this.lblSizeValue.Name = "lblSizeValue";
+            this.lblSizeValue.Size = new System.Drawing.Size(0, 13);
+            this.lblSizeValue.TabIndex = 3;
+            // 
+            // lblTooLargeValue
+            // 
+            this.lblTooLargeValue.AutoSize = true;
+            this.lblTooLargeValue.Location = new System.Drawing.Point(65, 20);
+            this.lblTooLargeValue.Name = "lblTooLargeValue";
+            this.lblTooLargeValue.Size = new System.Drawing.Size(0, 13);
+            this.lblTooLargeValue.TabIndex = 2;
+            // 
+            // lblSize
+            // 
+            this.lblSize.AutoSize = true;
+            this.lblSize.Location = new System.Drawing.Point(121, 20);
+            this.lblSize.Name = "lblSize";
+            this.lblSize.Size = new System.Drawing.Size(30, 13);
+            this.lblSize.TabIndex = 1;
+            this.lblSize.Text = "Size:";
+            // 
+            // lblTooLarge
+            // 
+            this.lblTooLarge.AutoSize = true;
+            this.lblTooLarge.Location = new System.Drawing.Point(7, 20);
+            this.lblTooLarge.Name = "lblTooLarge";
+            this.lblTooLarge.Size = new System.Drawing.Size(59, 13);
+            this.lblTooLarge.TabIndex = 0;
+            this.lblTooLarge.Text = "Too Large:";
+            // 
             // NewExportForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1201, 399);
+            this.ClientSize = new System.Drawing.Size(1458, 366);
+            this.Controls.Add(this.gbxExportEstimate);
+            this.Controls.Add(this.btnEstimateExport);
+            this.Controls.Add(this.gbxPassword);
+            this.Controls.Add(this.gbxName);
             this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.btnExportSettings);
+            this.Controls.Add(this.btnExport);
             this.Controls.Add(this.lvAddedClips);
             this.Controls.Add(this.lvAvailableClips);
             this.Controls.Add(this.lvDataSources);
@@ -184,6 +294,12 @@ namespace ExampleClient.Source
             this.Name = "NewExportForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Export Clips";
+            this.gbxName.ResumeLayout(false);
+            this.gbxName.PerformLayout();
+            this.gbxPassword.ResumeLayout(false);
+            this.gbxPassword.PerformLayout();
+            this.gbxExportEstimate.ResumeLayout(false);
+            this.gbxExportEstimate.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -197,12 +313,22 @@ namespace ExampleClient.Source
         private System.Windows.Forms.ColumnHeader colHeadType;
         private System.Windows.Forms.ColumnHeader colHeadStartTime;
         private System.Windows.Forms.ColumnHeader colHeadEndTime;
-        private System.Windows.Forms.Button btnExportSettings;
+        private System.Windows.Forms.Button btnExport;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.ColumnHeader colHeadAddType;
         private System.Windows.Forms.ColumnHeader colHeadAddStartTime;
         private System.Windows.Forms.ColumnHeader colHeadAddEndTime;
         public System.Windows.Forms.ListView lvAvailableClips;
         public System.Windows.Forms.ListView lvAddedClips;
+        private System.Windows.Forms.GroupBox gbxName;
+        private System.Windows.Forms.TextBox tbxExportName;
+        private System.Windows.Forms.GroupBox gbxPassword;
+        private System.Windows.Forms.TextBox tbxExportPassword;
+        private System.Windows.Forms.Button btnEstimateExport;
+        private System.Windows.Forms.GroupBox gbxExportEstimate;
+        private System.Windows.Forms.Label lblSizeValue;
+        private System.Windows.Forms.Label lblTooLargeValue;
+        private System.Windows.Forms.Label lblSize;
+        private System.Windows.Forms.Label lblTooLarge;
     }
 }

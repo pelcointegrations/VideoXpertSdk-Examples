@@ -79,8 +79,11 @@
     </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="TimeZoneConverter, Version=3.4.0.0, Culture=neutral, PublicKeyToken=e20ab7d0d9479841, processorArchitecture=MSIL">
+      <HintPath>packages\TimeZoneConverter.3.4.0\lib\net461\TimeZoneConverter.dll</HintPath>
+    </Reference>
     <Reference Include="VxSdk.NET-Media, Version=0.0.0.0, Culture=neutral, PublicKeyToken=2604320bde3eedc4, processorArchitecture=x86">
-      <HintPath>packages\VxSdk.NET-Media.3.0.61\lib\$(Platform)\VxSdk.NET-Media.dll</HintPath>
+      <HintPath>packages\VxSdk.NET-Media.3.0.71\lib\$(Platform)\VxSdk.NET-Media.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -126,6 +129,12 @@
     <Compile Include="Source\Analytics\AnalyticBehaviorManagerForm.Designer.cs">
       <DependentUpon>AnalyticBehaviorManagerForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\Analytics\LineCountRequestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Analytics\LineCountRequestForm.Designer.cs">
+      <DependentUpon>LineCountRequestForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Source\Analytics\AnalyticConfigManagerForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -162,6 +171,36 @@
     <Compile Include="Source\Bookmarks\BookmarkConfigForm.Designer.cs">
       <DependentUpon>BookmarkConfigForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\Configuration\ReportConfigurationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Configuration\ReportConfigurationForm.Designer.cs">
+      <DependentUpon>ReportConfigurationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Configuration\ExportConfigurationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Configuration\ExportConfigurationForm.Designer.cs">
+      <DependentUpon>ExportConfigurationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Configuration\EventConfigurationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Configuration\EventConfigurationForm.Designer.cs">
+      <DependentUpon>EventConfigurationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Configuration\ThermalEtdConfigurationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Configuration\ThermalEtdConfigurationForm.Designer.cs">
+      <DependentUpon>ThermalEtdConfigurationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Configuration\TimeConfigurationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Configuration\TimeConfigurationForm.Designer.cs">
+      <DependentUpon>TimeConfigurationForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Source\Configuration\TwilioConfigurationForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -186,6 +225,30 @@
     <Compile Include="Source\Configuration\ServerConfigurationForm.Designer.cs">
       <DependentUpon>ServerConfigurationForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\DataSources\MetadataSnapshotForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\DataSources\MetadataSnapshotForm.Designer.cs">
+      <DependentUpon>MetadataSnapshotForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\DataSources\ModifyVideoEncodingConfigsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\DataSources\ModifyVideoEncodingConfigsForm.Designer.cs">
+      <DependentUpon>ModifyVideoEncodingConfigsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\DataSources\ModifySmartCompressionConfigForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\DataSources\ModifySmartCompressionConfigForm.Designer.cs">
+      <DependentUpon>ModifySmartCompressionConfigForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\DataSources\ModifyPtzConfigForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\DataSources\ModifyPtzConfigForm.Designer.cs">
+      <DependentUpon>ModifyPtzConfigForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Source\DataStorages\TriggerFileRecoveryForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -197,6 +260,36 @@
     </Compile>
     <Compile Include="Source\DataStorages\FileRecoveryManagerForm.Designer.cs">
       <DependentUpon>FileRecoveryManagerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Devices\FileSelectionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Devices\FileSelectionForm.Designer.cs">
+      <DependentUpon>FileSelectionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Discovery\AddDeviceSearchForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Discovery\AddDeviceSearchForm.Designer.cs">
+      <DependentUpon>AddDeviceSearchForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Discovery\DiscoveryStatusForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Discovery\DiscoveryStatusForm.Designer.cs">
+      <DependentUpon>DiscoveryStatusForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Files\AddFileForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Files\AddFileForm.Designer.cs">
+      <DependentUpon>AddFileForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Files\FileManagerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Files\FileManagerForm.Designer.cs">
+      <DependentUpon>FileManagerForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\Members\MemberManagerForm.cs">
       <SubType>Form</SubType>
@@ -317,6 +410,36 @@
     </Compile>
     <Compile Include="Source\MonitorWalls\ManageMonitorSelectionsForm.Designer.cs">
       <DependentUpon>ManageMonitorSelectionsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Reports\ModifyReportTemplateForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Reports\ModifyReportTemplateForm.Designer.cs">
+      <DependentUpon>ModifyReportTemplateForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Reports\ReportFilterSelectionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Reports\ReportFilterSelectionForm.Designer.cs">
+      <DependentUpon>ReportFilterSelectionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Reports\ReportManagerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Reports\ReportManagerForm.Designer.cs">
+      <DependentUpon>ReportManagerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Roles\PermissionSchemaDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Roles\PermissionSchemaDetailsForm.Designer.cs">
+      <DependentUpon>PermissionSchemaDetailsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Rules\AddRuleResponseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Rules\AddRuleResponseForm.Designer.cs">
+      <DependentUpon>AddRuleResponseForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\Rules\AddRuleTriggerForm.cs">
       <SubType>Form</SubType>
@@ -755,12 +878,6 @@
     <Compile Include="Source\Exports\ExportManagerForm.Designer.cs">
       <DependentUpon>ExportManagerForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Source\Exports\ExportSettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Source\Exports\ExportSettingsForm.Designer.cs">
-      <DependentUpon>ExportSettingsForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Source\Schedules\NewPropertyForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -862,6 +979,9 @@
     <EmbeddedResource Include="Source\Analytics\AnalyticBehaviorManagerForm.resx">
       <DependentUpon>AnalyticBehaviorManagerForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Source\Analytics\LineCountRequestForm.resx">
+      <DependentUpon>LineCountRequestForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Source\Analytics\AnalyticConfigManagerForm.resx">
       <DependentUpon>AnalyticConfigManagerForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -880,6 +1000,21 @@
     <EmbeddedResource Include="Source\Bookmarks\BookmarkConfigForm.resx">
       <DependentUpon>BookmarkConfigForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Source\Configuration\ReportConfigurationForm.resx">
+      <DependentUpon>ReportConfigurationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Configuration\ExportConfigurationForm.resx">
+      <DependentUpon>ExportConfigurationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Configuration\EventConfigurationForm.resx">
+      <DependentUpon>EventConfigurationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Configuration\ThermalEtdConfigurationForm.resx">
+      <DependentUpon>ThermalEtdConfigurationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Configuration\TimeConfigurationForm.resx">
+      <DependentUpon>TimeConfigurationForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Source\Configuration\TwilioConfigurationForm.resx">
       <DependentUpon>TwilioConfigurationForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -895,11 +1030,38 @@
     <EmbeddedResource Include="Source\Configuration\LdapConfigurationForm.resx">
       <DependentUpon>LdapConfigurationForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Source\DataSources\MetadataSnapshotForm.resx">
+      <DependentUpon>MetadataSnapshotForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\DataSources\ModifyVideoEncodingConfigsForm.resx">
+      <DependentUpon>ModifyVideoEncodingConfigsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\DataSources\ModifySmartCompressionConfigForm.resx">
+      <DependentUpon>ModifySmartCompressionConfigForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\DataSources\ModifyPtzConfigForm.resx">
+      <DependentUpon>ModifyPtzConfigForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Source\DataStorages\TriggerFileRecoveryForm.resx">
       <DependentUpon>TriggerFileRecoveryForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Source\DataStorages\FileRecoveryManagerForm.resx">
       <DependentUpon>FileRecoveryManagerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Devices\FileSelectionForm.resx">
+      <DependentUpon>FileSelectionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Discovery\AddDeviceSearchForm.resx">
+      <DependentUpon>AddDeviceSearchForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Discovery\DiscoveryStatusForm.resx">
+      <DependentUpon>DiscoveryStatusForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Files\AddFileForm.resx">
+      <DependentUpon>AddFileForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Files\FileManagerForm.resx">
+      <DependentUpon>FileManagerForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Source\Members\MemberManagerForm.resx">
       <DependentUpon>MemberManagerForm.cs</DependentUpon>
@@ -958,6 +1120,21 @@
     <EmbeddedResource Include="Source\MonitorWalls\ManageMonitorSelectionsForm.resx">
       <DependentUpon>ManageMonitorSelectionsForm.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Reports\ModifyReportTemplateForm.resx">
+      <DependentUpon>ModifyReportTemplateForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Reports\ReportFilterSelectionForm.resx">
+      <DependentUpon>ReportFilterSelectionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Reports\ReportManagerForm.resx">
+      <DependentUpon>ReportManagerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Roles\PermissionSchemaDetailsForm.resx">
+      <DependentUpon>PermissionSchemaDetailsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Rules\AddRuleResponseForm.resx">
+      <DependentUpon>AddRuleResponseForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Source\Rules\AddRuleTriggerForm.resx">
       <DependentUpon>AddRuleTriggerForm.cs</DependentUpon>
@@ -1181,9 +1358,6 @@
     <EmbeddedResource Include="Source\Exports\ExportManagerForm.resx">
       <DependentUpon>ExportManagerForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Source\Exports\ExportSettingsForm.resx">
-      <DependentUpon>ExportSettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Source\Schedules\NewPropertyForm.resx">
       <DependentUpon>NewPropertyForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -1282,11 +1456,11 @@
   <PropertyGroup>
     <PostBuildEvent>xcopy /Y /F "$(ProjectDir)ThirdParty\ffmpeg.exe" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
-  <Import Project="packages\VxSdk.NET-Media.3.0.61\build\VxSdk.NET-Media.targets" Condition="Exists('packages\VxSdk.NET-Media.3.0.61\build\VxSdk.NET-Media.targets')" />
+  <Import Project="packages\VxSdk.NET-Media.3.0.71\build\VxSdk.NET-Media.targets" Condition="Exists('packages\VxSdk.NET-Media.3.0.71\build\VxSdk.NET-Media.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\VxSdk.NET-Media.3.0.61\build\VxSdk.NET-Media.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VxSdk.NET-Media.3.0.61\build\VxSdk.NET-Media.targets'))" />
+    <Error Condition="!Exists('packages\VxSdk.NET-Media.3.0.71\build\VxSdk.NET-Media.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\VxSdk.NET-Media.3.0.71\build\VxSdk.NET-Media.targets'))" />
   </Target>
 </Project>

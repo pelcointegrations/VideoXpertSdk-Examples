@@ -35,15 +35,18 @@
             this.btnNewNotification = new System.Windows.Forms.Button();
             this.btnRefresh = new System.Windows.Forms.Button();
             this.btnModifyNotification = new System.Windows.Forms.Button();
+            this.chUserNames = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // lvNotificationManager
             // 
             this.lvNotificationManager.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.chId,
-            this.chRoleNames});
+            this.chRoleNames,
+            this.chUserNames});
             this.lvNotificationManager.FullRowSelect = true;
             this.lvNotificationManager.GridLines = true;
+            this.lvNotificationManager.HideSelection = false;
             this.lvNotificationManager.Location = new System.Drawing.Point(12, 12);
             this.lvNotificationManager.MultiSelect = false;
             this.lvNotificationManager.Name = "lvNotificationManager";
@@ -55,12 +58,12 @@
             // chId
             // 
             this.chId.Text = "ID";
-            this.chId.Width = 224;
+            this.chId.Width = 230;
             // 
             // chRoleNames
             // 
             this.chRoleNames.Text = "Roles To Notify";
-            this.chRoleNames.Width = 526;
+            this.chRoleNames.Width = 260;
             // 
             // btnDelete
             // 
@@ -102,6 +105,11 @@
             this.btnModifyNotification.UseVisualStyleBackColor = true;
             this.btnModifyNotification.Click += new System.EventHandler(this.ButtonModifyNotification_Click);
             // 
+            // chUserNames
+            // 
+            this.chUserNames.Text = "Users To Notify";
+            this.chUserNames.Width = 260;
+            // 
             // NotificationManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -131,5 +139,6 @@
         private System.Windows.Forms.Button btnNewNotification;
         private System.Windows.Forms.Button btnRefresh;
         private System.Windows.Forms.Button btnModifyNotification;
+        private System.Windows.Forms.ColumnHeader chUserNames;
     }
 }

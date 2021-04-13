@@ -23,6 +23,7 @@ namespace ExampleClient.Source
             tbxName.Text = dataSource.Name;
             nudNumber.Value = dataSource.Number;
             nudRetentionLimit.Value = dataSource.RetentionLimit;
+            nudPruningThreshold.Value = dataSource.PruningThreshold;
             chbxEnabled.Checked = dataSource.IsEnabled;
         }
 
@@ -55,6 +56,9 @@ namespace ExampleClient.Source
 
             if (SelectedDataSource.RetentionLimit != (int)nudRetentionLimit.Value)
                 SelectedDataSource.RetentionLimit = (int)nudRetentionLimit.Value;
+
+            if (SelectedDataSource.PruningThreshold != (int)nudPruningThreshold.Value)
+                SelectedDataSource.PruningThreshold = (int)nudPruningThreshold.Value;
 
             if (SelectedDataSource.IsEnabled != chbxEnabled.Checked)
                 SelectedDataSource.IsEnabled = chbxEnabled.Checked;

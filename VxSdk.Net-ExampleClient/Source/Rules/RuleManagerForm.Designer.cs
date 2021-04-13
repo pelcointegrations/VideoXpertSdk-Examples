@@ -39,6 +39,7 @@
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnHalt = new System.Windows.Forms.Button();
+            this.chResponses = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // lvRuleManager
@@ -48,9 +49,11 @@
             this.chId,
             this.chEnabled,
             this.chTimeTables,
-            this.chTriggers});
+            this.chTriggers,
+            this.chResponses});
             this.lvRuleManager.FullRowSelect = true;
             this.lvRuleManager.GridLines = true;
+            this.lvRuleManager.HideSelection = false;
             this.lvRuleManager.Location = new System.Drawing.Point(12, 12);
             this.lvRuleManager.MultiSelect = false;
             this.lvRuleManager.Name = "lvRuleManager";
@@ -62,7 +65,7 @@
             // chName
             // 
             this.chName.Text = "Name";
-            this.chName.Width = 200;
+            this.chName.Width = 162;
             // 
             // chId
             // 
@@ -134,6 +137,11 @@
             this.btnHalt.UseVisualStyleBackColor = true;
             this.btnHalt.Click += new System.EventHandler(this.ButtonHalt_Click);
             // 
+            // chResponses
+            // 
+            this.chResponses.Text = "Responses";
+            this.chResponses.Width = 70;
+            // 
             // RuleManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -168,5 +176,6 @@
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnHalt;
+        private System.Windows.Forms.ColumnHeader chResponses;
     }
 }

@@ -134,6 +134,7 @@ namespace ExampleClient.Source
                 lvItem.SubItems.Add(rule.IsEnabled.ToString());
                 lvItem.SubItems.Add(rule.TimeTables.Count.ToString());
                 lvItem.SubItems.Add(rule.Triggers.Count.ToString());
+                lvItem.SubItems.Add(rule.Responses.Count.ToString());
                 lvItem.Tag = rule;
                 lvRuleManager.Items.Add(lvItem);
             }
