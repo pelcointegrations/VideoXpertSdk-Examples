@@ -81,7 +81,7 @@ namespace ExampleClient.Source
         /// </summary>
         private void PopulateFileRecoveryInfo()
         {
-            FileRecovery fileRecovery = SelectedStorageConfig.FileRecoveryResource;
+            VxFileRecovery fileRecovery = SelectedStorageConfig.FileRecoveryResource;
 
             tbxStatus.Text = fileRecovery.Status.ToString();
             tbxFilesRecovered.Text = fileRecovery.FilesRecovered.ToString();

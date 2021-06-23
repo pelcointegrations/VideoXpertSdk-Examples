@@ -73,7 +73,7 @@ namespace ExampleClient.Source
 
             // Get the associated File object from the selected item and delete
             // it from the VideoXpert system.
-            var file = (File)lvFileManager.CheckedItems[0].Tag;
+            var file = (VxFile)lvFileManager.CheckedItems[0].Tag;
             MainForm.CurrentSystem.DeleteFile(file);
             lvFileManager.CheckedItems[0].Remove();
         }
@@ -89,7 +89,7 @@ namespace ExampleClient.Source
                 return;
 
             // Get the associated File object from the selected item.
-            var file = (File)lvFileManager.CheckedItems[0].Tag;
+            var file = (VxFile)lvFileManager.CheckedItems[0].Tag;
 
             // Open a save file dialog for the user to select a filename for the
             // file download.

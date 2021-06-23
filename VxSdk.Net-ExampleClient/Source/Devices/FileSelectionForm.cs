@@ -47,7 +47,7 @@ namespace ExampleClient.Source
             if (lvFileManager.SelectedItems.Count == 0)
                 return;
 
-            var file = (File)lvFileManager.SelectedItems[0].Tag;
+            var file = (VxFile)lvFileManager.SelectedItems[0].Tag;
             SelectedDevice.UpdateSoftware(file);
         }
 
